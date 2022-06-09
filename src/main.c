@@ -28,11 +28,18 @@ int main(void)
 		if (light == 1) writeRegisterValues(false, true, false);
 		if (light == 2) writeRegisterValues(false, false, true);
 		
-		if (light == 2 || light == 0)
-			direction = !direction;
-
 		if (direction) 	light++;
 		else 						light--; 
+
+		if (light == 3) {
+			direction = !direction;
+			light = 2;
+		}
+
+		if (light == -1) {
+			direction = !direction;
+			light = 0;
+		}
 	}
 }
 
