@@ -18,13 +18,19 @@ bool readReceiver					(Receiver receiver);
 int main(void)
 {
 	init();
+	bool direction = true;
+	int light = 0;
 	while (1)
 	{
-		writeRegisterValues(
-			readReceiver(Left),
-			readReceiver(Mid),
-			readReceiver(Right)
-		);
+		if (light == 0) writeRegisterValues(true, false, false);
+		if (light == 1) writeRegisterValues(false, true, false);
+		if (light == 2) writeRegisterValues(false, false, true);
+		
+		if (light == 2 || light == 0)
+			direction = !direction;
+
+		if (direction) 	light++;
+		else 						light--; 
 	}
 }
 
