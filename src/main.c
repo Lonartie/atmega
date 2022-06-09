@@ -33,12 +33,12 @@ int main(void)
 
 		if (light == 3) {
 			direction = !direction;
-			light = 2;
+			light = 1;
 		}
 
 		if (light == -1) {
 			direction = !direction;
-			light = 0;
+			light = 1;
 		}
 	}
 }
