@@ -22,7 +22,7 @@ int main(void)
 	int light = 0;
 	while (1)
 	{
-		_delay_ms(500);
+		_delay_ms(100);
 
 		if (light == 0) writeRegisterValues(true, false, false);
 		if (light == 1) writeRegisterValues(false, true, false);
