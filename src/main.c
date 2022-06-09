@@ -22,6 +22,8 @@ int main(void)
 	int light = 0;
 	while (1)
 	{
+		_delay_ms(500);
+
 		if (light == 0) writeRegisterValues(true, false, false);
 		if (light == 1) writeRegisterValues(false, true, false);
 		if (light == 2) writeRegisterValues(false, false, true);
