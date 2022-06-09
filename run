@@ -1,7 +1,6 @@
 #!/bin/bash
 
-echo compiling..
-avr-gcc "$@" -DF_CPU=16E6 -Os -Wall -Wextra -mmcu=atmega328p -o main
+./compile
 
 echo extracting hex..
 avr-objcopy -O ihex main main.hex
