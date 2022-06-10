@@ -13,6 +13,8 @@ ShiftRegister ShiftRegister_create(
   sr.data = Component_create(data_ddr, data_port, data_pin);
   sr.size = size;
   sr.tpd_mcs = tpd_mcs;
+  Component_set_write(&sr.clk);
+  Component_set_write(&sr.data);
   return sr;
 }
 
@@ -26,6 +28,8 @@ ShiftRegister* ShiftRegister_new(
   sr->data = Component_create(data_ddr, data_port, data_pin);
   sr->size = size;
   sr->tpd_mcs = tpd_mcs;
+  Component_set_write(&sr->clk);
+  Component_set_write(&sr->data);
   return sr;
 }
 
@@ -43,7 +47,6 @@ void ShiftRegister_clear(ShiftRegister* sr)
 
 void ShiftRegister_write(ShiftRegister* sr, bool value)
 {
-  Component_set_write(&sr->data);
   Component_write(&sr->clk, false);
   Component_write(&sr->data, value);
   Component_write(&sr->clk, true);
