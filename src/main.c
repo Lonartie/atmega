@@ -19,6 +19,7 @@ int main()
 {
 	atmega = System_create();
 	volatile Timer timer = Timer_create(100, main_2);
+	EventQueue_run();
 }
 
 void main_2(void)
