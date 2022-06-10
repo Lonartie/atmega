@@ -23,6 +23,6 @@ void ShiftRegister_clear(ShiftRegister* sr);
 void ShiftRegister_write(ShiftRegister* sr, bool value);
 
 /// @brief writes a number of values to the shift register
-void ShiftRegister_write_n(ShiftRegister* sr, ...);
+void ShiftRegister_write_n(ShiftRegister* sr, uint32_t n, ...);
 
 #endif // SHIFT_REGISTER_H

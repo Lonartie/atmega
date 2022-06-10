@@ -33,11 +33,11 @@ void ShiftRegister_write(ShiftRegister* sr, bool value)
     _delay_us(1); // because _delay_us expects a compile time constant
 }
 
-void ShiftRegister_write_n(ShiftRegister* sr, ...)
+void ShiftRegister_write_n(ShiftRegister* sr, uint32_t n, ...)
 {
   va_list args;
-  va_start(args, sr);
-  for (uint16_t i = 0; i < sr->size; i++)
+  va_start(args, n);
+  for (uint16_t i = 0; i < n; i++)
   {
     bool value = va_arg(args, int); // bool gets promoted to int through va_args
     ShiftRegister_write(sr, value);
