@@ -1,6 +1,6 @@
 #include "Timer.h"
-#include "HardwareTimer.h"
 #include "EventQueue.h"
+#include "HardwareTimer.h"
 
 Timer Timer_create(uint64_t interval_ms, TimerCallback callback)
 {

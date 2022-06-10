@@ -1,6 +1,7 @@
 #include "System.h"
 #include "EventSystem/EventQueue.h"
 #include "EventSystem/Timer.h"
+#include "EventSystem/HardwareTimer.h"
 #include "utils.h"
 
 #include <stdio.h>
@@ -13,10 +14,10 @@ void led(uint32_t argc, void** argv)
 	ShiftRegister_write(&atmega.led_strip, true);
 }
 
-
 void main_2(void);
 int main()
 {
+	timer_init();
 	atmega = System_create();
 	volatile Timer timer = Timer_create(100, main_2);
 	EventQueue_run();

@@ -3,10 +3,7 @@
 
 #include <stdint.h>
 
-// Initializes the use of the timer functions
-void initTimer();
-
-// Gets the milliseconds of the current time.
-uint32_t millis();
+void timer_init();
+uint64_t millis(); 
 
 #endif // HARDWARE_TIMER_H
