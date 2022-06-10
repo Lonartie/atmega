@@ -4,7 +4,6 @@ echo compiling..
 avr-gcc \
   src/*.c \
   src/Models/*.c \
-  src/Std/*.c \
   src/EventSystem/*.c \
   src/EventSystem/wraps/*.c \
   -D F_CPU=16000000 -Os -Wall -Wextra -Wfatal-errors -mmcu=atmega328p -o main

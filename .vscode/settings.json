@@ -1,7 +1,11 @@
 {
   "files.associations": {
     "utils.h": "c",
-    "shiftregister.h": "c"
+    "shiftregister.h": "c",
+    "timer.h": "c",
+    "millis.h": "c",
+    "hardwaretimer.h": "c",
+    "hwmillitimer.h": "c"
   },
   "C_Cpp.errorSquiggles": "Disabled"
 }
