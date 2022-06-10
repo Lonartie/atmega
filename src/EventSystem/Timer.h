@@ -12,6 +12,7 @@ typedef struct {
 } Timer;
 
 Timer Timer_create(uint64_t interval_ms, TimerCallback callback);
+void Timer_start(Timer* timer);
 void Timer_update(void* obj);
 
 #endif // TIMER_H
