@@ -7,10 +7,20 @@ static volatile uint64_t timerMillis;
 
 void initTimer()
 {
-	TCCR0A |= (1<<WGM01); // set CTC mode
-	TCCR0B |= ((1<<CS01) | (1<<CS00)); //set counting clock to F_CPU / 8 -> 1MHZ
-	TIMSK0 |= (1<<OCIE0A);
-	OCR0A = 125; // set counter compare val,we count from 0-99 w 1MHZ CLK
+  TCCR1B = 0;
+  TCCR1A = 0;
+
+
+  //set CTC mode
+  TCCR1B |= (1 << WGM12);
+  // enable compare match interrupt
+  TIMSK1 |= (1 << OCIE1A);
+
+
+  // set OCR0A value for 100 msec
+  OCR1A = 0x0619;
+  //set 1024 prescaler
+  TCCR1B |= (( 1 << CS10) | (1 << CS12));
 }
 
 ISR(TIMER1_COMPA_vect) 
