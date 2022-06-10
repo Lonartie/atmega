@@ -18,7 +18,7 @@ void main_2(void);
 int main()
 {
 	atmega = System_create();
-	volatile Timer timer = Timer_create(1000, main_2);
+	volatile Timer timer = Timer_create(100, main_2);
 }
 
 void main_2(void)
@@ -26,7 +26,6 @@ void main_2(void)
 	static int light = 0;
 	static bool direction = true;
 
-	_delay_ms(100);
 	if (light == 0) ShiftRegister_write_n(&atmega.led_strip, 3, true, false, false);
 	if (light == 1) ShiftRegister_write_n(&atmega.led_strip, 3, false, true, false);
 	if (light == 2) ShiftRegister_write_n(&atmega.led_strip, 3, false, false, true);
