@@ -1,4 +1,7 @@
-#define F_CPU 16E6
+#ifndef F_CPU
+# define F_CPU 16E6
+#endif
+
 #ifndef __AVR_ATmega328P__
 #	define __AVR_ATmega328P__
 #endif

@@ -10,22 +10,15 @@ int main(void)
 	while (true)
 	{
 		_delay_ms(100);
-
 		if (light == 0) ShiftRegister_write_n(&system.led_strip, true, false, false);
 		if (light == 1) ShiftRegister_write_n(&system.led_strip, false, true, false);
 		if (light == 2) ShiftRegister_write_n(&system.led_strip, false, false, true);
 		
-		if (direction) 	light++;
-		else 						light--; 
+		light += direction * 2 - 1;
 
-		if (light == 3) {
+		if (light == 3 || light == -1) {
 			direction = !direction;
-			light = 1;
-		}
-
-		if (light == -1) {
-			direction = !direction;
-			light = 1;
+			light += 2 * (direction * 2 - 1);
 		}
 	}
 }
