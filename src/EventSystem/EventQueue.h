@@ -1,16 +1,22 @@
 #ifndef EVENT_QUEUE_H
 #define EVENT_QUEUE_H
 
-#include "Callback.h"
+#include "Event.h"
 #include "String.h"
+#include "Listener.h"
+#include "Updater.h"
 
 typedef struct
 {
-  Vector_Callback callbacks;
+  Vector_Updater updaters;
+  Vector_Event events;
+  Vector_Listener listeners;
 } EventQueue;
 
 EventQueue* EventQueue_instance();
-void EventQueue_register_callback(String event_type, CallbackFunction fun);
-void EventQueue_send_event(String event_type, uint32_t argc, void** argv);
+void EventQueue_register_updater(Updater updater);
+void EventQueue_register_listener(Listener listener);
+void EventQueue_send_event(Event event);
+void EventQueue_run();
 
 #endif // EVENT_QUEUE_H

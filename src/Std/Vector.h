@@ -79,8 +79,8 @@ Vector_##type Vector_##type##_move(Vector_##type* other)                        
   vector.capacity = other->capacity;                                                        \
   vector.data = other->data;                                                                \
   other->size = 0;                                                                          \
-  other->capacity = 0;                                                                      \
-  other->data = NULL;                                                                       \
+  other->capacity = 1;                                                                      \
+  other->data = malloc(sizeof(type) * other->capacity);                                     \
   return vector;                                                                            \
 }                                                                                           \
                                                                                             \
