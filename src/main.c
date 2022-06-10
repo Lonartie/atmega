@@ -18,7 +18,6 @@ int main()
 
 	ShiftRegister_write(&atmega.led_strip, true);
 
-	EventQueue_register_event_type("led");
 	EventQueue_register_callback("led", led);
 	Vector_bool args = Vector_bool_create();
 	Vector_bool_push_back(&args, true);

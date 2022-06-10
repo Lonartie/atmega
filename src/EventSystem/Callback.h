@@ -1,10 +1,15 @@
 #ifndef CALLBACK_H
 #define CALLBACK_H
 
+#include "String.h"
 #include "../Std/Vector.h"
 
-typedef void(*Callback)(uint32_t argc, void** argv);
+typedef void(*CallbackFunction)(uint32_t argc, void** argv);
+typedef struct {
+  CallbackFunction function;
+  String event_type;
+} Callback;
+
 DECLARE_VECTOR(Callback);
-DECLARE_VECTOR(Vector_Callback);
 
 #endif // CALLBACK_H
