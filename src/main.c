@@ -7,13 +7,15 @@
 
 System atmega;
 
-void led(uint32_t args, void** argv)
+void led(uint32_t argc, void** argv)
 {
-	if (args != 3)
+	if (argc != 3)
 		abort();
 
+	bool* args = *argv;
+
 	for (uint32_t i = 0; i < 3; i++)
-		ShiftRegister_write(&atmega.led_strip, argv[i]);
+		ShiftRegister_write(&atmega.led_strip, args[i]);
 }
 
 int main()
