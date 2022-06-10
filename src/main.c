@@ -9,18 +9,15 @@ System atmega;
 
 void led(uint32_t argc, void** argv)
 {
-	if (argc != 3)
-		abort();
-
-	bool* args = *argv;
-
-	for (uint32_t i = 0; i < 3; i++)
-		ShiftRegister_write(&atmega.led_strip, args[i]);
+	ShiftRegister_write(&atmega.led_strip, true);
 }
 
 int main()
 {
 	atmega = System_create();
+
+	ShiftRegister_write(&atmega.led_strip, true);
+
 	EventQueue_register_event_type("led");
 	EventQueue_register_callback("led", led);
 	Vector_bool args = Vector_bool_create();
