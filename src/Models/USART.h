@@ -4,16 +4,18 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-typedef struct {
+typedef struct USART {
   long ubrr;
   bool heap;    //< whether or not the object is allocated on the heap
+
+  void(*destroy)(struct USART*);
+  void (*send_byte)(struct USART*, char);
+  void (*send_str)(struct USART*, const char*);
+  char (*recv_byte)(struct USART*);
 } USART;
 
 /// @returns a new USART (stack)
 USART USART_create();
-
-/// @returns a new USART (heap / malloc)
-USART* USART_new();
 
 /// @brief destroys the USART
 void USART_destroy(USART* usart);
@@ -26,7 +28,6 @@ void USART_send_str(USART* usart, const char* str);
 
 /// @brief receives a single byte through the USART
 /// @returns the received byte
-uint8_t USART_recv_byte(USART* usart);
-
+char USART_recv_byte(USART* usart);
 
 #endif // SERIAL_H

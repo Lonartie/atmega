@@ -3,11 +3,15 @@
 
 #include "Component.h"
 
-typedef struct {
+typedef struct ShiftRegister {
   Component clk;    ///< clock component
   Component data;   ///< data component
   uint16_t size;    ///< size of the register
   uint16_t tpd_mcs; ///< time per data bit in microseconds
+
+  void(*clear)(struct ShiftRegister*);
+  void(*write)(struct ShiftRegister*, bool);
+  void(*write_n)(struct ShiftRegister*, uint32_t, ...);
 } ShiftRegister;
 
 /// @returns a new shift register (stack)

@@ -3,7 +3,7 @@
 
 #include "Vector.h"
 
-typedef struct {
+typedef struct Updater {
   void* object;
   void (*update)(void* object);
 } Updater;

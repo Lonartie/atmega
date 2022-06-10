@@ -13,6 +13,9 @@ ShiftRegister ShiftRegister_create(
   sr.data = Component_create(data_ddr, data_port, data_pin);
   sr.size = size;
   sr.tpd_mcs = tpd_mcs;
+  sr.clear = ShiftRegister_clear;
+  sr.write = ShiftRegister_write;
+  sr.write_n = ShiftRegister_write_n;
   Component_set_write(&sr.clk);
   Component_set_write(&sr.data);
   return sr;

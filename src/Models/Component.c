@@ -6,6 +6,12 @@ Component Component_create(volatile uint8_t* ddr, volatile uint8_t* port, uint8_
   comp.ddr = ddr;
   comp.port = port;
   comp.pin = pin;
+
+  comp.set_read = Component_set_read;
+  comp.set_write = Component_set_write;
+  comp.write = Component_write;
+  comp.read = Component_read;
+
   return comp;
 }
 

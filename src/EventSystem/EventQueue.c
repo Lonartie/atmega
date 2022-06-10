@@ -1,5 +1,5 @@
 #include "EventQueue.h"
-
+#include "../Misc/utils.h"
 #include <stdbool.h>
 #include <util/delay.h>
 #include <avr/io.h>
@@ -16,60 +16,84 @@ EventQueue* EventQueue_instance()
     instance.updaters = Vector_Updater_create();
     instance.events = Vector_Event_create();
     instance.listeners = Vector_Listener_create();
+    instance.reg_updater = EventQueue_register_updater;
+    instance.unreg_updater = EventQueue_unregister_updater;
+    instance.reg_listener = EventQueue_register_listener;
+    instance.unreg_listener = EventQueue_unregister_listener;
+    instance.send_event = EventQueue_send_event;
+    instance.run = EventQueue_run;
     initialized = true;
   }
 
   return &instance;
 }
 
-void EventQueue_register_updater(Updater updater)
+void EventQueue_register_updater(EventQueue* _this, Updater updater)
 {
-  EventQueue* event_queue = EventQueue_instance();
-  Vector_Updater_push_back(&event_queue->updaters, updater);
+  calln(_this->updaters, push_back, (updater));
 }
 
-void EventQueue_register_listener(Listener listener)
+void EventQueue_unregister_updater(EventQueue* _this, Updater updater)
 {
-  EventQueue* event_queue = EventQueue_instance();
-  Vector_Listener_push_back(&event_queue->listeners, listener);
+  for (uint64_t i = 0; i < _this->updaters.size; i++)
+    if (_this->updaters.data[i].update == updater.update && 
+        _this->updaters.data[i].object == updater.object)
+    {
+      calln(_this->updaters, erase, (i));
+      return;
+    }
 }
 
-void EventQueue_send_event(Event event)
+void EventQueue_register_listener(EventQueue* _this, Listener listener)
 {
-  EventQueue* event_queue = EventQueue_instance();
-  Vector_Event_push_back(&event_queue->events, event);
+  calln(_this->listeners, push_back, (listener));
 }
 
-void EventQueue_run()
+void EventQueue_unregister_listener(EventQueue* _this, Listener listener)
 {
-  EventQueue* event_queue = EventQueue_instance();
+  for (uint64_t i = 0; i < _this->listeners.size; i++)
+    if (_this->listeners.data[i].callback == listener.callback && 
+        String_equals(_this->listeners.data[i].event_type, listener.event_type))
+    {
+      calln(_this->listeners, erase, (i));
+      return;
+    }
+}
+
+void EventQueue_send_event(EventQueue* _this, Event event)
+{
+  calln(_this->events, push_back, (event));
+}
+
+void EventQueue_run(EventQueue* _this)
+{
   while (1)
   {
     _delay_us(EVENT_PERIOD_US);
 
     // run updaters
-    for (uint32_t i = 0; i < event_queue->updaters.size; i++) {
-      event_queue->updaters.data[i].update(event_queue->updaters.data[i].object);
+    for (uint32_t i = 0; i < _this->updaters.size; i++) {
+      _this->updaters.data[i].update(_this->updaters.data[i].object);
     }
 
-    Vector_Event tmp_events = Vector_Event_move(&event_queue->events);
+    Vector_Event tmp_events = Vector_Event_move(&_this->events);
 
     // take all events
     for (uint64_t i = 0; i < tmp_events.size; ++i) {
       Event event = tmp_events.data[i];
 
       // find listeners for this event
-      for (uint64_t j = 0; j < event_queue->listeners.size; ++j) {
-        if (String_equals(event.event_type, event_queue->listeners.data[j].event_type)) {
+      for (uint64_t j = 0; j < _this->listeners.size; ++j) {
+        if (String_equals(event.event_type, _this->listeners.data[j].event_type)) {
 
           // call listener
-          event_queue->listeners.data[j].callback(event.argc, event.argv);
+          _this->listeners.data[j].callback(event.argc, event.argv);
         }
       }
 
-      event.cleaner(&event);
+      call(event, cleaner);
     }
 
-    Vector_Event_destroy(&tmp_events);
+    call(tmp_events, destroy);
   }
 }

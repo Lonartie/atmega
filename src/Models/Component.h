@@ -5,11 +5,16 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-typedef struct
+typedef struct Component
 {
   volatile uint8_t* ddr;    ///< data direction register
   volatile uint8_t* port;   ///< port register
   uint8_t pin;              ///< pin number
+
+  void(*set_read)(struct Component*);
+  void(*set_write)(struct Component*);
+  void(*write)(struct Component*, bool);
+  bool(*read)(struct Component*);
 } Component;
 
 /// @returns a new component (stack)
