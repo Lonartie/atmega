@@ -11,7 +11,7 @@
 #include <avr/io.h>
 #include <stdlib.h>
 
-USART USART_creat()
+USART USART_create()
 {
   USART usart;
   usart.ubrr = UBRR_SETTING;

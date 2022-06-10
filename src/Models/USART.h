@@ -10,7 +10,7 @@ typedef struct {
 } USART;
 
 /// @returns a new USART (stack)
-USART USART_creat();
+USART USART_create();
 
 /// @returns a new USART (heap / malloc)
 USART* USART_new();
