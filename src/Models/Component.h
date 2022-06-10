@@ -10,17 +10,10 @@ typedef struct
   volatile uint8_t* ddr;    ///< data direction register
   volatile uint8_t* port;   ///< port register
   uint8_t pin;              ///< pin number
-  bool heap;                ///< whether the component is allocated on the heap
 } Component;
 
 /// @returns a new component (stack)
 Component Component_create(volatile uint8_t* ddr, volatile uint8_t* port, uint8_t pin);
-
-/// @returns a new component (heap / malloc)
-Component* Component_new(volatile uint8_t* ddr, volatile uint8_t* port, uint8_t pin);
-
-/// @brief frees the component if it was alloced on the heap
-void Component_destroy(Component* component);
 
 ///@brief sets the component to read mode 
 void Component_set_read(Component* component);

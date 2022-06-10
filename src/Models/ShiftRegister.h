@@ -8,7 +8,6 @@ typedef struct {
   Component data;   ///< data component
   uint16_t size;    ///< size of the register
   uint16_t tpd_mcs; ///< time per data bit in microseconds
-  bool heap;        ///< whether the component is allocated on the heap
 } ShiftRegister;
 
 /// @returns a new shift register (stack)
@@ -16,15 +15,6 @@ ShiftRegister ShiftRegister_create(
   volatile uint8_t* clk_ddr, volatile uint8_t* clk_port, uint8_t clk_pin,
   volatile uint8_t* data_ddr, volatile uint8_t* data_port, uint8_t data_pin,
   uint16_t size, uint16_t tpd_mcs);
-
-/// @returns a new shift register (heap / malloc)
-ShiftRegister* ShiftRegister_new(
-  volatile uint8_t* clk_ddr, volatile uint8_t* clk_port, uint8_t clk_pin,
-  volatile uint8_t* data_ddr, volatile uint8_t* data_port, uint8_t data_pin,
-  uint16_t size, uint16_t tpd_mcs);
-
-/// @brief destroys the shift register
-void ShiftRegister_destroy(ShiftRegister* sr);
 
 /// @brief clears the shift register
 void ShiftRegister_clear(ShiftRegister* sr);

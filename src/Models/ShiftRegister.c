@@ -18,27 +18,6 @@ ShiftRegister ShiftRegister_create(
   return sr;
 }
 
-ShiftRegister* ShiftRegister_new(
-  volatile uint8_t* clk_ddr, volatile uint8_t* clk_port, uint8_t clk_pin,
-  volatile uint8_t* data_ddr, volatile uint8_t* data_port, uint8_t data_pin,
-  uint16_t size, uint16_t tpd_mcs)
-{
-  ShiftRegister* sr = malloc(sizeof(ShiftRegister) * 1);
-  sr->clk = Component_create(clk_ddr, clk_port, clk_pin);
-  sr->data = Component_create(data_ddr, data_port, data_pin);
-  sr->size = size;
-  sr->tpd_mcs = tpd_mcs;
-  Component_set_write(&sr->clk);
-  Component_set_write(&sr->data);
-  return sr;
-}
-
-void ShiftRegister_destroy(ShiftRegister* sr)
-{
-  if (sr->heap)
-    free(sr);
-}
-
 void ShiftRegister_clear(ShiftRegister* sr)
 {
   for (uint16_t i = 0; i < sr->size; i++)
