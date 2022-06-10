@@ -13,7 +13,7 @@ int main()
 	atmega = System_create();
 
 	Timer timer = Timer_create(100, main_2);
-	Timer_start(&timer);
+	call(timer, start);
 	
 	callp(EventQueue_instance(), run);
 }

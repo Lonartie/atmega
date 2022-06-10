@@ -6,4 +6,6 @@ avr-gcc \
   src/Models/*.c \
   src/EventSystem/*.c \
   src/EventSystem/wraps/*.c \
-  -D F_CPU=16000000 -Os -Wall -Wextra -Wfatal-errors -mmcu=atmega328p -o main
+  -ffunction-sections -fdata-sections \
+  -Wl,--gc-sections \
+  -D F_CPU=16000000 -Os -flto -Wall -Wextra -Wfatal-errors -mmcu=atmega328p -o main
