@@ -9,5 +9,3 @@
 
 #include <avr/io.h>
 #include <util/delay.h>
-
-#include "deps/iesusart.h"
