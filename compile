@@ -1,0 +1,8 @@
+#!/bin/bash
+
+echo compiling..
+avr-gcc \
+  -I src/deps/ \
+  src/*.c \
+  src/deps/*.c \
+  -D F_CPU=16E6 -Os -Wall -Wextra -mmcu=atmega328p -o main
