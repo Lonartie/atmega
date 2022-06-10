@@ -5,5 +5,6 @@
 
 void timer_init();
 uint64_t millis(); 
+uint64_t micros();
 
 #endif // HARDWARE_TIMER_H

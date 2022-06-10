@@ -73,7 +73,7 @@ typedef unsigned long micros_t;
 #define MICROS_TIMER1 		1 // Use timer1
 #define MICROS_TIMER2 		2 // Use timer2
 
-#define MICROS_TIMER 		MICROS_TIMER2 // Which timer to use
+#define MICROS_TIMER 		MICROS_TIMER1 // Which timer to use
 
 /*************************************************************
 	--END OF USER SETUP SECTION
