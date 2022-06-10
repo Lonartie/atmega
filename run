@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "HI"
+
 echo compiling..
 avr-gcc "$@" -DF_CPU=16E6 -Os -Wall -Wextra -mmcu=atmega328p -o main
 
