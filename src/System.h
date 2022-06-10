@@ -6,10 +6,11 @@
 
 typedef struct
 {
-  ShiftRegister led_strip;
-  USART logger;
+  ShiftRegister led_strip;    //< the LED strip (ShiftRegister)
+  USART logger;               //< the logger (USART)
 } System;
 
+/// @brief creates a system with a shift register for the led strip and a usart as the logger
 System System_create();
 
 #endif // SYSTEM_H
