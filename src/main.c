@@ -8,7 +8,7 @@ int main(void)
 
 	bool direction = true;
 	int light = 0;
-	while (1)
+	while (true)
 	{
 		_delay_ms(100);
 
