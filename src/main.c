@@ -5,6 +5,7 @@
 #include "System.h"
 
 System atmega;
+Timer timer;
 
 void main_2(void);
 int main()
@@ -12,7 +13,9 @@ int main()
 	timer_init();
 	atmega = System_create();
 
-	Timer timer = Timer_create(100, main_2);
+	timer = Timer_create(100, "main_timer_100_ms");
+	EventQueue_register_listener(EventQueue_instance(), Listener_create(main_2, "main_timer_100_ms"));
+
 	ACTOR_SCOPE(timer)
 	{
 		timer.start();
@@ -27,11 +30,19 @@ void main_2(void)
 	static int light = 0;
 	static bool direction = true;
 
-	ACTOR_SCOPE(atmega.led_strip)
+	ACTOR_SCOPE(atmega)
 	{
-		if (light == 0) atmega.led_strip.write_n(3, true, false, false);
-		if (light == 1) atmega.led_strip.write_n(3, false, true, false);
-		if (light == 2) atmega.led_strip.write_n(3, false, false, true);
+		ACTOR_SCOPE(atmega.led_strip)
+		{
+			if (light == 0) atmega.led_strip.write_n(3, true, false, false);
+			if (light == 1) atmega.led_strip.write_n(3, false, true, false);
+			if (light == 2) atmega.led_strip.write_n(3, false, false, true);
+		}
+
+		if (get_actor() != &atmega)
+		{
+			Timer_stop(&timer);
+		}
 	}
 	
 	light += direction * 2 - 1;

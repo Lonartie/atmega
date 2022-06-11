@@ -8,5 +8,6 @@ typedef const char* String;
 DECLARE_VECTOR(String);
 
 bool String_equals(String a, String b);
+String String_copy(String a);
 
 #endif // VECTOR_STRING_H
