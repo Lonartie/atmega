@@ -2,14 +2,22 @@
 #include "EventQueue.h"
 #include "HardwareTimer.h"
 
+DEFINE_ACTOR(Timer);
+
+DEFINE_ACTOR_FORWARDER(void, Timer, start);
+DEFINE_ACTOR_FORWARDER(void, Timer, stop);
+
 Timer Timer_create(uint64_t interval_ms, TimerCallback callback)
 {
   Timer timer;
   timer.interval_ms = interval_ms;
   timer.callback = callback;
   timer.last_time_ms = millis();
-  timer.start = Timer_start;
-  timer.stop = Timer_stop;
+  
+  SET_ACTOR_FOWARDER(timer, Timer, start);
+  SET_ACTOR_FOWARDER(timer, Timer, stop);
+  SET_ACTOR_MEM(timer, Timer);
+
   return timer;
 }
 

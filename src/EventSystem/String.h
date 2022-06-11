@@ -1,7 +1,7 @@
 #ifndef VECTOR_STRING_H
 #define VECTOR_STRING_H
 
-#include "Vector.h"
+#include "../Misc/Vector.h"
 #include <stdbool.h>
 
 typedef const char* String;

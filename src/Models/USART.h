@@ -3,16 +3,20 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "../Misc/Actor.h"
 
 typedef struct USART {
   long ubrr;
   bool heap;    //< whether or not the object is allocated on the heap
 
-  void(*destroy)(struct USART*);
-  void (*send_byte)(struct USART*, char);
-  void (*send_str)(struct USART*, const char*);
-  char (*recv_byte)(struct USART*);
+  void(*destroy)();
+  void (*send_byte)(char);
+  void (*send_str)(const char*);
+  char (*recv_byte)();
+  DECLARE_ACTOR_MEM(USART);
 } USART;
+
+DECLARE_ACTOR(USART);
 
 /// @returns a new USART (stack)
 USART USART_create();

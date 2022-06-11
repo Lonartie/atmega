@@ -3,6 +3,11 @@
 #include <stdarg.h>
 #include <util/delay.h>
 
+DEFINE_ACTOR(ShiftRegister);
+DEFINE_ACTOR_FORWARDER(void, ShiftRegister, clear);
+DEFINE_ACTOR_FORWARDER_N(void, ShiftRegister, write, (bool value), (value));
+DECLARE_ACTOR_FORWARDER_N(void, ShiftRegister, write_n, (uint32_t n, ...));
+
 ShiftRegister ShiftRegister_create(
   volatile uint8_t* clk_ddr, volatile uint8_t* clk_port, uint8_t clk_pin,
   volatile uint8_t* data_ddr, volatile uint8_t* data_port, uint8_t data_pin,
@@ -13,9 +18,12 @@ ShiftRegister ShiftRegister_create(
   sr.data = Component_create(data_ddr, data_port, data_pin);
   sr.size = size;
   sr.tpd_mcs = tpd_mcs;
-  sr.clear = ShiftRegister_clear;
-  sr.write = ShiftRegister_write;
-  sr.write_n = ShiftRegister_write_n;
+  
+  SET_ACTOR_FOWARDER(sr, ShiftRegister, clear);
+  SET_ACTOR_FOWARDER(sr, ShiftRegister, write);
+  SET_ACTOR_FOWARDER(sr, ShiftRegister, write_n);
+  SET_ACTOR_MEM(sr, ShiftRegister);
+
   Component_set_write(&sr.clk);
   Component_set_write(&sr.data);
   return sr;
@@ -44,6 +52,18 @@ void ShiftRegister_write_n(ShiftRegister* sr, uint32_t n, ...)
   {
     bool value = va_arg(args, int); // bool gets promoted to int through va_args
     ShiftRegister_write(sr, value);
+  }
+  va_end(args);
+}
+
+void ShiftRegister_write_n_actor(uint32_t n, ...)
+{
+  va_list args;
+  va_start(args, n);
+  for (uint16_t i = 0; i < n; i++)
+  {
+    bool value = va_arg(args, int); // bool gets promoted to int through va_args
+    ShiftRegister_write_actor(value);
   }
   va_end(args);
 }

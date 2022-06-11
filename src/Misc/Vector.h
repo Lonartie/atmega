@@ -7,12 +7,7 @@
 #include <stdbool.h>
 #include <stdarg.h>
 
-#define DISABLE_WARNING(X)            \
-_Pragma("GCC diagnostic push")        \
-_Pragma(#X)
-
-#define WARNING_POP                   \
-_Pragma("GCC diagnostic pop")
+#include "Actor.h"
 
 #define PROMOTE(type) _Generic((type),        \
   bool    : int32_t,                          \
@@ -36,8 +31,10 @@ typedef struct Vector_##type                                                    
   void(*set)(struct Vector_##type*, uint64_t, type);                                        \
   void(*erase)(struct Vector_##type*, uint64_t);                                            \
   void(*push_back)(struct Vector_##type*, type);                                            \
+  DECLARE_ACTOR_MEM(Vector_##type);                                                         \
 } Vector_##type;                                                                            \
                                                                                             \
+DECLARE_ACTOR(Vector_##type);                                                               \
 Vector_##type Vector_##type##_create();                                                     \
 Vector_##type Vector_##type##_create_with_capacity(uint64_t capacity);                      \
 Vector_##type Vector_##type##_copy(Vector_##type* other);                                   \
@@ -52,6 +49,7 @@ void Vector_##type##_erase(Vector_##type* vector, uint64_t index);              
 void Vector_##type##_push_back(Vector_##type* vector, type value);
 
 #define DEFINE_VECTOR(type)                                                                 \
+DEFINE_ACTOR(Vector_##type)                                                                 \
 Vector_##type Vector_##type##_create()                                                      \
 {                                                                                           \
   Vector_##type vector;                                                                     \
@@ -66,6 +64,7 @@ Vector_##type Vector_##type##_create()                                          
   vector.set = Vector_##type##_set;                                                         \
   vector.erase = Vector_##type##_erase;                                                     \
   vector.push_back = Vector_##type##_push_back;                                             \
+  SET_ACTOR_MEM(vector, Vector_##type);                                                     \
   return vector;                                                                            \
 }                                                                                           \
                                                                                             \
@@ -82,6 +81,7 @@ Vector_##type Vector_##type##_create_with_capacity(uint64_t capacity)           
   vector.get = Vector_##type##_get;                                                         \
   vector.set = Vector_##type##_set;                                                         \
   vector.erase = Vector_##type##_erase;                                                     \
+  SET_ACTOR_MEM(vector, Vector_##type);                                                     \
   return vector;                                                                            \
 }                                                                                           \
                                                                                             \
@@ -98,6 +98,7 @@ Vector_##type Vector_##type##_copy(Vector_##type* other)                        
   vector.get = Vector_##type##_get;                                                         \
   vector.set = Vector_##type##_set;                                                         \
   vector.erase = Vector_##type##_erase;                                                     \
+  SET_ACTOR_MEM(vector, Vector_##type);                                                     \
   memcpy(vector.data, other->data, sizeof(type) * vector.capacity);                         \
   return vector;                                                                            \
 }                                                                                           \
@@ -115,6 +116,7 @@ Vector_##type Vector_##type##_move(Vector_##type* other)                        
   vector.get = Vector_##type##_get;                                                         \
   vector.set = Vector_##type##_set;                                                         \
   vector.erase = Vector_##type##_erase;                                                     \
+  SET_ACTOR_MEM(vector, Vector_##type);                                                     \
   other->size = 0;                                                                          \
   other->capacity = 1;                                                                      \
   other->data = malloc(sizeof(type) * other->capacity);                                     \
@@ -135,6 +137,14 @@ Vector_##type Vector_##type##_sublist(Vector_##type* other, uint64_t start, uint
   vector.size = end - start;                                                                \
   vector.capacity = vector.size;                                                            \
   vector.data = malloc(sizeof(type) * vector.capacity);                                     \
+  vector.destroy = Vector_##type##_destroy;                                                 \
+  vector.sublist = Vector_##type##_sublist;                                                 \
+  vector.resize = Vector_##type##_resize;                                                   \
+  vector.clear = Vector_##type##_clear;                                                     \
+  vector.get = Vector_##type##_get;                                                         \
+  vector.set = Vector_##type##_set;                                                         \
+  vector.erase = Vector_##type##_erase;                                                     \
+  SET_ACTOR_MEM(vector, Vector_##type);                                                     \
   memcpy(vector.data, other->data + start, sizeof(type) * vector.capacity);                 \
   return vector;                                                                            \
 }                                                                                           \
@@ -156,28 +166,16 @@ void Vector_##type##_clear(Vector_##type* vector)                               
                                                                                             \
 type* Vector_##type##_get(Vector_##type* vector, uint64_t index)                            \
 {                                                                                           \
-  if (index >= vector->size)                                                                \
-  {                                                                                         \
-    return NULL;                                                                            \
-  }                                                                                         \
   return vector->data + index;                                                              \
 }                                                                                           \
                                                                                             \
 void Vector_##type##_set(Vector_##type* vector, uint64_t index, type value)                 \
 {                                                                                           \
-  if (index >= vector->size)                                                                \
-  {                                                                                         \
-    return;                                                                                 \
-  }                                                                                         \
   vector->data[index] = value;                                                              \
 }                                                                                           \
                                                                                             \
 void Vector_##type##_erase(Vector_##type* vector, uint64_t index)                           \
 {                                                                                           \
-  if (index >= vector->size)                                                                \
-  {                                                                                         \
-    return;                                                                                 \
-  }                                                                                         \
   memmove(vector->data + index, vector->data + index + 1,                                   \
           sizeof(type) * (vector->size - index - 1));                                       \
   vector->size--;                                                                           \
@@ -196,6 +194,5 @@ void Vector_##type##_push_back(Vector_##type* vector, type value)               
 
 DECLARE_VECTOR(int);
 DECLARE_VECTOR(bool);
-DECLARE_VECTOR(double);
 
 #endif

@@ -2,15 +2,14 @@
 #define EVENT_H
 
 #include "String.h"
-#include "Vector.h"
+#include "../Misc/Vector.h"
 
-typedef void(*Cleanup)(void*);
-typedef struct 
+typedef struct Event
 {
   String event_type;
   int argc;
   void** argv;
-  Cleanup cleaner;
+  void(*cleaner)(struct Event*);
 } Event;
 
 DECLARE_VECTOR(Event);

@@ -3,9 +3,11 @@
 echo compiling..
 avr-gcc \
   src/*.c \
+  src/Misc/*.c \
   src/Models/*.c \
   src/EventSystem/*.c \
   src/EventSystem/wraps/*.c \
   -ffunction-sections -fdata-sections \
-  -Wl,--gc-sections \
-  -D F_CPU=16000000 -Os -flto -Wall -Wextra -Wfatal-errors -mmcu=atmega328p -o main
+  -Wl,--gc-sections -Os -flto \
+  -Wall -Wextra -Wfatal-errors \
+  -D F_CPU=16000000 -mmcu=atmega328p -o main

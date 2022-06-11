@@ -13,10 +13,6 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
-#define UNPACK(...) __VA_ARGS__
+#include "Actor.h"
 
-#define calln(O, F, ARGS) (O).F(&O, UNPACK ARGS)
-#define callpn(O, F, ARGS) (O)->F(O, UNPACK ARGS)
-
-#define call(O, F) (O).F(&O)
-#define callp(O, F) (O)->F(O)
+#define MAYBE_UNUSED __attribute__((unused))

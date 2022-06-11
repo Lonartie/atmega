@@ -5,7 +5,8 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-static const uint64_t EVENT_PERIOD_US = 100;
+#define USE_EVENT_QUEUE_DELAY false
+static const uint64_t EVENT_PERIOD_US MAYBE_UNUSED = 100;
 
 EventQueue* EventQueue_instance()
 {
@@ -30,7 +31,7 @@ EventQueue* EventQueue_instance()
 
 void EventQueue_register_updater(EventQueue* _this, Updater updater)
 {
-  calln(_this->updaters, push_back, (updater));
+  Vector_Updater_push_back(&_this->updaters, updater);
 }
 
 void EventQueue_unregister_updater(EventQueue* _this, Updater updater)
@@ -39,14 +40,14 @@ void EventQueue_unregister_updater(EventQueue* _this, Updater updater)
     if (_this->updaters.data[i].update == updater.update && 
         _this->updaters.data[i].object == updater.object)
     {
-      calln(_this->updaters, erase, (i));
+      Vector_Updater_erase(&_this->updaters, i);
       return;
     }
 }
 
 void EventQueue_register_listener(EventQueue* _this, Listener listener)
 {
-  calln(_this->listeners, push_back, (listener));
+  Vector_Listener_push_back(&_this->listeners, listener);
 }
 
 void EventQueue_unregister_listener(EventQueue* _this, Listener listener)
@@ -55,21 +56,23 @@ void EventQueue_unregister_listener(EventQueue* _this, Listener listener)
     if (_this->listeners.data[i].callback == listener.callback && 
         String_equals(_this->listeners.data[i].event_type, listener.event_type))
     {
-      calln(_this->listeners, erase, (i));
+      Vector_Listener_erase(&_this->listeners, i);
       return;
     }
 }
 
 void EventQueue_send_event(EventQueue* _this, Event event)
 {
-  calln(_this->events, push_back, (event));
+  Vector_Event_push_back(&_this->events, event);
 }
 
 void EventQueue_run(EventQueue* _this)
 {
   while (1)
   {
+#if USE_EVENT_QUEUE_DELAY == true
     _delay_us(EVENT_PERIOD_US);
+#endif
 
     // run updaters
     for (uint32_t i = 0; i < _this->updaters.size; i++) {
@@ -91,9 +94,10 @@ void EventQueue_run(EventQueue* _this)
         }
       }
 
-      call(event, cleaner);
+      // clean up event
+      event.cleaner(&event);
     }
 
-    call(tmp_events, destroy);
+    Vector_Event_destroy(&tmp_events);
   }
 }

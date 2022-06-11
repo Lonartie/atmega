@@ -1,7 +1,7 @@
 #ifndef UPDATER_H
 #define UPDATER_H
 
-#include "Vector.h"
+#include "../Misc/Vector.h"
 
 typedef struct Updater {
   void* object;

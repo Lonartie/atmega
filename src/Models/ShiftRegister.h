@@ -2,6 +2,7 @@
 #define SHIFT_REGISTER_H
 
 #include "Component.h"
+#include "../Misc/utils.h"
 
 typedef struct ShiftRegister {
   Component clk;    ///< clock component
@@ -9,10 +10,13 @@ typedef struct ShiftRegister {
   uint16_t size;    ///< size of the register
   uint16_t tpd_mcs; ///< time per data bit in microseconds
 
-  void(*clear)(struct ShiftRegister*);
-  void(*write)(struct ShiftRegister*, bool);
-  void(*write_n)(struct ShiftRegister*, uint32_t, ...);
+  void(*clear)();
+  void(*write)(bool);
+  void(*write_n)(uint32_t, ...);
+  DECLARE_ACTOR_MEM(ShiftRegister);
 } ShiftRegister;
+
+DECLARE_ACTOR(ShiftRegister);
 
 /// @returns a new shift register (stack)
 ShiftRegister ShiftRegister_create(
