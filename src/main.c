@@ -15,13 +15,7 @@ int main()
 
 	timer = Timer_create(100, "main_timer_100_ms");
 	EventQueue_register_listener(EventQueue_instance(), Listener_create(main_2, "main_timer_100_ms"));
-
-	ACTOR_SCOPE(timer)
-	{
-		timer.start();
-		timer.release_actor();
-	}
-	
+	ACTOR_SCOPE(timer) timer.start();	
 	EventQueue_run(EventQueue_instance());
 }
 
@@ -41,7 +35,7 @@ void main_2(void)
 
 		if (get_actor() != &atmega)
 		{
-			// Timer_stop(&timer);
+			ShiftRegister_write_n(&atmega.led_strip, 3, true, true, true);
 		}
 	}
 	
