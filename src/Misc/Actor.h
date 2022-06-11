@@ -70,11 +70,7 @@ OBJ.release_actor = TYPE##_release_actor;
 OBJ.NAME = TYPE##_##NAME##_actor;
 
 #define ACTOR_SCOPE_IMPL \
-bool after_scope() { \
-  release_actor(); \
-  return false; \
-} \
-for (int __index__ = 0; __index__ != 1 || after_scope(); __index__++)
+for (int __index__ = 0; __index__ != 1 || (release_actor(), false); __index__++)
 
 #define ACTOR_SCOPE(OBJ) \
 set_actor(&OBJ); \

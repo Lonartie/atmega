@@ -7,7 +7,7 @@
 System atmega;
 Timer timer;
 
-void main_2(void);
+void main_2(int, void**);
 int main()
 {
 	timer_init();
@@ -19,7 +19,7 @@ int main()
 	EventQueue_run(EventQueue_instance());
 }
 
-void main_2(void)
+void main_2(int argc MAYBE_UNUSED, void** argv MAYBE_UNUSED)
 {
 	static int light = 0;
 	static bool direction = true;

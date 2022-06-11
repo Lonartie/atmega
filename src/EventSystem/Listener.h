@@ -4,7 +4,7 @@
 #include "String.h"
 #include "../Misc/Vector.h"
 
-typedef void(*ListenerCallback)();
+typedef void(*ListenerCallback)(int argc, void** argv);
 
 typedef struct {
   ListenerCallback callback;

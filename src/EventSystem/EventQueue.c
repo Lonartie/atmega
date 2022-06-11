@@ -5,7 +5,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-#define USE_EVENT_QUEUE_DELAY false
+#define USE_EVENT_QUEUE_DELAY true
 static const uint64_t EVENT_PERIOD_US MAYBE_UNUSED = 100;
 
 EventQueue* EventQueue_instance()
@@ -13,7 +13,8 @@ EventQueue* EventQueue_instance()
   static EventQueue instance;
   static bool initialized = false;
 
-  if (!initialized) {
+  if (!initialized) 
+  {
     instance.updaters = Vector_Updater_create();
     instance.events = Vector_Event_create();
     instance.listeners = Vector_Listener_create();
@@ -70,28 +71,30 @@ void EventQueue_send_event(EventQueue* _this, Event event)
 
 void EventQueue_run(EventQueue* _this)
 {
-  while (1)
+  while (true)
   {
 #if USE_EVENT_QUEUE_DELAY == true
     _delay_us(EVENT_PERIOD_US);
 #endif
 
     // run updaters
-    for (uint32_t i = 0; i < _this->updaters.size; i++) {
+    for (uint32_t i = 0; i < _this->updaters.size; i++) 
+    {
       _this->updaters.data[i].update(_this->updaters.data[i].object);
     }
 
     Vector_Event tmp_events = Vector_Event_move(&_this->events);
 
     // take all events
-    for (uint64_t i = 0; i < tmp_events.size; ++i) {
+    for (uint64_t i = 0; i < tmp_events.size; ++i) 
+    {
       Event event = tmp_events.data[i];
 
       // find listeners for this event
-      for (uint64_t j = 0; j < _this->listeners.size; ++j) {
-        if (String_equals(event.event_type, _this->listeners.data[j].event_type)) {
-
-          // call listener
+      for (uint64_t j = 0; j < _this->listeners.size; ++j) 
+      {
+        if (String_equals(event.event_type, _this->listeners.data[j].event_type)) 
+        {
           _this->listeners.data[j].callback(event.argc, event.argv);
         }
       }
