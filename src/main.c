@@ -41,7 +41,7 @@ void main_2(void)
 
 		if (get_actor() != &atmega)
 		{
-			Timer_stop(&timer);
+			// Timer_stop(&timer);
 		}
 	}
 	
