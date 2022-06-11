@@ -17,12 +17,14 @@ EventQueue* EventQueue_instance()
     instance.updaters = Vector_Updater_create();
     instance.events = Vector_Event_create();
     instance.listeners = Vector_Listener_create();
+
     instance.reg_updater = EventQueue_register_updater;
     instance.unreg_updater = EventQueue_unregister_updater;
     instance.reg_listener = EventQueue_register_listener;
     instance.unreg_listener = EventQueue_unregister_listener;
     instance.send_event = EventQueue_send_event;
     instance.run = EventQueue_run;
+
     initialized = true;
   }
 
@@ -95,7 +97,8 @@ void EventQueue_run(EventQueue* _this)
       }
 
       // clean up event
-      event.cleaner(&event);
+      if (event.cleaner)
+        event.cleaner(&event);
     }
 
     Vector_Event_destroy(&tmp_events);
