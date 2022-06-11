@@ -54,4 +54,4 @@ dkms.conf
 main
 main.hex
 .vscode/settings.json
-test*
+/test*

@@ -24,19 +24,11 @@ void main_2(int argc MAYBE_UNUSED, void* argv MAYBE_UNUSED)
 	static int light = 0;
 	static bool direction = true;
 
-	ACTOR_SCOPE(atmega)
+	ACTOR_SCOPE(atmega.led_strip)
 	{
-		ACTOR_SCOPE(atmega.led_strip)
-		{
-			if (light == 0) atmega.led_strip.write_n(3, true, false, false);
-			if (light == 1) atmega.led_strip.write_n(3, false, true, false);
-			if (light == 2) atmega.led_strip.write_n(3, false, false, true);
-		}
-
-		if (get_actor() != &atmega)
-		{
-			ShiftRegister_write_n(&atmega.led_strip, 3, true, true, true);
-		}
+		if (light == 0) atmega.led_strip.write_n(3, true, false, false);
+		if (light == 1) atmega.led_strip.write_n(3, false, true, false);
+		if (light == 2) atmega.led_strip.write_n(3, false, false, true);
 	}
 	
 	light += direction * 2 - 1;
