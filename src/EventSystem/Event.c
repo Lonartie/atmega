@@ -2,7 +2,7 @@
 
 DEFINE_VECTOR(Event);
 
-Event Event_create(String event_type, int argc, void** argv)
+Event Event_create(String event_type, int argc, void* argv)
 {
   Event event;
   event.event_type = event_type;
@@ -12,7 +12,7 @@ Event Event_create(String event_type, int argc, void** argv)
   return event;
 }
 
-Event Event_create_with_cleaner(String event_type, int argc, void** argv, 
+Event Event_create_with_cleaner(String event_type, int argc, void* argv, 
   void(*cleaner)(struct Event*))
 {
   Event event;

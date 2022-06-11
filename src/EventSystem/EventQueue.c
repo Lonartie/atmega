@@ -1,11 +1,9 @@
 #include "EventQueue.h"
 #include "../Misc/utils.h"
 #include <stdbool.h>
-#include <util/delay.h>
-#include <avr/io.h>
-#include <avr/interrupt.h>
+// #include <util/delay.h>
 
-#define USE_EVENT_QUEUE_DELAY true
+#define USE_EVENT_QUEUE_DELAY false
 static const uint64_t EVENT_PERIOD_US MAYBE_UNUSED = 100;
 
 EventQueue* EventQueue_instance()

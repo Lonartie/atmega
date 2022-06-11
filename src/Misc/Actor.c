@@ -12,8 +12,8 @@ static bool initialized = false;
 void* set_actor(void* obj) 
 {
   if (!initialized) {
-    initialized = true;
     actor_instance = Vector_void_ptr_create();
+    initialized = true;
   }
 
   Vector_void_ptr_push_back(&actor_instance, obj);
@@ -22,7 +22,7 @@ void* set_actor(void* obj)
 
 void* get_actor() 
 {
-  return Vector_void_ptr_get(&actor_instance, actor_instance.size - 1);
+  return *Vector_void_ptr_get(&actor_instance, actor_instance.size - 1);
 }
 
 void release_actor()
