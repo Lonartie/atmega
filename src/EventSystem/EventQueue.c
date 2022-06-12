@@ -99,7 +99,7 @@ void EventQueue_run(EventQueue* _this)
       {
         if (String_equals(event.event_type, _this->listeners.data[j].event_type)) 
         {
-          _this->listeners.data[j].callback(event.event_data);
+          _this->listeners.data[j].callback();
         }
       }
     }

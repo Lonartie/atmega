@@ -5,7 +5,7 @@
 #include "Event.h"
 #include "../Misc/utils.h"
 
-typedef void(*ListenerCallback)(event_data_t);
+typedef void(*ListenerCallback)();
 
 typedef struct {
   ListenerCallback callback;
