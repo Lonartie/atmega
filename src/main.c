@@ -14,6 +14,7 @@ int main()
 {
 	timer_init();
 	atmega = System_create();
+	usart = USART_create();
 	timer = Timer_create(100, "main_timer_100_ms");
 
 	EventQueue* evq = EventQueue_instance();
