@@ -18,9 +18,9 @@ int main()
   EventQueue_reg_listener(EventQueue_instance(), Listener_create(callme, "test"));
 
   Vector_int_4 vec = Vector_int_4_create();
-  Vector_int_push_back(&vec, 0);
-  Vector_int_push_back(&vec, 1);
-  Vector_int_push_back(&vec, 2);
+  Vector_int_4_push_back(&vec, 0);
+  Vector_int_4_push_back(&vec, 1);
+  Vector_int_4_push_back(&vec, 2);
   Event event = Event_create("test", vec.size, vec.data);
 
   EventQueue_send_event(EventQueue_instance(), event);
