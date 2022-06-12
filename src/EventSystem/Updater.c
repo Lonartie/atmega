@@ -1,6 +1,6 @@
 #include "Updater.h"
 
-DEFINE_VECTOR(Updater);
+DEFINE_VECTORS(Updater);
 
 Updater Updater_create(void* object, void (*update)(void* object))
 {

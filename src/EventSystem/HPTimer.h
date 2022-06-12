@@ -13,10 +13,7 @@ typedef struct HPTimer {
 
   void(*start)();
   void(*stop)();
-  DECLARE_ACTOR_MEM(HPTimer);
 } HPTimer;
-
-DECLARE_ACTOR(HPTimer);
 
 HPTimer HPTimer_create(uint64_t interval_us, HPTimerCallback callback);
 void HPTimer_start(HPTimer* timer);

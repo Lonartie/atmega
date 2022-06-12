@@ -1,6 +1,5 @@
 #include "Component.h"
 
-DEFINE_ACTOR(Component);
 DEFINE_ACTOR_FORWARDER(void, Component, set_read);
 DEFINE_ACTOR_FORWARDER(void, Component, set_write);
 DEFINE_ACTOR_FORWARDER_N(void, Component, write, (bool value), (value));
@@ -13,11 +12,10 @@ Component Component_create(volatile uint8_t* ddr, volatile uint8_t* port, uint8_
   comp.port = port;
   comp.pin = pin;
 
-  SET_ACTOR_FOWARDER(comp, Component, set_read);
-  SET_ACTOR_FOWARDER(comp, Component, set_write);
-  SET_ACTOR_FOWARDER(comp, Component, write);
-  SET_ACTOR_FOWARDER(comp, Component, read);
-  SET_ACTOR_MEM(comp, Component);
+  SET_ACTOR_FORWARDER(comp, Component, set_read);
+  SET_ACTOR_FORWARDER(comp, Component, set_write);
+  SET_ACTOR_FORWARDER(comp, Component, write);
+  SET_ACTOR_FORWARDER(comp, Component, read);
 
   return comp;
 }

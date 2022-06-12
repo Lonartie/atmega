@@ -13,16 +13,10 @@ typedef struct USART {
   void (*send_byte)(char);
   void (*send_str)(const char*);
   char (*recv_byte)();
-  DECLARE_ACTOR_MEM(USART);
 } USART;
-
-DECLARE_ACTOR(USART);
 
 /// @returns a new USART (stack)
 USART USART_create();
-
-/// @brief destroys the USART
-void USART_destroy(USART* usart);
 
 /// @brief sends a single byte through the USART
 void USART_send_byte(USART* usart, char byte);

@@ -3,7 +3,6 @@
 #include <stdarg.h>
 #include <util/delay.h>
 
-DEFINE_ACTOR(ShiftRegister);
 DEFINE_ACTOR_FORWARDER(void, ShiftRegister, clear);
 DEFINE_ACTOR_FORWARDER_N(void, ShiftRegister, write, (bool value), (value));
 DECLARE_ACTOR_FORWARDER_N(void, ShiftRegister, write_n, (uint32_t n, ...));
@@ -19,10 +18,9 @@ ShiftRegister ShiftRegister_create(
   sr.size = size;
   sr.tpd_mcs = tpd_mcs;
   
-  SET_ACTOR_FOWARDER(sr, ShiftRegister, clear);
-  SET_ACTOR_FOWARDER(sr, ShiftRegister, write);
-  SET_ACTOR_FOWARDER(sr, ShiftRegister, write_n);
-  SET_ACTOR_MEM(sr, ShiftRegister);
+  SET_ACTOR_FORWARDER(sr, ShiftRegister, clear);
+  SET_ACTOR_FORWARDER(sr, ShiftRegister, write);
+  SET_ACTOR_FORWARDER(sr, ShiftRegister, write_n);
 
   Component_set_write(&sr.clk);
   Component_set_write(&sr.data);

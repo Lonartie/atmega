@@ -13,10 +13,7 @@ typedef struct ShiftRegister {
   void(*clear)();
   void(*write)(bool);
   void(*write_n)(uint32_t, ...);
-  DECLARE_ACTOR_MEM(ShiftRegister);
 } ShiftRegister;
-
-DECLARE_ACTOR(ShiftRegister);
 
 /// @returns a new shift register (stack)
 ShiftRegister ShiftRegister_create(

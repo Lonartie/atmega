@@ -2,7 +2,6 @@
 #include "EventQueue.h"
 #include "HardwareTimer.h"
 
-DEFINE_ACTOR(HPTimer);
 DEFINE_ACTOR_FORWARDER(void, HPTimer, start);
 DEFINE_ACTOR_FORWARDER(void, HPTimer, stop);
 
@@ -12,9 +11,8 @@ HPTimer HPTimer_create(uint64_t interval_us, HPTimerCallback callback)
   timer.interval_us = interval_us;
   timer.callback = callback;
   timer.last_time_us = micros();
-  SET_ACTOR_FOWARDER(timer, HPTimer, start);
-  SET_ACTOR_FOWARDER(timer, HPTimer, stop);
-  SET_ACTOR_MEM(timer, HPTimer);
+  SET_ACTOR_FORWARDER(timer, HPTimer, start);
+  SET_ACTOR_FORWARDER(timer, HPTimer, stop);
   return timer;
 }
 

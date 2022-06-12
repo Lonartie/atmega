@@ -17,10 +17,7 @@ typedef struct Component
   void(*set_write)();
   void(*write)(bool);
   bool(*read)();
-  DECLARE_ACTOR_MEM(Component);
 } Component;
-
-DECLARE_ACTOR(Component);
 
 /// @returns a new component (stack)
 Component Component_create(volatile uint8_t* ddr, volatile uint8_t* port, uint8_t pin);

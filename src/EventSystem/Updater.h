@@ -8,7 +8,7 @@ typedef struct Updater {
   void (*update)(void* object);
 } Updater;
 
-DECLARE_VECTOR(Updater);
+DECLARE_VECTORS(Updater);
 
 Updater Updater_create(void* object, void (*update)(void* object));
 

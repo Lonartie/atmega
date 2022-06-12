@@ -1,6 +1,6 @@
 #include "Listener.h"
 
-DEFINE_VECTOR(Listener);
+DEFINE_VECTORS(Listener);
 
 Listener Listener_create(ListenerCallback callback, String event_type)
 {

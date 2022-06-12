@@ -5,10 +5,7 @@
 typedef struct test
 {
   int n;
-  DECLARE_ACTOR_MEM(test);
 } test;
-
-DEFINE_ACTOR(test);
 
 int main()
 {

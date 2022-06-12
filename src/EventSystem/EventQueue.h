@@ -7,9 +7,9 @@
 #include "Updater.h"
 
 typedef struct EventQueue {
-  Vector_Updater updaters;
-  Vector_Event events;
-  Vector_Listener listeners;
+  Vector_Updater_16 updaters;
+  Vector_Event_32 events;
+  Vector_Listener_64 listeners;
 
   void(*reg_updater)(Updater);
   void(*unreg_updater)(Updater);
@@ -17,10 +17,7 @@ typedef struct EventQueue {
   void(*unreg_listener)(Listener);
   void(*send_event)(Event);
   void(*run)();
-  DECLARE_ACTOR_MEM(EventQueue);
 } EventQueue;
-
-DECLARE_ACTOR(EventQueue);
 
 EventQueue* EventQueue_instance();
 void EventQueue_reg_updater(EventQueue* _this, Updater updater);

@@ -2,8 +2,6 @@
 #include "EventQueue.h"
 #include "HardwareTimer.h"
 
-DEFINE_ACTOR(Timer);
-
 DEFINE_ACTOR_FORWARDER(void, Timer, start);
 DEFINE_ACTOR_FORWARDER(void, Timer, stop);
 
@@ -12,21 +10,12 @@ Timer Timer_create(uint64_t interval_ms, String event_type)
   Timer timer;
   timer.interval_ms = interval_ms;
   timer.last_time_ms = millis();
-  timer.event_type = String_copy(event_type);
+  timer.event_type = event_type;
   
-  SET_ACTOR_FOWARDER(timer, Timer, start);
-  SET_ACTOR_FOWARDER(timer, Timer, stop);
-  SET_ACTOR_MEM(timer, Timer);
+  SET_ACTOR_FORWARDER(timer, Timer, start);
+  SET_ACTOR_FORWARDER(timer, Timer, stop);
 
   return timer;
-}
-
-void Timer_destroy(Timer* timer)
-{
-  // yes this should never be done
-  // but we know this string wasn't const in the first place
-  // so don't look at it :D
-  free((char*)timer->event_type);
 }
 
 void Timer_start(Timer* timer)

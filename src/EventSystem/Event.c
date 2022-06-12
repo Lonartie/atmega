@@ -1,6 +1,6 @@
 #include "Event.h"
 
-DEFINE_VECTOR(Event);
+DEFINE_VECTORS(Event);
 
 Event Event_create(String event_type, int argc, void* argv)
 {

@@ -14,13 +14,9 @@ typedef struct Timer {
 
   void(*start)();
   void(*stop)();
-  DECLARE_ACTOR_MEM(Timer);
 } Timer;
 
-DECLARE_ACTOR(Timer);
-
 Timer Timer_create(uint64_t interval_ms, String event_type);
-void Timer_destroy(Timer* timer);
 void Timer_start(Timer* timer);
 void Timer_stop(Timer* timer);
 void Timer_update(void* obj);

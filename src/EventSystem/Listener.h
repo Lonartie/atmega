@@ -11,7 +11,7 @@ typedef struct {
   String event_type;
 } Listener;
 
-DECLARE_VECTOR(Listener);
+DECLARE_VECTORS(Listener);
 
 Listener Listener_create(ListenerCallback callback, String event_type);
 

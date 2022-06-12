@@ -3,29 +3,26 @@
 
 typedef void* void_ptr;
 
-DECLARE_VECTOR(void_ptr);
-DEFINE_VECTOR(void_ptr);
-
-static Vector_void_ptr actor_instance;
+static void* actor_instances[64];
+static uint actors_count = 0;
 static bool initialized = false;
 
 void* set_actor(void* obj) 
 {
   if (!initialized) {
-    actor_instance = Vector_void_ptr_create();
     initialized = true;
   }
 
-  Vector_void_ptr_push_back(&actor_instance, obj);
+  actor_instances[actors_count++] = obj;
   return obj;
 }
 
 void* get_actor() 
 {
-  return *Vector_void_ptr_get(&actor_instance, actor_instance.size - 1);
+  return actor_instances[actors_count - 1];
 }
 
 void release_actor()
 {
-  Vector_void_ptr_erase(&actor_instance, actor_instance.size - 1);
+  actors_count--;
 }

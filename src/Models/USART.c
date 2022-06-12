@@ -11,9 +11,6 @@
 #include <avr/io.h>
 #include <stdlib.h>
 
-DEFINE_ACTOR(USART);
-
-DEFINE_ACTOR_FORWARDER(void, USART, destroy);
 DEFINE_ACTOR_FORWARDER_N(void, USART, send_byte, (char value), (value));
 DEFINE_ACTOR_FORWARDER_N(void, USART, send_str, (const char* str), (str));
 DEFINE_ACTOR_FORWARDER(char, USART, recv_byte);
@@ -24,11 +21,9 @@ USART USART_create()
   usart.ubrr = UBRR_SETTING;
   usart.heap = false;
 
-  SET_ACTOR_FOWARDER(usart, USART, destroy);
-  SET_ACTOR_FOWARDER(usart, USART, send_byte);
-  SET_ACTOR_FOWARDER(usart, USART, send_str);
-  SET_ACTOR_FOWARDER(usart, USART, recv_byte);
-  SET_ACTOR_MEM(usart, USART);
+  SET_ACTOR_FORWARDER(usart, USART, send_byte);
+  SET_ACTOR_FORWARDER(usart, USART, send_str);
+  SET_ACTOR_FORWARDER(usart, USART, recv_byte);
 
   UBRR0H = (unsigned char) (usart.ubrr >> 8);
   UBRR0L = (unsigned char) usart.ubrr;
@@ -37,12 +32,6 @@ USART USART_create()
   USART_send_str(&usart, "<(^_^)>\n\0");
 
   return usart;
-}
-
-void USART_destroy(USART* usart)
-{
-  if (usart->heap)
-    free(usart);
 }
 
 #pragma GCC diagnostic push
