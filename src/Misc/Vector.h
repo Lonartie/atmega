@@ -1,13 +1,7 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
-#include <stdint.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include <stdarg.h>
-
-#include "Actor.h"
+#include "utils.h"
 
 #define DECLARE_VECTOR(TYPE, SIZE) \
 typedef struct Vector_##TYPE##_##SIZE \
@@ -141,7 +135,6 @@ typedef unsigned char uchar;
 typedef unsigned short ushort;
 typedef unsigned int uint;
 typedef unsigned long ulong;
-
 
 DECLARE_VECTORS(char)
 DECLARE_VECTORS(uchar)

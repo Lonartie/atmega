@@ -99,13 +99,9 @@ void EventQueue_run(EventQueue* _this)
       {
         if (String_equals(event.event_type, _this->listeners.data[j].event_type)) 
         {
-          _this->listeners.data[j].callback(event.argc, event.argv);
+          _this->listeners.data[j].callback(event.event_data);
         }
       }
-
-      // clean up event
-      if (event.cleaner)
-        event.cleaner(&event);
     }
   }
 }

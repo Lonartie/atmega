@@ -2,9 +2,10 @@
 #define LISTENER_H
 
 #include "String.h"
-#include "../Misc/Vector.h"
+#include "Event.h"
+#include "../Misc/utils.h"
 
-typedef void(*ListenerCallback)(int argc, void* argv);
+typedef void(*ListenerCallback)(event_data_t);
 
 typedef struct {
   ListenerCallback callback;

@@ -34,8 +34,13 @@ RET TYPE##_##NAME##_actor() { \
 #define SET_ACTOR_FORWARDER(OBJ, TYPE, NAME) \
 OBJ.NAME = TYPE##_##NAME##_actor;
 
+#define _CAT(A, B, C) A##B##C
+#define CAT(A, B, C) _CAT(A, B, C)
+
 #define ACTOR_SCOPE_IMPL \
-for (int __index__ = 0; __index__ != 1 || (release_actor(), false); __index__++)
+for (int CAT(__index_,__LINE__,__) = 0; \
+  CAT(__index_,__LINE__,__) != 1 || (release_actor(), false); \
+  CAT(__index_,__LINE__,__)++)
 
 #define ACTOR_SCOPE(OBJ) \
 set_actor(&OBJ); \

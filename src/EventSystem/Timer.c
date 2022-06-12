@@ -34,7 +34,7 @@ void Timer_update(void* obj)
   uint64_t current_time_ms = millis();
   if (timer->last_time_ms + timer->interval_ms <= current_time_ms) {
     timer->last_time_ms = current_time_ms;
-    Event event = Event_create(timer->event_type, 0, NULL);
+    Event event = Event_create(timer->event_type);
     EventQueue_send_event(EventQueue_instance(), event);
   }
 }

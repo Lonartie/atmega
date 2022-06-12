@@ -9,7 +9,7 @@ System atmega;
 Timer timer;
 USART usart;
 
-void main_2(int, void*);
+void main_2(event_data_t);
 int main()
 {
 	timer_init();
@@ -26,7 +26,7 @@ int main()
 	}
 }
 
-void main_2(int argc MAYBE_UNUSED, void* argv MAYBE_UNUSED)
+void main_2(event_data_t data MAYBE_UNUSED)
 {
 	static int light = 0;
 	static bool direction = true;
