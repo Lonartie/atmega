@@ -15,7 +15,7 @@ void callme(int argc, void* argv)
 
 int main()
 {
-  EventQueue_register_listener(EventQueue_instance(), Listener_create(callme, "test"));
+  EventQueue_reg_listener(EventQueue_instance(), Listener_create(callme, "test"));
 
   Vector_int vec = Vector_int_create();
   Vector_int_push_back(&vec, 0);

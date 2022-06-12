@@ -80,5 +80,8 @@ ACTOR_SCOPE_IMPL
 set_actor(OBJ); \
 ACTOR_SCOPE_IMPL
 
+#define ACTOR(OBJ) \
+ACTOR_SCOPE(OBJ) (OBJ)
+
 
 #endif // ACTOR_H

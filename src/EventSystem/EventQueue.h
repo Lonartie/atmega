@@ -11,19 +11,22 @@ typedef struct EventQueue {
   Vector_Event events;
   Vector_Listener listeners;
 
-  void(*reg_updater)(struct EventQueue*, Updater);
-  void(*unreg_updater)(struct EventQueue*, Updater);
-  void(*reg_listener)(struct EventQueue*, Listener);
-  void(*unreg_listener)(struct EventQueue*, Listener);
-  void(*send_event)(struct EventQueue*, Event);
-  void(*run)(struct EventQueue*);
+  void(*reg_updater)(Updater);
+  void(*unreg_updater)(Updater);
+  void(*reg_listener)(Listener);
+  void(*unreg_listener)(Listener);
+  void(*send_event)(Event);
+  void(*run)();
+  DECLARE_ACTOR_MEM(EventQueue);
 } EventQueue;
 
+DECLARE_ACTOR(EventQueue);
+
 EventQueue* EventQueue_instance();
-void EventQueue_register_updater(EventQueue* _this, Updater updater);
-void EventQueue_unregister_updater(EventQueue* _this, Updater updater);
-void EventQueue_register_listener(EventQueue* _this, Listener listener);
-void EventQueue_unregister_listener(EventQueue* _this, Listener listener);
+void EventQueue_reg_updater(EventQueue* _this, Updater updater);
+void EventQueue_unreg_updater(EventQueue* _this, Updater updater);
+void EventQueue_reg_listener(EventQueue* _this, Listener listener);
+void EventQueue_unreg_listener(EventQueue* _this, Listener listener);
 void EventQueue_send_event(EventQueue* _this, Event event);
 void EventQueue_run(EventQueue* _this);
 

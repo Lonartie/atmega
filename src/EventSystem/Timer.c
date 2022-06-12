@@ -31,12 +31,12 @@ void Timer_destroy(Timer* timer)
 
 void Timer_start(Timer* timer)
 {
-  EventQueue_register_updater(EventQueue_instance(), Updater_create(timer, Timer_update));
+  EventQueue_reg_updater(EventQueue_instance(), Updater_create(timer, Timer_update));
 }
 
 void Timer_stop(Timer* timer)
 {
-  EventQueue_unregister_updater(EventQueue_instance(), Updater_create(timer, Timer_update));
+  EventQueue_unreg_updater(EventQueue_instance(), Updater_create(timer, Timer_update));
 }
 
 void Timer_update(void* obj)

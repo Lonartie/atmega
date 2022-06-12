@@ -12,11 +12,15 @@ int main()
 {
 	timer_init();
 	atmega = System_create();
-
 	timer = Timer_create(100, "main_timer_100_ms");
-	EventQueue_register_listener(EventQueue_instance(), Listener_create(main_2, "main_timer_100_ms"));
-	ACTOR_SCOPE(timer) timer.start();	
-	EventQueue_run(EventQueue_instance());
+
+	EventQueue* evq = EventQueue_instance();
+	ACTOR_SCOPE(evq) 
+	{
+		evq->reg_listener(Listener_create(main_2, "main_timer_100_ms"));
+		ACTOR(timer).start();	
+		evq->run();
+	}
 }
 
 void main_2(int argc MAYBE_UNUSED, void* argv MAYBE_UNUSED)

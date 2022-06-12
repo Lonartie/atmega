@@ -2,25 +2,30 @@
 #include "EventQueue.h"
 #include "HardwareTimer.h"
 
+DEFINE_ACTOR(HPTimer);
+DEFINE_ACTOR_FORWARDER(void, HPTimer, start);
+DEFINE_ACTOR_FORWARDER(void, HPTimer, stop);
+
 HPTimer HPTimer_create(uint64_t interval_us, HPTimerCallback callback)
 {
   HPTimer timer;
   timer.interval_us = interval_us;
   timer.callback = callback;
   timer.last_time_us = micros();
-  timer.start = HPTimer_start;
-  timer.stop = HPTimer_stop;
+  SET_ACTOR_FOWARDER(timer, HPTimer, start);
+  SET_ACTOR_FOWARDER(timer, HPTimer, stop);
+  SET_ACTOR_MEM(timer, HPTimer);
   return timer;
 }
 
 void HPTimer_start(HPTimer* timer)
 {
-  EventQueue_register_updater(EventQueue_instance(), Updater_create(timer, HPTimer_update));
+  EventQueue_reg_updater(EventQueue_instance(), Updater_create(timer, HPTimer_update));
 }
 
 void HPTimer_stop(HPTimer* timer)
 {
-  EventQueue_unregister_updater(EventQueue_instance(), Updater_create(timer, HPTimer_update));
+  EventQueue_unreg_updater(EventQueue_instance(), Updater_create(timer, HPTimer_update));
 }
 
 void HPTimer_update(void* obj)

@@ -6,6 +6,14 @@
 #define USE_EVENT_QUEUE_DELAY false
 static const uint64_t EVENT_PERIOD_US MAYBE_UNUSED = 100;
 
+DEFINE_ACTOR(EventQueue);
+DEFINE_ACTOR_FORWARDER_N(void, EventQueue, reg_updater, (Updater updater), (updater));
+DEFINE_ACTOR_FORWARDER_N(void, EventQueue, unreg_updater, (Updater updater), (updater));
+DEFINE_ACTOR_FORWARDER_N(void, EventQueue, reg_listener, (Listener listener), (listener));
+DEFINE_ACTOR_FORWARDER_N(void, EventQueue, unreg_listener, (Listener listener), (listener));
+DEFINE_ACTOR_FORWARDER_N(void, EventQueue, send_event, (Event event), (event));
+DEFINE_ACTOR_FORWARDER(void, EventQueue, run);
+
 EventQueue* EventQueue_instance()
 {
   static EventQueue instance;
@@ -17,12 +25,12 @@ EventQueue* EventQueue_instance()
     instance.events = Vector_Event_create();
     instance.listeners = Vector_Listener_create();
 
-    instance.reg_updater = EventQueue_register_updater;
-    instance.unreg_updater = EventQueue_unregister_updater;
-    instance.reg_listener = EventQueue_register_listener;
-    instance.unreg_listener = EventQueue_unregister_listener;
-    instance.send_event = EventQueue_send_event;
-    instance.run = EventQueue_run;
+    SET_ACTOR_FOWARDER(instance, EventQueue, reg_updater);
+    SET_ACTOR_FOWARDER(instance, EventQueue, unreg_updater);
+    SET_ACTOR_FOWARDER(instance, EventQueue, reg_listener);
+    SET_ACTOR_FOWARDER(instance, EventQueue, unreg_listener);
+    SET_ACTOR_FOWARDER(instance, EventQueue, run);
+    SET_ACTOR_MEM(instance, EventQueue);
 
     initialized = true;
   }
@@ -30,12 +38,12 @@ EventQueue* EventQueue_instance()
   return &instance;
 }
 
-void EventQueue_register_updater(EventQueue* _this, Updater updater)
+void EventQueue_reg_updater(EventQueue* _this, Updater updater)
 {
   Vector_Updater_push_back(&_this->updaters, updater);
 }
 
-void EventQueue_unregister_updater(EventQueue* _this, Updater updater)
+void EventQueue_unreg_updater(EventQueue* _this, Updater updater)
 {
   for (uint64_t i = 0; i < _this->updaters.size; i++)
     if (_this->updaters.data[i].update == updater.update && 
@@ -46,12 +54,12 @@ void EventQueue_unregister_updater(EventQueue* _this, Updater updater)
     }
 }
 
-void EventQueue_register_listener(EventQueue* _this, Listener listener)
+void EventQueue_reg_listener(EventQueue* _this, Listener listener)
 {
   Vector_Listener_push_back(&_this->listeners, listener);
 }
 
-void EventQueue_unregister_listener(EventQueue* _this, Listener listener)
+void EventQueue_unreg_listener(EventQueue* _this, Listener listener)
 {
   for (uint64_t i = 0; i < _this->listeners.size; i++)
     if (_this->listeners.data[i].callback == listener.callback && 
