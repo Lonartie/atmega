@@ -15,7 +15,7 @@ int main()
 	timer = Timer_create(100, "main_timer_100_ms");
 
 	EventQueue* evq = EventQueue_instance();
-	ACTOR_SCOPE(evq) 
+	ACTOR_SCOPE(*evq) 
 	{
 		evq->reg_listener(Listener_create(main_2, "main_timer_100_ms"));
 		ACTOR(timer).start();	
@@ -36,7 +36,6 @@ void main_2(int argc MAYBE_UNUSED, void* argv MAYBE_UNUSED)
 	}
 	
 	light += direction * 2 - 1;
-
 	if (light == 3 || light == -1) {
 		direction = !direction;
 		light += 2 * (direction * 2 - 1);
