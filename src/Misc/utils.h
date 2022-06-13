@@ -6,7 +6,6 @@
 #	define __AVR_ATmega328P__
 #endif
 
-#include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>

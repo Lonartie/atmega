@@ -9,7 +9,6 @@
 
 #include "USART.h"
 #include <avr/io.h>
-#include <stdlib.h>
 
 DEFINE_ACTOR_FORWARDER_N(void, USART, send_byte, (char value), (value));
 DEFINE_ACTOR_FORWARDER_N(void, USART, send_str, (const char* str), (str));

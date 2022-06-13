@@ -1,7 +1,6 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
-#include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
 
