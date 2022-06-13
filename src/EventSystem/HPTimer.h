@@ -2,7 +2,7 @@
 #define HPTIMER_H
 
 #include <stdint.h>
-#include "String.h"
+#include "../Misc/String.h"
 #include "../Misc/Actor.h"
 
 typedef void(*TimerCallback)();

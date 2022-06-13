@@ -1,7 +1,7 @@
 #ifndef EVENT_H
 #define EVENT_H
 
-#include "String.h"
+#include "../Misc/String.h"
 #include "../Misc/Vector.h"
 
 typedef struct Event
