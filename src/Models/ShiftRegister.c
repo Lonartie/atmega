@@ -13,8 +13,8 @@ ShiftRegister ShiftRegister_create(
   uint16_t size, uint16_t tpd_mcs)
 {
   ShiftRegister sr;
-  sr.clk = Component_create(clk_ddr, clk_port, clk_pin);
-  sr.data = Component_create(data_ddr, data_port, data_pin);
+  sr.clk = Pin_create(clk_ddr, clk_port, clk_pin);
+  sr.data = Pin_create(data_ddr, data_port, data_pin);
   sr.size = size;
   sr.tpd_mcs = tpd_mcs;
   
@@ -22,8 +22,8 @@ ShiftRegister ShiftRegister_create(
   SET_ACTOR_FORWARDER(sr, ShiftRegister, write);
   SET_ACTOR_FORWARDER(sr, ShiftRegister, write_n);
 
-  Component_set_write(&sr.clk);
-  Component_set_write(&sr.data);
+  Pin_set_write(&sr.clk);
+  Pin_set_write(&sr.data);
   return sr;
 }
 
@@ -35,9 +35,9 @@ void ShiftRegister_clear(ShiftRegister* sr)
 
 void ShiftRegister_write(ShiftRegister* sr, bool value)
 {
-  Component_write(&sr->clk, false);
-  Component_write(&sr->data, value);
-  Component_write(&sr->clk, true);
+  Pin_write(&sr->clk, false);
+  Pin_write(&sr->data, value);
+  Pin_write(&sr->clk, true);
   for (uint8_t i = 0; i < sr->tpd_mcs; i++)
     _delay_us(1); // because _delay_us expects a compile time constant
 }

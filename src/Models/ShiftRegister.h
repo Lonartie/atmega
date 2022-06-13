@@ -1,12 +1,12 @@
 #ifndef SHIFT_REGISTER_H
 #define SHIFT_REGISTER_H
 
-#include "Component.h"
+#include "Pin.h"
 #include "../Misc/utils.h"
 
 typedef struct ShiftRegister {
-  Component clk;    ///< clock component
-  Component data;   ///< data component
+  Pin clk;    ///< clock component
+  Pin data;   ///< data component
   uint16_t size;    ///< size of the register
   uint16_t tpd_mcs; ///< time per data bit in microseconds
 
