@@ -22,8 +22,8 @@ ShiftRegister ShiftRegister_create(
   SET_ACTOR_FORWARDER(sr, ShiftRegister, write);
   SET_ACTOR_FORWARDER(sr, ShiftRegister, write_n);
 
-  Pin_set_write(&sr.clk);
-  Pin_set_write(&sr.data);
+  ACTOR(sr.clk).set_write();
+  ACTOR(sr.data).set_write();
   return sr;
 }
 
