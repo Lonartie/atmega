@@ -13,6 +13,7 @@
       "stopAtEntry": false,
       "cwd": "${fileDirname}",
       "environment": [],
+      "internalConsoleOptions": "openOnSessionStart",
       "externalConsole": false,
       "MIMode": "lldb"
     }

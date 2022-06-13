@@ -1,7 +1,7 @@
 #ifndef ACTOR_H
 #define ACTOR_H
 
-void* set_actor(void* obj);
+void set_actor(void* obj);
 void* get_actor();
 void release_actor();
 
@@ -46,12 +46,14 @@ for (int CAT3(__index_,__LINE__,__) = 0; \
 set_actor(&OBJ); \
 ACTOR_SCOPE_IMPL
 
-#define ACTOR_SCOPE_PTR(OBJ) \
+#define ACTORP_SCOPE(OBJ) \
 set_actor(OBJ); \
 ACTOR_SCOPE_IMPL
 
 #define ACTOR(OBJ) \
 ACTOR_SCOPE(OBJ) (OBJ)
 
+#define ACTORP(OBJ) \
+ACTORP_SCOPE(OBJ) (OBJ)
 
 #endif // ACTOR_H

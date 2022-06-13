@@ -35,9 +35,10 @@ void ShiftRegister_clear(ShiftRegister* sr)
 
 void ShiftRegister_write(ShiftRegister* sr, bool value)
 {
-  Pin_write(&sr->clk, false);
-  Pin_write(&sr->data, value);
-  Pin_write(&sr->clk, true);
+  ACTOR(sr->clk).write(false);
+  ACTOR(sr->data).write(value);
+  ACTOR(sr->clk).write(true);
+  
   for (uint8_t i = 0; i < sr->tpd_mcs; i++)
     _delay_us(1); // because _delay_us expects a compile time constant
 }
