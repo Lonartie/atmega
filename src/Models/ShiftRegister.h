@@ -17,8 +17,8 @@ typedef struct ShiftRegister {
 
 /// @returns a new shift register (stack)
 ShiftRegister ShiftRegister_create(
-  volatile uint8_t* clk_ddr, volatile uint8_t* clk_port, uint8_t clk_pin,
-  volatile uint8_t* data_ddr, volatile uint8_t* data_port, uint8_t data_pin,
+  volatile uint8_t* clk_ddr, volatile uint8_t* clk_port, uint8_t clk_ddr_pin, uint8_t clk_port_pin,
+  volatile uint8_t* data_ddr, volatile uint8_t* data_port, uint8_t data_ddr_pin, uint8_t data_port_pin,
   uint16_t size, uint16_t tpd_mcs);
 
 /// @brief clears the shift register

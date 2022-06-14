@@ -5,6 +5,6 @@ DEFINE_VECTORS(Event);
 Event Event_create(String event_type)
 {
   Event event;
-  event.event_type = event_type;
+  event.event = event_type;
   return event;
 }

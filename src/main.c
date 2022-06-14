@@ -2,74 +2,37 @@
 #include "EventSystem/EventSystem.h"
 #include "EventSystem/Timer.h"
 #include "EventSystem/HardwareTimer.h"
+#include "EventSystem/AnySensorWatcher.h"
 #include "Models/USART.h"
 #include "System.h"
 
-typedef struct Tuple 
-{
-	USART usart;
-	System atmega; 
-} Tuple;
-
-void main_loop(void* t);
-void exit_callback(void* t);
+void update(void* t);
 
 int main()
 {
 	timer_init();
-	Tuple tuple;
-	tuple.usart = USART_create();
-	tuple.atmega = System_create();
-	Timer timer = Timer_create(500, "main_timer_333_ms");
-	Timer exit_timer = Timer_create(10000, "exit");
+	System atmega = System_create();
+
+	AnySensorWatcher watcher = AnySensorWatcher_create("update", 3,
+		atmega.lf_left, atmega.lf_middle, atmega.lf_right);
 
 	EventSystem* evq = EventSystem_instance();
 	ACTOR_SCOPE(*evq) 
 	{
-		evq->reg_listener(Listener_create_r(&tuple, main_loop, timer.event_type));
-		evq->reg_listener(Listener_create_r(&tuple, exit_callback, exit_timer.event_type));
-		ACTOR(timer).start();	
-		ACTOR(exit_timer).start();
+		evq->reg_listener(Listener_create_r(&atmega, update, watcher.event));
+		ACTOR(watcher).start();
 		evq->run();
 	}
-
-	ACTOR(tuple.usart).send_str("All timers have been stopped.\n");
 }
 
-void main_loop(void* t)
+void update(void* t)
 {
-	static int light = 0;
-	static bool direction = true;
-	Tuple* tuple = (Tuple*)t;
-	System* mega = &tuple->atmega;
-	USART* usart = &tuple->usart;
-
-	ACTOR_SCOPE(mega->led_strip)
-	{
-		if (light == 0) mega->led_strip.write_n(3, true, false, false);
-		if (light == 1) mega->led_strip.write_n(3, false, true, false);
-		if (light == 2) mega->led_strip.write_n(3, false, false, true);
-	}
-
-	ACTOR_SCOPE(*usart)
-	{
-		if (light == 0) usart->send_str("Left\n");
-		if (light == 1) usart->send_str("Middle\n");
-		if (light == 2) usart->send_str("Right\n");
-	}
+	System* atmega = (System*) t;
+	bool left, middle, right;
 	
-	light += direction * 2 - 1;
-	if (light == 3 || light == -1) {
-		direction = !direction;
-		light += 2 * (direction * 2 - 1);
-	}
-}
+	ACTOR_SCOPE(atmega->lf_left) left = atmega->lf_left.read();
+	ACTOR_SCOPE(atmega->lf_middle) middle = atmega->lf_middle.read();
+	ACTOR_SCOPE(atmega->lf_right) right = atmega->lf_right.read();
 
-void exit_callback(void* t)
-{
-	Tuple* tuple = (Tuple*)t;
-	USART* usart = &tuple->usart;
-
-	ACTOR(*usart).send_str("about to end\n");
-	ACTOR(*EventSystem_instance()).exit();
+	ACTOR(atmega->led_strip).write_n(3, left, middle, right);
 }

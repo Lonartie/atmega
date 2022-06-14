@@ -8,13 +8,13 @@ DEFINE_ACTOR_FORWARDER_N(void, ShiftRegister, write, (bool value), (value));
 DECLARE_ACTOR_FORWARDER_N(void, ShiftRegister, write_n, (uint32_t n, ...));
 
 ShiftRegister ShiftRegister_create(
-  volatile uint8_t* clk_ddr, volatile uint8_t* clk_port, uint8_t clk_pin,
-  volatile uint8_t* data_ddr, volatile uint8_t* data_port, uint8_t data_pin,
+  volatile uint8_t* clk_ddr, volatile uint8_t* clk_port, uint8_t clk_ddr_pin, uint8_t clk_port_pin,
+  volatile uint8_t* data_ddr, volatile uint8_t* data_port, uint8_t data_ddr_pin, uint8_t data_port_pin,
   uint16_t size, uint16_t tpd_mcs)
 {
   ShiftRegister sr;
-  sr.clk = Pin_create(clk_ddr, clk_port, clk_pin);
-  sr.data = Pin_create(data_ddr, data_port, data_pin);
+  sr.clk = Pin_create(clk_ddr, clk_port, clk_ddr_pin, clk_port_pin);
+  sr.data = Pin_create(data_ddr, data_port, data_ddr_pin, data_port_pin);
   sr.size = size;
   sr.tpd_mcs = tpd_mcs;
   

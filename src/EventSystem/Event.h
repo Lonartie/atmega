@@ -6,11 +6,11 @@
 
 typedef struct Event
 {
-  String event_type;
+  String event;
 } Event;
 
 DECLARE_VECTORS(Event);
 
-Event Event_create(String event_type);
+Event Event_create(String event);
 
 #endif // EVENT_H

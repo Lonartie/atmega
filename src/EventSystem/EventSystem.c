@@ -67,7 +67,7 @@ void EventSystem_unreg_listener(EventSystem* _this, Listener listener)
 {
   for (uint64_t i = 0; i < _this->listeners.size; i++)
     if (_this->listeners.data[i].callback == listener.callback && 
-        String_equals(_this->listeners.data[i].event_type, listener.event_type))
+        String_equals(_this->listeners.data[i].event, listener.event))
     {
       ACTOR(_this->listeners).erase(i);
       return;
@@ -79,7 +79,7 @@ void EventSystem_send_event(EventSystem* _this, Event event)
   // find listeners for this event
   for (uint64_t j = 0; j < _this->listeners.size; ++j) 
   {
-    if (String_equals(event.event_type, _this->listeners.data[j].event_type)) 
+    if (String_equals(event.event, _this->listeners.data[j].event)) 
     {
       Listener* listener = &_this->listeners.data[j];
       if (listener->callback_r != NULL)

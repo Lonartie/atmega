@@ -148,7 +148,4 @@ DECLARE_VECTORS(bool)
 DECLARE_VECTORS(float)
 DECLARE_VECTORS(double)
 
-
-
-
 #endif

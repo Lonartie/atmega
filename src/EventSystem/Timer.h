@@ -10,7 +10,7 @@ typedef void(*TimerCallback)();
 typedef struct Timer {
   uint64_t interval_ms;
   uint64_t last_time_ms;
-  String event_type;
+  String event;
 
   void(*start)();
   void(*stop)();
