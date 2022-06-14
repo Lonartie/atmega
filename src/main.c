@@ -1,4 +1,5 @@
 #include "Misc/utils.h"
+#include "Misc/Debug.h"
 #include "EventSystem/EventSystem.h"
 #include "EventSystem/Timer.h"
 #include "EventSystem/HardwareTimer.h"
@@ -25,6 +26,8 @@ int main()
 	}
 }
 
+void message(bool a, bool b, bool c);
+
 void update(void* t)
 {
 	System* atmega = (System*) t;
@@ -35,4 +38,23 @@ void update(void* t)
 	ACTOR_SCOPE(atmega->lf_right) right = atmega->lf_right.read();
 
 	ACTOR(atmega->led_strip).write_n(3, left, middle, right);
+	message(left, middle, right);
+}
+
+void print(char i, bool on)
+{
+	char str[] = "sensor ? is now o??\n";
+	str[7] = i;
+	str[17] = on ? 'n' : 'f';
+	str[18] = on ? ' ' : 'f';
+	debug(str);
+}
+
+void message(bool a, bool b, bool c)
+{
+	static bool _a = 0, _b = 0, _c = 0;
+
+	if (_a != a) _a = (print('l', a), a);
+	if (_b != b) _b = (print('m', b), b);
+	if (_c != c) _c = (print('r', c), c);
 }
