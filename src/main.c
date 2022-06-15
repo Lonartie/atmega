@@ -11,8 +11,8 @@ int main()
 	PWM_init();
 
 	System atmega = System_create();
-	ACTOR(atmega.mt_left).set_speed(100);
-	ACTOR(atmega.mt_right).set_speed(100);
+	ACTOR(atmega.mt_left).set_speed(155);
+	ACTOR(atmega.mt_right).set_speed(155);
 	ACTOR(atmega.mt_left).drive_forward();
 	ACTOR(atmega.mt_right).drive_backward();
 
