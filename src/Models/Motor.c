@@ -3,9 +3,8 @@
 #include "../Misc/Actor.h"
 #include <util/delay.h>
 
-DEFINE_ACTOR_FORWARDER(void, Motor, drive_forward);
-DEFINE_ACTOR_FORWARDER(void, Motor, drive_backward);
-DEFINE_ACTOR_FORWARDER_N(void, Motor, set_speed, (uint8_t speed), (speed));
+DEFINE_ACTOR_FORWARDER_N(void, Motor, drive_forward, (uint8_t speed), (speed));
+DEFINE_ACTOR_FORWARDER_N(void, Motor, drive_backward, (uint8_t speed), (speed));
 DEFINE_ACTOR_FORWARDER(void, Motor, stop);
 
 Motor Motor_create(uint8_t pwm_pin, Pin forward, Pin backward)
@@ -17,7 +16,6 @@ Motor Motor_create(uint8_t pwm_pin, Pin forward, Pin backward)
 
   SET_ACTOR_FORWARDER(motor, Motor, drive_forward);
   SET_ACTOR_FORWARDER(motor, Motor, drive_backward);
-  SET_ACTOR_FORWARDER(motor, Motor, set_speed);
   SET_ACTOR_FORWARDER(motor, Motor, stop);
 
   ACTOR(motor.forward).set_write();
@@ -26,22 +24,17 @@ Motor Motor_create(uint8_t pwm_pin, Pin forward, Pin backward)
   return motor;
 }
 
-void Motor_drive_forward(Motor* _this)
+void Motor_drive_forward(Motor* _this, uint8_t speed)
 {
-  Pin_write(&_this->backward, 0);
-  _delay_ms(1);
+  Pin_write(&_this->backward, 0); _delay_ms(1);
   Pin_write(&_this->forward, 1);
+  PWM_set_duty_cycle(_this->pwm_pin, speed);
 }
 
-void Motor_drive_backward(Motor* _this)
+void Motor_drive_backward(Motor* _this, uint8_t speed)
 {
-  Pin_write(&_this->forward, 0);
-  _delay_ms(1);
+  Pin_write(&_this->forward, 0); _delay_ms(1);
   Pin_write(&_this->backward, 1);
-}
-
-void Motor_set_speed(Motor* _this, uint8_t speed)
-{
   PWM_set_duty_cycle(_this->pwm_pin, speed);
 }
 

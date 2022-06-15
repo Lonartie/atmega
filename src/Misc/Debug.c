@@ -1,8 +1,11 @@
 #include "Debug.h"
 #include "../Models/USART.h"
+#include "utils.h"
 
-void debug(const char* str)
+void debug(const char* str MAYBE_UNUSED)
 {
+  #if 0
+
   static USART usart;
   static bool initialized = false;
 
@@ -13,4 +16,6 @@ void debug(const char* str)
   }
 
   USART_send_str(&usart, str);
+
+  #endif
 }
