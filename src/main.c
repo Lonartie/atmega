@@ -51,7 +51,7 @@ void update(void* t)
 		ACTOR(mright).drive_forward();
 	}
 
-	if (left)
+	if (right)
 	{
 		ACTOR(mleft).set_speed(30);
 		ACTOR(mright).set_speed(80);
@@ -59,7 +59,7 @@ void update(void* t)
 		ACTOR(mright).drive_forward();
 	}
 
-	if (right)
+	if (left)
 	{
 		ACTOR(mleft).set_speed(80);
 		ACTOR(mright).set_speed(30);
