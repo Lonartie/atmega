@@ -20,6 +20,9 @@ Motor Motor_create(uint8_t pwm_pin, Pin forward, Pin backward)
   SET_ACTOR_FORWARDER(motor, Motor, set_speed);
   SET_ACTOR_FORWARDER(motor, Motor, stop);
 
+  ACTOR(motor.forward).set_write();
+  ACTOR(motor.backward).set_write();
+
   return motor;
 }
 
