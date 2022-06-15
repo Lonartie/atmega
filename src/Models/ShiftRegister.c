@@ -35,12 +35,14 @@ void ShiftRegister_clear(ShiftRegister* sr)
 
 void ShiftRegister_write(ShiftRegister* sr, bool value)
 {
-  ACTOR(sr->clk).write(false);
+  ACTOR(sr->clk).write(0);
   ACTOR(sr->data).write(value);
-  ACTOR(sr->clk).write(true);
+  ACTOR(sr->clk).write(1);
   
   for (uint8_t i = 0; i < sr->tpd_mcs; i++)
     _delay_us(1); // because _delay_us expects a compile time constant
+  
+  ACTOR(sr->clk).write(0);
 }
 
 void ShiftRegister_write_n(ShiftRegister* sr, uint32_t n, ...)

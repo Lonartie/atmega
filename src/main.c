@@ -53,7 +53,7 @@ void log_states(void* t)
 	ACTOR_SCOPE(atmega->lf_middle) middle = atmega->lf_middle.read();
 	ACTOR_SCOPE(atmega->lf_right) right = atmega->lf_right.read();
 
-	message(left, middle, right);
+	message(right, middle, left);
 }
 
 void update(void* t)
