@@ -10,6 +10,8 @@ System System_create()
   system.lf_left = Pin_create(&DDRC, &PINC, DDC0, PINC0);
   system.lf_middle = Pin_create(&DDRC, &PINC, DDC1, PINC1);
   system.lf_right = Pin_create(&DDRC, &PINC, DDC2, PINC2);
+  system.mt_left = Motor_create(PD5, Pin_create(&DDRD, &PORTD, PD7, PORTD7), Pin_create(&DDRB, &PORTB, PB0, PORTB0));
+  system.mt_right = Motor_create(PD6, Pin_create(&DDRB, &PORTB, PB1, PORTB1), Pin_create(&DDRD, &PORTD, PD3, PORTD3));
 
   ShiftRegister_clear(&system.led_strip);
   ACTOR(system.lf_left).set_read();
