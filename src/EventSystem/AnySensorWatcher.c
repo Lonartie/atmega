@@ -39,7 +39,7 @@ void AnySensorWatcher_update(void* _this)
 {
   AnySensorWatcher* this = (AnySensorWatcher*)_this;
   Vector_Pin_8* pins = &this->pins;
-  Vector__Bool_16* states = &this->states;
+  Vector__Bool_8* states = &this->states;
   String event = this->event;
 
   bool any = false;
@@ -48,9 +48,9 @@ void AnySensorWatcher_update(void* _this)
     Pin* pin = Vector_Pin_8_get(pins, i);
     bool state = Pin_read(pin);
 
-    if (state != *Vector__Bool_16_get(states, i))
+    if (state != *Vector__Bool_8_get(states, i))
     {
-      Vector__Bool_16_set(states, i, state);
+      Vector__Bool_8_set(states, i, state);
       any = true;
     }
   }
