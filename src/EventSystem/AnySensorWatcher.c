@@ -16,7 +16,7 @@ AnySensorWatcher AnySensorWatcher_create(String event, uint8_t n, ...)
   {
     Pin pin = va_arg(args, Pin);
     Vector_Pin_8_push_back(&watcher.pins, pin);
-    Vector__Bool_16_push_back(&watcher.states, false);
+    Vector__Bool_8_push_back(&watcher.states, false);
   }
 
   SET_ACTOR_FORWARDER(watcher, AnySensorWatcher, start);

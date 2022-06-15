@@ -5,12 +5,12 @@
 DEFINE_ACTOR_FORWARDER(void, HPTimer, start);
 DEFINE_ACTOR_FORWARDER(void, HPTimer, stop);
 
-HPTimer HPTimer_create(uint64_t interval_us, String event_type)
+HPTimer HPTimer_create(uint64_t interval_us, String event)
 {
   HPTimer timer;
   timer.interval_us = interval_us;
   timer.last_time_us = micros();
-  timer.event_type = event_type;
+  timer.event = event;
   
   SET_ACTOR_FORWARDER(timer, HPTimer, start);
   SET_ACTOR_FORWARDER(timer, HPTimer, stop);
@@ -34,7 +34,7 @@ void HPTimer_update(void* obj)
   uint64_t current_time_us = micros();
   if (timer->last_time_us + timer->interval_us <= current_time_us) {
     timer->last_time_us = current_time_us;
-    Event event = Event_create(timer->event_type);
+    Event event = Event_create(timer->event);
     EventSystem_send_event(EventSystem_instance(), event);
   }
 }

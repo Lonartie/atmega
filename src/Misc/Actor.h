@@ -1,8 +1,15 @@
 #ifndef ACTOR_H
 #define ACTOR_H
 
+/// @brief sets the given object as the current actor to call 'member-functions' on
+/// @note the actor system is queue-based
+/// @param object the object to set as the current actor
 void set_actor(void* obj);
+
+/// @returns the current actor to call 'member-functions' on
 void* get_actor();
+
+/// @brief releases the current actor
 void release_actor();
 
 #define UNPACK(...) __VA_ARGS__

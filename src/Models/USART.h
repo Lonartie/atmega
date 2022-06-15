@@ -5,6 +5,7 @@
 #include <stdbool.h>
 #include "../Misc/Actor.h"
 
+/// @brief a serial port
 typedef struct USART {
   long ubrr;
   bool heap;    //< whether or not the object is allocated on the heap

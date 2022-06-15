@@ -28,7 +28,6 @@ USART USART_create()
   UBRR0L = (unsigned char) usart.ubrr;
   UCSR0B = (1 << RXEN0) | (1 << TXEN0);
   UCSR0C = (1 << USBS0) | (3 << UCSZ00);
-  USART_send_str(&usart, "<(^_^)>\n\0");
 
   return usart;
 }

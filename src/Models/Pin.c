@@ -14,7 +14,7 @@ Pin Pin_create(volatile uint8_t* ddr, volatile uint8_t* port, uint8_t ddr_pin, u
   pin.port = port;
   pin.ddr_pin = ddr_pin;
   pin.port_pin = port_pin;
-  
+
   SET_ACTOR_FORWARDER(pin, Pin, set_read);
   SET_ACTOR_FORWARDER(pin, Pin, set_write);
   SET_ACTOR_FORWARDER(pin, Pin, write);

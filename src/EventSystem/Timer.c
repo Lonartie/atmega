@@ -5,12 +5,12 @@
 DEFINE_ACTOR_FORWARDER(void, Timer, start);
 DEFINE_ACTOR_FORWARDER(void, Timer, stop);
 
-Timer Timer_create(uint64_t interval_ms, String event_type)
+Timer Timer_create(uint64_t interval_ms, String event)
 {
   Timer timer;
   timer.interval_ms = interval_ms;
   timer.last_time_ms = millis();
-  timer.event = event_type;
+  timer.event = event;
   
   SET_ACTOR_FORWARDER(timer, Timer, start);
   SET_ACTOR_FORWARDER(timer, Timer, stop);

@@ -7,6 +7,7 @@
 #include "EventSystem/AnySensorWatcher.h"
 #include "Models/USART.h"
 #include "System.h"
+#include <stdio.h>
 
 bool visible = false;
 
@@ -59,7 +60,7 @@ void update(void* t)
 {
 	System* atmega = (System*) t;
 	bool left, middle, right;
-	
+
 	ACTOR_SCOPE(atmega->lf_left) left = atmega->lf_left.read();
 	ACTOR_SCOPE(atmega->lf_middle) middle = atmega->lf_middle.read();
 	ACTOR_SCOPE(atmega->lf_right) right = atmega->lf_right.read();
@@ -72,11 +73,7 @@ void update(void* t)
 
 void print(char i, bool on)
 {
-	char str[] = "sensor ? is now o??\n";
-	str[7] = i;
-	str[17] = on ? 'n' : 'f';
-	str[18] = on ? ' ' : 'f';
-	debug(str);
+	debug(FMT("sensor %c is now %s\n", i, on ? "on" : "off"));
 }
 
 void message(bool a, bool b, bool c)

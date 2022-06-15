@@ -7,6 +7,8 @@
 #include "../Misc/utils.h"
 #include "../Misc/Vector.h"
 
+/// @brief represents a pin on a microcontroller to have a high level 
+///        abstraction to interact with it
 typedef struct Pin
 {
   volatile uint8_t* ddr;    ///< data direction register
@@ -14,9 +16,16 @@ typedef struct Pin
   uint8_t ddr_pin;          ///< ddr pin number
   uint8_t port_pin;         ///< port pin number
 
+  /// @brief sets the pin to 'read'-mode (sensors)
   void(*set_read)();
+
+  /// @brief sets the pin to 'write'-mode (actuators)
   void(*set_write)();
+
+  /// @brief writes a value to the pin
   void(*write)(bool);
+
+  /// @brief reads the value from the pin
   bool(*read)();
 } Pin;
 
