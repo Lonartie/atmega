@@ -53,7 +53,7 @@ void log_states(void* t)
 	ACTOR_SCOPE(atmega->lf_middle) middle = atmega->lf_middle.read();
 	ACTOR_SCOPE(atmega->lf_right) right = atmega->lf_right.read();
 
-	message(right, middle, left);
+	message(left, middle, right);
 }
 
 void update(void* t)
@@ -66,9 +66,9 @@ void update(void* t)
 	ACTOR_SCOPE(atmega->lf_right) right = atmega->lf_right.read();
 
 	ACTOR(atmega->led_strip).write_n(3, 
-		left && visible, 
+		right && visible, 
 		middle && visible, 
-		right && visible);		
+		left && visible);		
 }
 
 void print(char i, bool on)
