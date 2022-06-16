@@ -75,8 +75,8 @@ void update(void* t)
  	else if (left)
 	{
 		// right sensor -> steer right -> move left forward
-		ACTOR(mleft).drive_forward(15);
-		ACTOR(mright).drive_backward(15);
+		ACTOR(mleft).drive_forward(7);
+		ACTOR(mright).drive_backward(7);
 
 		debug("steer right\n");
 		state = turn_right;
@@ -86,8 +86,8 @@ void update(void* t)
 	else if (right)
 	{
 		// left sensor -> steer left -> move right forward
-		ACTOR(mleft).drive_backward(15);
-		ACTOR(mright).drive_forward(15);
+		ACTOR(mleft).drive_backward(7);
+		ACTOR(mright).drive_forward(7);
 
 		debug("steer left\n");
 		state = turn_left;
@@ -97,8 +97,8 @@ void update(void* t)
 	else if (mid)
 	{
 		// only mid sensor -> move forward
-		ACTOR(mleft).drive_forward(100);
-		ACTOR(mright).drive_forward(100);
+		ACTOR(mleft).drive_forward(50);
+		ACTOR(mright).drive_forward(50);
 
 		debug("forward\n");
 		state = forward;
