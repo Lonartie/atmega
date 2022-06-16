@@ -17,6 +17,7 @@ int main()
 	timer_init();
 	PWM_init();
 
+	EventSystem* system = EventSystem_instance();
 	System atmega = System_create();
 
 
