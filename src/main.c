@@ -17,18 +17,30 @@ int main()
 	timer_init();
 	PWM_init();
 
-	EventSystem* system = EventSystem_instance();
 	System atmega = System_create();
+	
+	Motor mleft = atmega->mt_left;
+	Motor mright = atmega->mt_right;
 
-	Timer timer = Timer_create(10, "update");
-	// AnySensorWatcher timer = AnySensorWatcher_create("update", 3, atmega.lf_left, atmega.lf_middle, atmega.lf_right);
+	
+	ACTOR(mleft).drive_forward(30);
+	ACTOR(mright).drive_forward(30);
 
-	ACTOR_SCOPE(*system)
-	{
-		system->reg_listener(Listener_create_r(&atmega, update, timer.event));
-		ACTOR(timer).start();
-		system->run();
-	}
+	_delay_ms(3000);
+
+	ACTOR(mleft).stop();
+	ACTOR(mright).stop();
+
+
+	// Timer timer = Timer_create(10, "update");
+	// // AnySensorWatcher timer = AnySensorWatcher_create("update", 3, atmega.lf_left, atmega.lf_middle, atmega.lf_right);
+
+	// ACTOR_SCOPE(*system)
+	// {
+	// 	system->reg_listener(Listener_create_r(&atmega, update, timer.event));
+	// 	ACTOR(timer).start();
+	// 	system->run();
+	// }
 }
 
 typedef enum State
