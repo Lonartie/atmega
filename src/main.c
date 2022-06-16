@@ -113,4 +113,8 @@ void update(void* t)
 	{
 		debug("unknown state\n");
 	}
+
+	lleft = left;
+	lmid = mid;
+	lright = right;
 }
