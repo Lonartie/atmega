@@ -72,7 +72,7 @@ void update(void* t)
 
 		ACTOR(atmega->led_strip).write_n(3, 1, 0, 1);
 	}
- 	else if (left)
+ 	else if (right)
 	{
 		// right sensor -> steer right -> move left forward
 		ACTOR(mleft).drive_forward(7);
@@ -83,7 +83,7 @@ void update(void* t)
 
 		ACTOR(atmega->led_strip).write_n(3, 0, 0, 1);
 	}
-	else if (right)
+	else if (left)
 	{
 		// left sensor -> steer left -> move right forward
 		ACTOR(mleft).drive_backward(7);
