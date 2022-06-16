@@ -19,8 +19,8 @@ int main()
 
 	System atmega = System_create();
 	
-	Motor mleft = atmega->mt_left;
-	Motor mright = atmega->mt_right;
+	Motor mleft = atmega.mt_left;
+	Motor mright = atmega.mt_right;
 
 	
 	ACTOR(mleft).drive_forward(30);
