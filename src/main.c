@@ -76,7 +76,7 @@ void update(void* t)
 	{
 		// right sensor -> steer right -> move left forward
 		ACTOR(mleft).drive_forward(7);
-		ACTOR(mright).drive_backward(7);
+		ACTOR(mright).stop();
 
 		debug("steer right\n");
 		state = turn_right;
@@ -86,7 +86,7 @@ void update(void* t)
 	else if (left)
 	{
 		// left sensor -> steer left -> move right forward
-		ACTOR(mleft).drive_backward(7);
+		ACTOR(mleft).stop();
 		ACTOR(mright).drive_forward(7);
 
 		debug("steer left\n");
