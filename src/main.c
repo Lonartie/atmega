@@ -23,13 +23,13 @@ int main()
 	Motor mright = atmega.mt_right;
 
 	
-	ACTOR(mleft).drive_forward(30);
-	ACTOR(mright).drive_forward(30);
+	Motor_drive_forward(&mleft, 30);
+	Motor_drive_forward(&mright, 30);
 
 	_delay_ms(3000);
 
-	ACTOR(mleft).stop();
-	ACTOR(mright).stop();
+	Motor_stop(&mleft);
+	Motor_stop(&mright);
 
 
 	// Timer timer = Timer_create(10, "update");
