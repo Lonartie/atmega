@@ -18,29 +18,17 @@ int main()
 	PWM_init();
 
 	System atmega = System_create();
-	
-	Motor mleft = atmega.mt_left;
-	Motor mright = atmega.mt_right;
-
-	
-	Motor_drive_forward(&mleft, 30);
-	Motor_drive_forward(&mright, 30);
-
-	_delay_ms(3000);
-
-	Motor_stop(&mleft);
-	Motor_stop(&mright);
 
 
-	// Timer timer = Timer_create(10, "update");
-	// // AnySensorWatcher timer = AnySensorWatcher_create("update", 3, atmega.lf_left, atmega.lf_middle, atmega.lf_right);
+	Timer timer = Timer_create(10, "update");
+	// AnySensorWatcher timer = AnySensorWatcher_create("update", 3, atmega.lf_left, atmega.lf_middle, atmega.lf_right);
 
-	// ACTOR_SCOPE(*system)
-	// {
-	// 	system->reg_listener(Listener_create_r(&atmega, update, timer.event));
-	// 	ACTOR(timer).start();
-	// 	system->run();
-	// }
+	ACTOR_SCOPE(*system)
+	{
+		system->reg_listener(Listener_create_r(&atmega, update, timer.event));
+		ACTOR(timer).start();
+		system->run();
+	}
 }
 
 typedef enum State
@@ -68,72 +56,64 @@ void update(void* t)
 	ACTOR_SCOPE(atmega->lf_middle) mid = atmega->lf_middle.read();
 	ACTOR_SCOPE(atmega->lf_right) right = atmega->lf_right.read();
 
-	ACTOR(mleft).drive_forward(30);
-	ACTOR(mright).drive_forward(30);
-	if (millis() == 3000)
+	// nothing has changed
+	if (lleft == left && lmid == mid && lright == right)
+		return;
+
+	if (left && right)
+	{
+		// weird situation, just drive forward slowly
+		ACTOR(mleft).drive_forward(30);
+		ACTOR(mright).drive_forward(30);
+
+		debug("sloooowly forward\n");
+		state = slowly_forward;
+
+		ACTOR(atmega->led_strip).write_n(3, 1, 0, 1);
+	}
+ 	else if (right)
+	{
+		// right sensor -> steer right -> move left forward
+		ACTOR(mleft).drive_forward(15);
+		ACTOR(mright).stop();
+
+		debug("steer right\n");
+		state = turn_right;
+
+		ACTOR(atmega->led_strip).write_n(3, 0, 0, 1);
+	}
+	else if (left)
+	{
+		// left sensor -> steer left -> move right forward
+		ACTOR(mleft).stop();
+		ACTOR(mright).drive_forward(15);
+
+		debug("steer left\n");
+		state = turn_left;
+
+		ACTOR(atmega->led_strip).write_n(3, 1, 0, 0);
+	}
+	else if (mid)
+	{
+		// only mid sensor -> move forward
+		ACTOR(mleft).drive_forward(100);
+		ACTOR(mright).drive_forward(100);
+
+		debug("forward\n");
+		state = forward;
+
+		ACTOR(atmega->led_strip).write_n(3, 0, 1, 0);
+	}
+	else if (state == slowly_forward)
 	{
 		ACTOR(mleft).stop();
 		ACTOR(mright).stop();
+		debug("stopping!\n");
 	}
-
-	// // nothing has changed
-	// if (lleft == left && lmid == mid && lright == right)
-	// 	return;
-
-	// if (left && right)
-	// {
-	// 	// weird situation, just drive forward slowly
-	// 	ACTOR(mleft).drive_forward(30);
-	// 	ACTOR(mright).drive_forward(30);
-
-	// 	debug("sloooowly forward\n");
-	// 	state = slowly_forward;
-
-	// 	ACTOR(atmega->led_strip).write_n(3, 1, 0, 1);
-	// }
- 	// else if (right)
-	// {
-	// 	// right sensor -> steer right -> move left forward
-	// 	ACTOR(mleft).drive_forward(15);
-	// 	ACTOR(mright).stop();
-
-	// 	debug("steer right\n");
-	// 	state = turn_right;
-
-	// 	ACTOR(atmega->led_strip).write_n(3, 0, 0, 1);
-	// }
-	// else if (left)
-	// {
-	// 	// left sensor -> steer left -> move right forward
-	// 	ACTOR(mleft).stop();
-	// 	ACTOR(mright).drive_forward(15);
-
-	// 	debug("steer left\n");
-	// 	state = turn_left;
-
-	// 	ACTOR(atmega->led_strip).write_n(3, 1, 0, 0);
-	// }
-	// else if (mid)
-	// {
-	// 	// only mid sensor -> move forward
-	// 	ACTOR(mleft).drive_forward(100);
-	// 	ACTOR(mright).drive_forward(100);
-
-	// 	debug("forward\n");
-	// 	state = forward;
-
-	// 	ACTOR(atmega->led_strip).write_n(3, 0, 1, 0);
-	// }
-	// else if (state == slowly_forward)
-	// {
-	// 	ACTOR(mleft).stop();
-	// 	ACTOR(mright).stop();
-	// 	debug("stopping!\n");
-	// }
-	// else
-	// {
-	// 	debug("unknown state\n");
-	// }
+	else
+	{
+		debug("unknown state\n");
+	}
 
 	lleft = left;
 	lmid = mid;
