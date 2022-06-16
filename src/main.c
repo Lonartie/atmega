@@ -23,7 +23,7 @@ int main()
 	Motor mright = atmega.mt_right;
 
 	
-	Motor_drive_backward(&mleft, 30);
+	Motor_drive_forward(&mleft, 30);
 	Motor_drive_forward(&mright, 30);
 
 	_delay_ms(3000);
