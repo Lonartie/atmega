@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include <util/delay.h>
 
-void update(void* t);
+void update(System* t);
 
 int main()
 {
@@ -42,14 +42,13 @@ typedef enum State
 	forward
 } State;
 
-void update(void* t)
+void update(System* atmega)
 {
 	static bool lleft = false, lmid = false, lright = false;
 	static State state = idle;
 
-	System* atmega = (System*) t;
-	Motor mleft = atmega->mt_left;
-	Motor mright = atmega->mt_right;
+	Motor* mleft = &atmega->mt_left;
+	Motor* mright = &atmega->mt_right;
 
 	bool left = Pin_read(&atmega->lf_left);
 	bool mid = Pin_read(&atmega->lf_middle);
@@ -74,8 +73,8 @@ void update(void* t)
 	if (mid)
 	{
 		// only mid sensor -> move forward
-		Motor_drive_forward(&mleft, 100);
-		Motor_drive_forward(&mright, 100);
+		Motor_drive_forward(mleft, 100);
+		Motor_drive_forward(mright, 100);
 
 		debug("forward\n");
 		state = forward;
@@ -83,8 +82,8 @@ void update(void* t)
 	else if (left)
 	{
 		// left sensor -> steer left -> move right forward
-		Motor_drive_backward(&mleft, 15);
-		Motor_drive_forward(&mright, 15);
+		Motor_drive_backward(mleft, 15);
+		Motor_drive_forward(mright, 15);
 
 		debug("steer left\n");
 		state = turn_left;
@@ -92,8 +91,8 @@ void update(void* t)
 	else if (right)
 	{
 		// right sensor -> steer right -> move left forward
-		Motor_drive_forward(&mleft, 15);
-		Motor_drive_backward(&mright, 15);
+		Motor_drive_forward(mleft, 15);
+		Motor_drive_backward(mright, 15);
 
 		debug("steer right\n");
 		state = turn_right;
