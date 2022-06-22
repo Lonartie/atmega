@@ -57,8 +57,8 @@ void update(System* atmega)
 	ShiftRegister_write_n(&atmega->led_strip, 3, left, mid, right);
 
 	// // nothing has changed
-	// if (lleft == left && lmid == mid && lright == right)
-	// 	return;
+	if (lleft == left && lmid == mid && lright == right)
+		return;
 
 	// if (left && right)
 	// {
