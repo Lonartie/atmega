@@ -51,62 +51,65 @@ void update(void* t)
 	bool mid = Pin_read(&atmega->lf_middle);
 	bool right = Pin_read(&atmega->lf_right);
 
+	Motor_drive_forward(&mleft, 255);
+	Motor_drive_backward(&mright, 255);
+
 	// // nothing has changed
 	// if (lleft == left && lmid == mid && lright == right)
 	// 	return;
 
-	if (left && right)
-	{
-		Motor_stop(&mleft);
-		Motor_stop(&mright);
-		// weird situation, just drive forward slowly
-		Motor_drive_forward(&mleft, 30);
-		Motor_drive_forward(&mright, 30);
+	// if (left && right)
+	// {
+	// 	Motor_stop(&mleft);
+	// 	Motor_stop(&mright);
+	// 	// weird situation, just drive forward slowly
+	// 	Motor_drive_forward(&mleft, 30);
+	// 	Motor_drive_forward(&mright, 30);
 
-		debug("sloooowly forward\n");
-		state = slowly_forward;
+	// 	debug("sloooowly forward\n");
+	// 	state = slowly_forward;
 
-		ShiftRegister_write_n(&atmega->led_strip, 3, 1, 0, 1);
-	}
- 	else if (right)
-	{
-		Motor_stop(&mleft);
-		Motor_stop(&mright);
-		// right sensor -> steer right -> move left forward
-		Motor_drive_forward(&mleft, 15);
-		Motor_drive_backward(&mright, 15);
+	// 	ShiftRegister_write_n(&atmega->led_strip, 3, 1, 0, 1);
+	// }
+ 	// else if (right)
+	// {
+	// 	Motor_stop(&mleft);
+	// 	Motor_stop(&mright);
+	// 	// right sensor -> steer right -> move left forward
+	// 	Motor_drive_forward(&mleft, 15);
+	// 	Motor_drive_backward(&mright, 15);
 
-		debug("steer right\n");
-		state = turn_right;
+	// 	debug("steer right\n");
+	// 	state = turn_right;
 
-		ShiftRegister_write_n(&atmega->led_strip, 3, 0, 0, 1);
-	}
-	else if (left)
-	{
-		Motor_stop(&mleft);
-		Motor_stop(&mright);
-		// left sensor -> steer left -> move right forward
-		Motor_drive_backward(&mleft, 15);
-		Motor_drive_forward(&mright, 15);
+	// 	ShiftRegister_write_n(&atmega->led_strip, 3, 0, 0, 1);
+	// }
+	// else if (left)
+	// {
+	// 	Motor_stop(&mleft);
+	// 	Motor_stop(&mright);
+	// 	// left sensor -> steer left -> move right forward
+	// 	Motor_drive_backward(&mleft, 15);
+	// 	Motor_drive_forward(&mright, 15);
 
-		debug("steer left\n");
-		state = turn_left;
+	// 	debug("steer left\n");
+	// 	state = turn_left;
 
-		ShiftRegister_write_n(&atmega->led_strip, 3, 1, 0, 0);
-	}
-	else if (mid)
-	{
-		Motor_stop(&mleft);
-		Motor_stop(&mright);
-		// only mid sensor -> move forward
-		Motor_drive_forward(&mleft, 100);
-		Motor_drive_forward(&mright, 100);
+	// 	ShiftRegister_write_n(&atmega->led_strip, 3, 1, 0, 0);
+	// }
+	// else if (mid)
+	// {
+	// 	Motor_stop(&mleft);
+	// 	Motor_stop(&mright);
+	// 	// only mid sensor -> move forward
+	// 	Motor_drive_forward(&mleft, 100);
+	// 	Motor_drive_forward(&mright, 100);
 
-		debug("forward\n");
-		state = forward;
+	// 	debug("forward\n");
+	// 	state = forward;
 
-		ShiftRegister_write_n(&atmega->led_strip, 3, 0, 1, 0);
-	}
+	// 	ShiftRegister_write_n(&atmega->led_strip, 3, 0, 1, 0);
+	// }
 	// else if (state == slowly_forward)
 	// {
 	// 	Motor_stop(&mleft);
