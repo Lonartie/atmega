@@ -37,8 +37,6 @@ int main()
 	USARTEvent_start(&usart);
 
 	EventSystem_run(EventSystem_instance());
-	
-
 
 	// Timer timer = Timer_create(100, "update");
 	// // AnySensorWatcher timer = AnySensorWatcher_create("update", 3, atmega.lf_left, atmega.lf_middle, atmega.lf_right);
