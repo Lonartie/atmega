@@ -160,6 +160,7 @@ static int lastTimeMS = 0;
 void update(System* atmega)
 {
 	static bool lleft = false, lmid = false, lright = false;
+	static bool left_fallback = false, right_fallback = false;
 
 	Motor* mleft = &atmega->mt_left;
 	Motor* mright = &atmega->mt_right;
@@ -190,23 +191,42 @@ void update(System* atmega)
 	// if (right) debug("reading right\n");
 	ShiftRegister_write_n(&atmega->led_strip, 3, left, mid, right);
 
-	if (mid && !left && !right)
+	if (mid_measure > 300 && left_measure < 400 && right_measure < 400)
 	{
 		// only mid sensor -> move forward
 		Motor_drive_forward(mleft, SPEED_DRIVE);
 		Motor_drive_forward(mright, SPEED_DRIVE);
 	} 
-	else if (left)
+	else if (left_measure > 300)
 	{
 		// left sensor -> steer left -> move right forward
 		Motor_drive_backward(mleft, SPEED_TURN);
 		Motor_drive_forward(mright, SPEED_TURN);
 	} 
-	else if (right)
+	else if (right_measure > 300)
 	{
 		// right sensor -> steer right -> move left forward
 		Motor_drive_forward(mleft, SPEED_TURN);
 		Motor_drive_backward(mright, SPEED_TURN);
+	} else {
+		if (left_fallback) {
+			// left sensor -> steer left -> move right forward
+			Motor_drive_backward(mleft, SPEED_TURN);
+			Motor_drive_forward(mright, SPEED_TURN);
+		}
+		if (right_fallback) {
+			// right sensor -> steer right -> move left forward
+			Motor_drive_forward(mleft, SPEED_TURN);
+			Motor_drive_backward(mright, SPEED_TURN);
+		}
+	}
+
+	if (left_measure > 300) {
+		left_fallback = true;
+	}
+
+	if (right_measure > 300) {
+		right_fallback = true;
 	}
 
 	lleft = left;
