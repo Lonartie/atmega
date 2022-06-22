@@ -9,16 +9,6 @@ typedef struct ShiftRegister {
   Pin data;         ///< data component
   uint16_t size;    ///< size of the register
   uint16_t tpd_mcs; ///< time per data bit in microseconds
-
-  /// @brief clears the shift register by setting all flip flops to 0
-  void(*clear)();
-
-  /// @brief writes a value to the shift register
-  void(*write)(bool);
-
-  /// @brief writes a number of values to the shift register
-  /// @note first value is written first so will end up on last pin after shifting
-  void(*write_n)(uint32_t, ...);
 } ShiftRegister;
 
 /// @returns a new shift register (stack)

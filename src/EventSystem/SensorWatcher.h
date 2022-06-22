@@ -11,12 +11,6 @@ typedef struct SensorWatcher
   Pin pin;
   String event;
   bool last_state;
-
-  /// @brief starts the watcher
-  void(*start)();
-
-  /// @brief stops the watcher
-  void(*stop)();
 } SensorWatcher;
 
 /// @brief creates a new sensor watcher with the given pin and event

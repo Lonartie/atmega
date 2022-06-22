@@ -11,6 +11,4 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "Actor.h"
-
 #define MAYBE_UNUSED __attribute__((unused))

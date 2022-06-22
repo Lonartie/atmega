@@ -12,12 +12,6 @@ typedef struct PhasedTimer
   String event;
   uint64_t last_time_ms;
   uint8_t phase;
-
-  /// @brief starts the timer
-  void(*start)();
-
-  /// @brief stops the timer
-  void(*stop)();
 } PhasedTimer;
 
 /// @brief creates a new phased timer with the specified event and phases

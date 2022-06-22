@@ -3,19 +3,12 @@
 
 #include <stdint.h>
 #include "../Misc/String.h"
-#include "../Misc/Actor.h"
 
 /// @brief a high precision timer that sends events in microsecond intervals
 typedef struct HPTimer {
   uint64_t interval_us;
   uint64_t last_time_us;
   String event;
-
-  /// @brief starts the timer
-  void(*start)();
-
-  /// @brief stops the timer
-  void(*stop)();
 } HPTimer;
 
 /// @brief creates a new high precision timer with the specified event and interval

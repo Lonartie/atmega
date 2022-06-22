@@ -2,9 +2,6 @@
 #include "EventSystem.h"
 #include <stdarg.h>
 
-DEFINE_ACTOR_FORWARDER(void, AnySensorWatcher, start);
-DEFINE_ACTOR_FORWARDER(void, AnySensorWatcher, stop);
-
 AnySensorWatcher AnySensorWatcher_create(String event, uint8_t n, ...)
 {
   AnySensorWatcher watcher;
@@ -18,9 +15,6 @@ AnySensorWatcher AnySensorWatcher_create(String event, uint8_t n, ...)
     Vector_Pin_8_push_back(&watcher.pins, pin);
     Vector__Bool_8_push_back(&watcher.states, false);
   }
-
-  SET_ACTOR_FORWARDER(watcher, AnySensorWatcher, start);
-  SET_ACTOR_FORWARDER(watcher, AnySensorWatcher, stop);
   
   return watcher;
 }

@@ -1,11 +1,6 @@
 #include "Motor.h"
 #include "PWM.h"
-#include "../Misc/Actor.h"
 #include <util/delay.h>
-
-DEFINE_ACTOR_FORWARDER_N(void, Motor, drive_forward, (uint8_t speed), (speed));
-DEFINE_ACTOR_FORWARDER_N(void, Motor, drive_backward, (uint8_t speed), (speed));
-DEFINE_ACTOR_FORWARDER(void, Motor, stop);
 
 Motor Motor_create(uint8_t pwm_pin, Pin forward, Pin backward)
 {
@@ -14,13 +9,9 @@ Motor Motor_create(uint8_t pwm_pin, Pin forward, Pin backward)
   motor.backward = backward;
   motor.pwm_pin = pwm_pin;
 
-  SET_ACTOR_FORWARDER(motor, Motor, drive_forward);
-  SET_ACTOR_FORWARDER(motor, Motor, drive_backward);
-  SET_ACTOR_FORWARDER(motor, Motor, stop);
-
-  ACTOR(motor.forward).set_write();
-  ACTOR(motor.backward).set_write();
-
+  Pin_set_write(&motor.forward);
+  Pin_set_write(&motor.backward);
+  
   return motor;
 }
 

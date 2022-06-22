@@ -14,9 +14,9 @@ System System_create()
   system.mt_right = Motor_create(PD6, Pin_create(&DDRB, &PORTB, PB3, PORTB3), Pin_create(&DDRB, &PORTB, PB1, PORTB1));
 
   ShiftRegister_clear(&system.led_strip);
-  ACTOR(system.lf_left).set_read();
-  ACTOR(system.lf_middle).set_read();
-  ACTOR(system.lf_right).set_read();
+  Pin_set_read(&system.lf_left);
+  Pin_set_read(&system.lf_middle);
+  Pin_set_read(&system.lf_right);
 
   return system;
 }

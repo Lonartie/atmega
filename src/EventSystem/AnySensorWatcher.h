@@ -13,12 +13,6 @@ typedef struct AnySensorWatcher
   Vector_Pin_8 pins;
   Vector__Bool_8 states;
   String event;
-
-  /// @brief starts the watcher
-  void(*start)();
-
-  /// @brief stops the watcher
-  void(*stop)();
 } AnySensorWatcher;
 
 /// @brief creates a new sensor watcher with the specified event and pins (up to 8)

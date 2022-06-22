@@ -3,9 +3,6 @@
 #include "EventSystem.h"
 #include <stdarg.h>
 
-DEFINE_ACTOR_FORWARDER(void, PhasedTimer, start);
-DEFINE_ACTOR_FORWARDER(void, PhasedTimer, stop);
-
 PhasedTimer PhasedTimer_create(String event, uint8_t n, ...)
 {
   PhasedTimer timer;
@@ -13,16 +10,13 @@ PhasedTimer PhasedTimer_create(String event, uint8_t n, ...)
   timer.last_time_ms = millis();
   timer.phase = 0;
   timer.phases = Vector_long_8_create();
-  
-  SET_ACTOR_FORWARDER(timer, PhasedTimer, start);
-  SET_ACTOR_FORWARDER(timer, PhasedTimer, stop);
 
   va_list args;
   va_start(args, n);
   for (uint8_t i = 0; i < n; i++) 
   {
     int arg = va_arg(args, int);
-    ACTOR(timer.phases).push_back((long) arg);
+    Vector_long_8_push_back(&timer.phases, (long)arg);
   }
   va_end(args);
 

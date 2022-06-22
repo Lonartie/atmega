@@ -10,19 +10,11 @@
 #include "USART.h"
 #include <avr/io.h>
 
-DEFINE_ACTOR_FORWARDER_N(void, USART, send_byte, (char value), (value));
-DEFINE_ACTOR_FORWARDER_N(void, USART, send_str, (const char* str), (str));
-DEFINE_ACTOR_FORWARDER(char, USART, recv_byte);
-
 USART USART_create()
 {
   USART usart;
   usart.ubrr = UBRR_SETTING;
   usart.heap = false;
-
-  SET_ACTOR_FORWARDER(usart, USART, send_byte);
-  SET_ACTOR_FORWARDER(usart, USART, send_str);
-  SET_ACTOR_FORWARDER(usart, USART, recv_byte);
 
   UBRR0H = (unsigned char) (usart.ubrr >> 8);
   UBRR0L = (unsigned char) usart.ubrr;

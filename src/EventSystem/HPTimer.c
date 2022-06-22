@@ -2,9 +2,6 @@
 #include "EventSystem.h"
 #include "HardwareTimer.h"
 
-DEFINE_ACTOR_FORWARDER(void, HPTimer, start);
-DEFINE_ACTOR_FORWARDER(void, HPTimer, stop);
-
 HPTimer HPTimer_create(uint64_t interval_us, String event)
 {
   HPTimer timer;
@@ -12,9 +9,6 @@ HPTimer HPTimer_create(uint64_t interval_us, String event)
   timer.last_time_us = micros();
   timer.event = event;
   
-  SET_ACTOR_FORWARDER(timer, HPTimer, start);
-  SET_ACTOR_FORWARDER(timer, HPTimer, stop);
-
   return timer;
 }
 

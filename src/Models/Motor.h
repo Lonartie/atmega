@@ -9,10 +9,6 @@ typedef struct Motor
   Pin forward;
   Pin backward;
   uint8_t pwm_pin;
-
-  void(*drive_forward)(uint8_t speed);
-  void(*drive_backward)(uint8_t speed);
-  void(*stop)();
 } Motor;
 
 Motor Motor_create(uint8_t pwm_pin, Pin forward, Pin backward);

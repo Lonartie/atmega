@@ -15,18 +15,6 @@ typedef struct Pin
   volatile uint8_t* port;   ///< port register
   uint8_t ddr_pin;          ///< ddr pin number
   uint8_t port_pin;         ///< port pin number
-
-  /// @brief sets the pin to 'read'-mode (sensors)
-  void(*set_read)();
-
-  /// @brief sets the pin to 'write'-mode (actuators)
-  void(*set_write)();
-
-  /// @brief writes a value to the pin
-  void(*write)(bool);
-
-  /// @brief reads the value from the pin
-  bool(*read)();
 } Pin;
 
 DECLARE_VECTORS(Pin);

@@ -9,14 +9,6 @@
 
 static const uint64_t EVENT_PERIOD_US MAYBE_UNUSED = 100;
 
-DEFINE_ACTOR_FORWARDER_N(void, EventSystem, reg_updater, (Updater updater), (updater));
-DEFINE_ACTOR_FORWARDER_N(void, EventSystem, unreg_updater, (Updater updater), (updater));
-DEFINE_ACTOR_FORWARDER_N(void, EventSystem, reg_listener, (Listener listener), (listener));
-DEFINE_ACTOR_FORWARDER_N(void, EventSystem, unreg_listener, (Listener listener), (listener));
-DEFINE_ACTOR_FORWARDER_N(void, EventSystem, send_event, (Event event), (event));
-DEFINE_ACTOR_FORWARDER(void, EventSystem, run);
-DEFINE_ACTOR_FORWARDER(void, EventSystem, exit);
-
 EventSystem* EventSystem_instance()
 {
   static EventSystem instance;
@@ -28,14 +20,6 @@ EventSystem* EventSystem_instance()
     instance.listeners = Vector_Listener_64_create();
     instance.exit_flag = false;
 
-    SET_ACTOR_FORWARDER(instance, EventSystem, reg_updater);
-    SET_ACTOR_FORWARDER(instance, EventSystem, unreg_updater);
-    SET_ACTOR_FORWARDER(instance, EventSystem, reg_listener);
-    SET_ACTOR_FORWARDER(instance, EventSystem, unreg_listener);
-    SET_ACTOR_FORWARDER(instance, EventSystem, send_event);
-    SET_ACTOR_FORWARDER(instance, EventSystem, run);
-    SET_ACTOR_FORWARDER(instance, EventSystem, exit);
-
     initialized = true;
   }
 
@@ -44,7 +28,7 @@ EventSystem* EventSystem_instance()
 
 void EventSystem_reg_updater(EventSystem* _this, Updater updater)
 {
-  ACTOR(_this->updaters).push_back(updater);
+  Vector_Updater_16_push_back(&_this->updaters, updater);
 }
 
 void EventSystem_unreg_updater(EventSystem* _this, Updater updater)
@@ -53,14 +37,14 @@ void EventSystem_unreg_updater(EventSystem* _this, Updater updater)
     if (_this->updaters.data[i].update == updater.update && 
         _this->updaters.data[i].object == updater.object)
     {
-      ACTOR(_this->updaters).erase(i);
+      Vector_Updater_16_erase(&_this->updaters, i);
       return;
     }
 }
 
 void EventSystem_reg_listener(EventSystem* _this, Listener listener)
 {
-  ACTOR(_this->listeners).push_back(listener);
+  Vector_Listener_64_push_back(&_this->listeners, listener);
 }
 
 void EventSystem_unreg_listener(EventSystem* _this, Listener listener)
@@ -69,7 +53,7 @@ void EventSystem_unreg_listener(EventSystem* _this, Listener listener)
     if (_this->listeners.data[i].callback == listener.callback && 
         String_equals(_this->listeners.data[i].event, listener.event))
     {
-      ACTOR(_this->listeners).erase(i);
+      Vector_Listener_64_erase(&_this->listeners, i);
       return;
     }
 }

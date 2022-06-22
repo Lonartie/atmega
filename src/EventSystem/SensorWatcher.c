@@ -2,18 +2,12 @@
 #include "EventSystem.h"
 #include "../Misc/Debug.h"
 
-DEFINE_ACTOR_FORWARDER(void, SensorWatcher, start);
-DEFINE_ACTOR_FORWARDER(void, SensorWatcher, stop);
-
 SensorWatcher SensorWatcher_create(Pin pin, String event)
 {
   SensorWatcher watcher;
   watcher.pin = pin;
   watcher.event = event;
   watcher.last_state = false;
-
-  SET_ACTOR_FORWARDER(watcher, SensorWatcher, start);
-  SET_ACTOR_FORWARDER(watcher, SensorWatcher, stop);
 
   return watcher;
 }

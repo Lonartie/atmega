@@ -12,28 +12,6 @@ typedef struct EventSystem {
   Vector_Updater_16 updaters;
   Vector_Listener_64 listeners;
   bool exit_flag;
-
-  /// @brief registers the given updater to the event system
-  void(*reg_updater)(Updater);
-
-  /// @brief unregisters the given updater from the event system
-  void(*unreg_updater)(Updater);
-
-  /// @brief registers the given listener to the event system
-  void(*reg_listener)(Listener);
-
-  /// @brief unregisters the given listener from the event system
-  void(*unreg_listener)(Listener);
-
-  /// @brief sends the given event to the event system
-  void(*send_event)(Event);
-
-  /// @brief runs the event system
-  /// @note returns only when the event system is stopped with 'EventSystem_exit()'
-  void(*run)();
-
-  /// @brief exits the event system
-  void(*exit)();
 } EventSystem;
 
 /// @returns the event system singleton instance

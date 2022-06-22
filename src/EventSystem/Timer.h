@@ -3,7 +3,6 @@
 
 #include <stdint.h>
 #include "../Misc/String.h"
-#include "../Misc/Actor.h"
 
 typedef void(*TimerCallback)();
 
@@ -12,12 +11,6 @@ typedef struct Timer {
   uint64_t interval_ms;
   uint64_t last_time_ms;
   String event;
-
-  /// @brief starts the timer
-  void(*start)();
-
-  /// @brief stops the timer
-  void(*stop)();
 } Timer;
 
 /// @brief creates a new timer with the specified event and interval

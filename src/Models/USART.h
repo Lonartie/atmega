@@ -3,17 +3,11 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "../Misc/Actor.h"
 
 /// @brief a serial port
 typedef struct USART {
   long ubrr;
   bool heap;    //< whether or not the object is allocated on the heap
-
-  void(*destroy)();
-  void (*send_byte)(char);
-  void (*send_str)(const char*);
-  char (*recv_byte)();
 } USART;
 
 /// @returns a new USART (stack)
