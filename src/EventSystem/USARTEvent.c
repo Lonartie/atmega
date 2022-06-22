@@ -23,10 +23,5 @@ USARTEvent USARTEvent_create(ShiftRegister led)
 
 ISR(USART_RX_vect)
 {
-  static bool a = true, b = false, c = false;
-  bool tmp = c;
-  c = b;
-  b = a;
-  a = tmp;
-  ShiftRegister_write_n(&leds, a, b, c);
+  debug("Hello!");
 }
