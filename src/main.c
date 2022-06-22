@@ -84,13 +84,12 @@ void update(System* atmega)
 	{
 		// left sensor -> steer left -> move right forward
 		Motor_stop(mleft);
-		Motor_drive_forward(mright, 15);
-		debug("reading left");
+		Motor_drive_forward(mright, 50);
 	} 
 	else if (right)
 	{
 		// right sensor -> steer right -> move left forward
-		Motor_drive_forward(mleft, 15);
+		Motor_drive_forward(mleft, 50);
 		Motor_stop(mright);
 	}
 	// else if (state == slowly_forward)
