@@ -47,9 +47,9 @@
 const int SPEED_DRIVE_SLOW = 0;
 const int SPEED_DRIVE = 120;
 const int SPEED_TURN = 200; 
-const int MEASURE_THRESHOLD_LEFT = 250;
-const int MEASURE_THRESHOLD_MID = 330;
-const int MEASURE_THRESHOLD_RIGHT = 250;
+const int MEASURE_THRESHOLD_LEFT = 330;
+const int MEASURE_THRESHOLD_MID = 400;
+const int MEASURE_THRESHOLD_RIGHT = 330;
 
 void update(System* t);
 
@@ -173,9 +173,13 @@ void update(System* atmega)
 		debug(FMT("adc: %d %d %d\n", left_measure, mid_measure, right_measure));
 	}
 
-	bool left = left_measure > mid_measure && left_measure > right_measure;
+	/*bool left = left_measure > mid_measure && left_measure > right_measure; 
 	bool mid = mid_measure > left_measure && mid_measure > right_measure;
-	bool right = right_measure > left_measure && right_measure > mid_measure;
+	bool right = right_measure > left_measure && right_measure > mid_measure;*/
+
+	bool left = left_measure > MEASURE_THRESHOLD_LEFT;
+	bool mid = mid_measure > MEASURE_THRESHOLD_MID;
+	bool right = right_measure > MEASURE_THRESHOLD_RIGHT;
 
 	// // nothing has changed
 	// if (lleft == left && lmid == mid && lright == right)
@@ -186,7 +190,7 @@ void update(System* atmega)
 	// if (right) debug("reading right\n");
 	ShiftRegister_write_n(&atmega->led_strip, 3, left, mid, right);
 
-	if (mid)
+	if (mid && !left && !right)
 	{
 		// only mid sensor -> move forward
 		Motor_drive_forward(mleft, SPEED_DRIVE);
