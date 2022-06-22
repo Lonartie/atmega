@@ -151,6 +151,8 @@ typedef enum State
 	forward
 } State;
 
+static int lastTimeMS = 0;
+
 void update(System* atmega)
 {
 	static bool lleft = false, lmid = false, lright = false;
@@ -161,6 +163,11 @@ void update(System* atmega)
 	int left_measure = ADC_read_avg(ADMUX_CHN_ADC2, ADC_AVG_WINDOW);
 	int mid_measure = ADC_read_avg(ADMUX_CHN_ADC1, ADC_AVG_WINDOW);
 	int right_measure = ADC_read_avg(ADMUX_CHN_ADC0, ADC_AVG_WINDOW);
+
+	if (lastTimeMS + 100 < millis()) {
+		lastTimeMS = millis();
+		debug(FMT("adc: %d %d %d\n", left_measure, mid_measure, right_measure));
+	}
 
 	bool left = left_measure > MEASURE_THRESHOLD_LEFT;
 	bool mid = mid_measure > MEASURE_THRESHOLD_MID;
@@ -181,8 +188,6 @@ void update(System* atmega)
 		// weird situation, just drive forward slowly
 		Motor_drive_forward(mleft, SPEED_DRIVE_SLOW);
 		Motor_drive_forward(mright, SPEED_DRIVE_SLOW);
-
-		// debug("sloooowly forward\n");
 	}
  	else if (mid)
 	{
@@ -202,16 +207,6 @@ void update(System* atmega)
 		Motor_drive_forward(mleft, SPEED_TURN);
 		Motor_drive_backward(mright, SPEED_TURN);
 	}
-	// else if (state == slowly_forward)
-	// {
-	// 	Motor_stop(&mleft);
-	// 	Motor_stop(&mright);
-	// 	debug("stopping!\n");
-	// }
-	// else
-	// {
-	// 	debug("unknown state\n");
-	// }
 
 	lleft = left;
 	lmid = mid;
