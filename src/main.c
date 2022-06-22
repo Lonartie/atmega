@@ -17,16 +17,20 @@ int main()
 	timer_init();
 	PWM_init();
 
-	EventSystem* system = EventSystem_instance();
+
+	// EventSystem* system = EventSystem_instance();
 	System atmega = System_create();
+	while (true) {
+		update(&atmega);
+	}
 
 
-	Timer timer = Timer_create(100, "update");
-	// AnySensorWatcher timer = AnySensorWatcher_create("update", 3, atmega.lf_left, atmega.lf_middle, atmega.lf_right);
+	// Timer timer = Timer_create(100, "update");
+	// // AnySensorWatcher timer = AnySensorWatcher_create("update", 3, atmega.lf_left, atmega.lf_middle, atmega.lf_right);
 
-	EventSystem_reg_listener(system, Listener_create_r(&atmega, update, timer.event));
-	Timer_start(&timer);
-	EventSystem_run(system);
+	// EventSystem_reg_listener(system, Listener_create_r(&atmega, update, timer.event));
+	// Timer_start(&timer);
+	// EventSystem_run(system);
 }
 
 typedef enum State
@@ -57,24 +61,25 @@ void update(void* t)
 	// if (lleft == left && lmid == mid && lright == right)
 	// 	return;
 
-	if (left && right)
-	{
-		// weird situation, just drive forward slowly
-		Motor_drive_forward(&mleft, 30);
-		Motor_drive_forward(&mright, 30);
+	// if (left && right)
+	// {
+	// 	// weird situation, just drive forward slowly
+	// 	Motor_drive_forward(&mleft, 30);
+	// 	Motor_drive_forward(&mright, 30);
 
-		debug("sloooowly forward\n");
-		state = slowly_forward;
-	}
- 	else if (right)
+	// 	debug("sloooowly forward\n");
+	// 	state = slowly_forward;
+	// }
+ 	// else 
+	if (mid)
 	{
-		// right sensor -> steer right -> move left forward
-		Motor_drive_forward(&mleft, 15);
-		Motor_drive_backward(&mright, 15);
+		// only mid sensor -> move forward
+		Motor_drive_forward(&mleft, 100);
+		Motor_drive_forward(&mright, 100);
 
-		debug("steer right\n");
-		state = turn_right;
-	}
+		debug("forward\n");
+		state = forward;
+	} 
 	else if (left)
 	{
 		// left sensor -> steer left -> move right forward
@@ -83,15 +88,15 @@ void update(void* t)
 
 		debug("steer left\n");
 		state = turn_left;
-	}
-	else if (mid)
+	} 
+	else if (right)
 	{
-		// only mid sensor -> move forward
-		Motor_drive_forward(&mleft, 100);
-		Motor_drive_forward(&mright, 100);
+		// right sensor -> steer right -> move left forward
+		Motor_drive_forward(&mleft, 15);
+		Motor_drive_backward(&mright, 15);
 
-		debug("forward\n");
-		state = forward;
+		debug("steer right\n");
+		state = turn_right;
 	}
 	// else if (state == slowly_forward)
 	// {
