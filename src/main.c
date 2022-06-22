@@ -10,8 +10,8 @@
 #include <stdio.h>
 #include <util/delay.h>
 
-const int SPEED_FAST = 100;
-const int SPEED_SLOW = 50; 
+const int SPEED_FAST = 150;
+const int SPEED_SLOW = 100; 
 
 void update(System* t);
 
