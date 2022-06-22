@@ -70,7 +70,7 @@ void update(void* t)
 	{
 		// right sensor -> steer right -> move left forward
 		Motor_drive_forward(&mleft, 15);
-		Motor_stop(&mright);
+		Motor_drive_backward(&mright, 15);
 
 		debug("steer right\n");
 		state = turn_right;
@@ -80,7 +80,7 @@ void update(void* t)
 	else if (left)
 	{
 		// left sensor -> steer left -> move right forward
-		Motor_stop(&mleft);
+		Motor_drive_backward(&mleft, 15);
 		Motor_drive_forward(&mright, 15);
 
 		debug("steer left\n");
