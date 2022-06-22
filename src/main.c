@@ -45,7 +45,7 @@
 #define ADCMSG "ADC0: %5u\tADC1: %5u\tADC2: %5u\n"
 
 const int SPEED_DRIVE_SLOW = 0;
-const int SPEED_DRIVE = 120;
+const int SPEED_DRIVE = 180;
 const int SPEED_TURN = 200; 
 const int MEASURE_THRESHOLD_LEFT = 330;
 const int MEASURE_THRESHOLD_MID = 400;
@@ -195,7 +195,7 @@ void update(System* atmega)
 	{
 		left_fallback = false;
 		right_fallback = false;
-		
+
 		// only mid sensor -> move forward
 		Motor_drive_forward(mleft, SPEED_DRIVE);
 		Motor_drive_forward(mright, SPEED_DRIVE);
