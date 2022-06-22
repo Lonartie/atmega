@@ -21,7 +21,7 @@ int main()
 	System atmega = System_create();
 
 
-	Timer timer = Timer_create(10, "update");
+	Timer timer = Timer_create(100, "update");
 	// AnySensorWatcher timer = AnySensorWatcher_create("update", 3, atmega.lf_left, atmega.lf_middle, atmega.lf_right);
 
 	EventSystem_reg_listener(system, Listener_create_r(&atmega, update, timer.event));
@@ -57,6 +57,8 @@ void update(void* t)
 
 	if (left && right)
 	{
+		Motor_stop(&mleft);
+		Motor_stop(&mright);
 		// weird situation, just drive forward slowly
 		Motor_drive_forward(&mleft, 30);
 		Motor_drive_forward(&mright, 30);
@@ -68,6 +70,8 @@ void update(void* t)
 	}
  	else if (right)
 	{
+		Motor_stop(&mleft);
+		Motor_stop(&mright);
 		// right sensor -> steer right -> move left forward
 		Motor_drive_forward(&mleft, 15);
 		Motor_drive_backward(&mright, 15);
@@ -79,6 +83,8 @@ void update(void* t)
 	}
 	else if (left)
 	{
+		Motor_stop(&mleft);
+		Motor_stop(&mright);
 		// left sensor -> steer left -> move right forward
 		Motor_drive_backward(&mleft, 15);
 		Motor_drive_forward(&mright, 15);
@@ -90,6 +96,8 @@ void update(void* t)
 	}
 	else if (mid)
 	{
+		Motor_stop(&mleft);
+		Motor_stop(&mright);
 		// only mid sensor -> move forward
 		Motor_drive_forward(&mleft, 100);
 		Motor_drive_forward(&mright, 100);
