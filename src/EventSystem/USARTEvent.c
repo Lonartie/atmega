@@ -4,7 +4,7 @@
 #include <avr/interrupt.h>
 #include <avr/sleep.h> 
 
-ISR(USART_RX_vect,ISR_BLOCK)
+ISR(USART_RX_vect)
 {
   debug("USART event? help!");
 }
