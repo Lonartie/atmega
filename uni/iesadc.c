@@ -109,7 +109,7 @@ uint16_t ADC_read_avg(uint8_t channel, uint8_t nsamples) {
 }
 
 int main(void) {
-	USART_Init(UBRR_SETTING);
+	USART_init(UBRR_SETTING);
 	
     DR_ADC0 &= ~(1 << DP_ADC0);
     DR_ADC1 &= ~(1 << DP_ADC1);
