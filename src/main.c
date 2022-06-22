@@ -10,6 +10,9 @@
 #include <stdio.h>
 #include <util/delay.h>
 
+const int SPEED_FAST = 100;
+const int SPEED_SLOW = 50; 
+
 void update(System* t);
 
 int main()
@@ -59,37 +62,36 @@ void update(System* atmega)
 	if (lleft == left && lmid == mid && lright == right)
 		return;
 
-	// if (left) debug("reading left\n");
-	// if (mid) debug("reading mid\n");
-	// if (right) debug("reading right\n");
+	if (left) debug("reading left\n");
+	if (mid) debug("reading mid\n");
+	if (right) debug("reading right\n");
 	ShiftRegister_write_n(&atmega->led_strip, 3, left, mid, right);
 
-	// if (left && right)
-	// {
-	// 	// weird situation, just drive forward slowly
-	// 	Motor_drive_forward(&mleft, 30);
-	// 	Motor_drive_forward(&mright, 30);
+	if (left && right)
+	{
+		// weird situation, just drive forward slowly
+		Motor_drive_forward(&mleft, SPEED_SLOW);
+		Motor_drive_forward(&mright, SPEED_SLOW);
 
-	// 	debug("sloooowly forward\n");
-	// 	state = slowly_forward;
-	// }
- 	// else 
-	if (mid)
+		debug("sloooowly forward\n");
+		state = slowly_forward;
+	}
+ 	else if (mid)
 	{
 		// only mid sensor -> move forward
-		Motor_drive_forward(mleft, 100);
-		Motor_drive_forward(mright, 100);
+		Motor_drive_forward(mleft, SPEED_FAST);
+		Motor_drive_forward(mright, SPEED_FAST);
 	} 
 	else if (left)
 	{
 		// left sensor -> steer left -> move right forward
 		Motor_stop(mleft);
-		Motor_drive_forward(mright, 50);
+		Motor_drive_forward(mright, SPEED_SLOW);
 	} 
 	else if (right)
 	{
 		// right sensor -> steer right -> move left forward
-		Motor_drive_forward(mleft, 50);
+		Motor_drive_forward(mleft, SPEED_SLOW);
 		Motor_stop(mright);
 	}
 	// else if (state == slowly_forward)
