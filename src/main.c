@@ -48,7 +48,7 @@ const int SPEED_DRIVE_SLOW = 0;
 const int SPEED_DRIVE = 120;
 const int SPEED_TURN = 200; 
 const int MEASURE_THRESHOLD_LEFT = 250;
-const int MEASURE_THRESHOLD_MID = 430;
+const int MEASURE_THRESHOLD_MID = 330;
 const int MEASURE_THRESHOLD_RIGHT = 250;
 
 void update(System* t);
