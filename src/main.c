@@ -11,6 +11,10 @@
 #include <util/delay.h>
 #include <avr/io.h>
 
+
+// WTF. Why is there no header here? Always seperate declaration,
+// documentation, and implementation! Clean this up if you use this!
+
 #define DR_ADC0 DDRC
 #define DP_ADC0 DDC0
 #define IR_ADC0 PC0
@@ -40,8 +44,8 @@
 // Well hmmm understand this by yourself. Become inspired.
 #define ADCMSG "ADC0: %5u\tADC1: %5u\tADC2: %5u\n"
 
-const int SPEED_FAST = 150;
-const int SPEED_SLOW = 100; 
+const int SPEED_DRIVE = 150;
+const int SPEED_TURN = 150; 
 const int MEASURE_THRESHOLD = 550;
 
 void update(System* t);
@@ -49,10 +53,10 @@ void update(System* t);
 void ADC_init(void) {
   // The following lines still let the digital input registers enabled,
   // though that's not a good idea (energy-consumption).
-  
+
   // Klare Verhältnisse erstma!
   ADMUX = 0;
-  
+
   // Sets AVcc as the ADC's voltage source and as the reference,
   // while that voltage stems from the AREF-pin (5V when the robots is
   //  powered by batteries, lower otherwise).
@@ -65,7 +69,7 @@ void ADC_init(void) {
 
   // This enables/really turns on the ADC. 
   ADCSRA |= (1<<ADEN);
-  
+
   // The following lines of code start a single measurement in single
   // conversion mode. Needed once to "warm up" the ADC. The contents
   // of the result-register ADCW are ignored because they are not
@@ -73,21 +77,21 @@ void ADC_init(void) {
   // conversion is done. The first conversion is not only inreliable,
   // but also 25 ADC-cycles long, while the next conversions are around
   // 13 cycles long.
-  ADCSRA |= (1<<ADSC); 
-  while (ADCSRA & (1<<ADIF)) {
+  ADCSRA |= (1<<ADSC);
+  while (ADCSRA & (1<<ADSC)) {
     // zzzZZZzzzZZZzzz ... take a sleep until measurement done.
   }
-  ADCW; 
+  ADCW;
 }
 
 uint16_t ADC_read(uint8_t channel) {
   // Remember to have the ADC initialized!
-  
+
   // The following line does set all ADMUX-MUX-pins to 0, disconnects
   // all channels from the MUX.
   ADMUX &= ~(ADMUX_CHN_ALL);
-  ADMUX |= channel;  
-  
+  ADMUX |= channel;
+
   // We start a single measurement and then busy-wait until
   // the ADSC-bit goes to 0, signalling the end of the measurement.
   ADCSRA |= (1<<ADSC);
@@ -96,7 +100,7 @@ uint16_t ADC_read(uint8_t channel) {
   }
   // Again, a pointer-airthmetical expression. the ADC-register has a
   // lower and a higher portion, but
-  return ADCW;                    
+  return ADCW;
 }
 
 uint16_t ADC_read_avg(uint8_t channel, uint8_t nsamples) {
@@ -161,39 +165,39 @@ void update(System* atmega)
 
 
 	// // nothing has changed
-	if (lleft == left && lmid == mid && lright == right)
-		return;
+	// if (lleft == left && lmid == mid && lright == right)
+	// 	return;
 
-	if (left) debug("reading left\n");
-	if (mid) debug("reading mid\n");
-	if (right) debug("reading right\n");
+	// if (left) debug("reading left\n");
+	// if (mid) debug("reading mid\n");
+	// if (right) debug("reading right\n");
 	ShiftRegister_write_n(&atmega->led_strip, 3, left, mid, right);
 
 	if (left && right)
 	{
 		// weird situation, just drive forward slowly
-		Motor_drive_forward(mleft, SPEED_SLOW);
-		Motor_drive_forward(mright, SPEED_SLOW);
+		Motor_drive_forward(mleft, SPEED_TURN);
+		Motor_drive_forward(mright, SPEED_TURN);
 
 		debug("sloooowly forward\n");
 	}
  	else if (mid)
 	{
 		// only mid sensor -> move forward
-		Motor_drive_forward(mleft, SPEED_FAST);
-		Motor_drive_forward(mright, SPEED_FAST);
+		Motor_drive_forward(mleft, SPEED_DRIVE);
+		Motor_drive_forward(mright, SPEED_DRIVE);
 	} 
 	else if (left)
 	{
 		// left sensor -> steer left -> move right forward
-		Motor_drive_backward(mleft, SPEED_SLOW);
-		Motor_drive_forward(mright, SPEED_SLOW);
+		Motor_drive_backward(mleft, SPEED_TURN);
+		Motor_drive_forward(mright, SPEED_TURN);
 	} 
 	else if (right)
 	{
 		// right sensor -> steer right -> move left forward
-		Motor_drive_forward(mleft, SPEED_SLOW);
-		Motor_drive_backward(mright, SPEED_SLOW);
+		Motor_drive_forward(mleft, SPEED_TURN);
+		Motor_drive_backward(mright, SPEED_TURN);
 	}
 	// else if (state == slowly_forward)
 	// {
