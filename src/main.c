@@ -51,9 +51,9 @@ void update(void* t)
 	bool mid = Pin_read(&atmega->lf_middle);
 	bool right = Pin_read(&atmega->lf_right);
 
-	// nothing has changed
-	if (lleft == left && lmid == mid && lright == right)
-		return;
+	// // nothing has changed
+	// if (lleft == left && lmid == mid && lright == right)
+	// 	return;
 
 	if (left && right)
 	{
@@ -99,16 +99,16 @@ void update(void* t)
 
 		ShiftRegister_write_n(&atmega->led_strip, 3, 0, 1, 0);
 	}
-	else if (state == slowly_forward)
-	{
-		Motor_stop(&mleft);
-		Motor_stop(&mright);
-		debug("stopping!\n");
-	}
-	else
-	{
-		debug("unknown state\n");
-	}
+	// else if (state == slowly_forward)
+	// {
+	// 	Motor_stop(&mleft);
+	// 	Motor_stop(&mright);
+	// 	debug("stopping!\n");
+	// }
+	// else
+	// {
+	// 	debug("unknown state\n");
+	// }
 
 	lleft = left;
 	lmid = mid;
