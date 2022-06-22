@@ -26,7 +26,7 @@ int main()
 
 	// EventSystem* system = EventSystem_instance();
 	System atmega = System_create();
-	USARTEvent event MAYBE_UNUSED = USARTEvent_create();
+	USARTEvent event MAYBE_UNUSED = USARTEvent_create(atmega.led_strip);
 	while (true) {
 		update(&atmega);
 	}
@@ -68,7 +68,7 @@ void update(System* atmega)
 
 	if (lastTimeMS + 100ul < millis()) {
 		lastTimeMS = millis();
-		debug(FMT("adc: %d %d %d\n", left_measure, mid_measure, right_measure));
+		// debug(FMT("adc: %d %d %d\n", left_measure, mid_measure, right_measure));
 	}
 
 	/*bool left = left_measure > mid_measure && left_measure > right_measure; 
@@ -86,7 +86,7 @@ void update(System* atmega)
 	// if (left) debug("reading left\n");
 	// if (mid) debug("reading mid\n");
 	// if (right) debug("reading right\n");
-	ShiftRegister_write_n(&atmega->led_strip, 3, left, mid, right);
+	// ShiftRegister_write_n(&atmega->led_strip, 3, left, mid, right);
 
 	if (mid)
 	{

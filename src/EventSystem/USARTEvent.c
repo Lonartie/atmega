@@ -3,15 +3,17 @@
 #include "../Models/USART.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
-#include <avr/sleep.h> 
+#include <avr/sleep.h>
 
 static USART usart;
+static ShiftRegister leds;
 static bool initialized = false;
 
-USARTEvent USARTEvent_create()
+USARTEvent USARTEvent_create(ShiftRegister led)
 {
   if (!initialized) {
     usart = USART_create();
+    leds = led;
     initialized = true;
   }
 
@@ -21,16 +23,10 @@ USARTEvent USARTEvent_create()
 
 ISR(USART_RX_vect)
 {
-  char data[64];
-  uint8_t i = 0;
-  while (1) {
-    data[i] = USART_recv_byte(&usart);
-    if (data[i] == '\r') {
-      break;
-    }
-    i++;
-  }
-  data[i + 1] = '\0';
-
-  debug(data);
+  static bool a = true, b = false, c = false;
+  bool tmp = c;
+  c = b;
+  b = a;
+  a = tmp;
+  ShiftRegister_write_n(&leds, a, b, c);
 }
