@@ -4,7 +4,7 @@
 
 void debug(const char* str MAYBE_UNUSED)
 {
-  #if 0
+  #if 1
 
   static USART usart;
   static bool initialized = false;

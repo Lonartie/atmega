@@ -20,6 +20,7 @@ int main()
 	EventSystem* system = EventSystem_instance();
 	System atmega = System_create();
 
+
 	Timer timer = Timer_create(10, "update");
 	// AnySensorWatcher timer = AnySensorWatcher_create("update", 3, atmega.lf_left, atmega.lf_middle, atmega.lf_right);
 
@@ -41,6 +42,7 @@ void update(void* t)
 {
 	static bool lleft = false, lmid = false, lright = false;
 	static State state = idle;
+	static uint64_t time = 0;
 
 	System* atmega = (System*) t;
 	Motor mleft = atmega->mt_left;
@@ -108,4 +110,8 @@ void update(void* t)
 	{
 		debug("unknown state\n");
 	}
+
+	lleft = left;
+	lmid = mid;
+	lright = right;
 }
