@@ -183,13 +183,7 @@ void update(System* atmega)
 	// if (right) debug("reading right\n");
 	ShiftRegister_write_n(&atmega->led_strip, 3, left, mid, right);
 
-	if (left && right)
-	{
-		// weird situation, just drive forward slowly
-		Motor_drive_forward(mleft, SPEED_DRIVE_SLOW);
-		Motor_drive_forward(mright, SPEED_DRIVE_SLOW);
-	}
- 	else if (mid)
+	if (mid)
 	{
 		// only mid sensor -> move forward
 		Motor_drive_forward(mleft, SPEED_DRIVE);
