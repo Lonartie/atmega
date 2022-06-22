@@ -193,6 +193,9 @@ void update(System* atmega)
 
 	if (mid)
 	{
+		left_fallback = false;
+		right_fallback = false;
+		
 		// only mid sensor -> move forward
 		Motor_drive_forward(mleft, SPEED_DRIVE);
 		Motor_drive_forward(mright, SPEED_DRIVE);
