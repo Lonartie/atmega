@@ -33,6 +33,9 @@ int main()
 	EventSystem_reg_listener(EventSystem_instance(), Listener_create_r(&atmega, update, timer.event));
 	EventSystem_reg_listener(EventSystem_instance(), Listener_create_r(&usart, input, usart.event));
 
+	Timer_start(&timer);
+	USARTEvent_start(&usart);
+
 	EventSystem_run(EventSystem_instance());
 	
 

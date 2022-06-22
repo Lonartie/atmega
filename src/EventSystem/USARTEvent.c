@@ -25,9 +25,17 @@ USARTEvent USARTEvent_create(String event)
   usart_event.event = event;
   usart_event.data = NULL;
 
-  EventSystem_reg_updater(EventSystem_instance(), Updater_create(&usart_event, USARTEvent_update));
-
   return usart_event;
+}
+
+void USARTEvent_start(USARTEvent* _this)
+{
+  EventSystem_reg_updater(EventSystem_instance(), Updater_create(&_this, USARTEvent_update));
+}
+
+void USARTEvent_stop(USARTEvent* _this)
+{
+  EventSystem_unreg_updater(EventSystem_instance(), Updater_create(&_this, USARTEvent_update));
 }
 
 void USARTEvent_update(void* _this)

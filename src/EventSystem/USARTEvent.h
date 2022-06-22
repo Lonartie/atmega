@@ -9,6 +9,8 @@ typedef struct USARTEvent {
 } USARTEvent;
 
 USARTEvent USARTEvent_create(String event);
+void USARTEvent_start(USARTEvent* _this);
+void USARTEvent_stop(USARTEvent* _this);
 void USARTEvent_update(void* _this);
 
 #endif // USART_EVENT_H
