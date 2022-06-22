@@ -181,7 +181,7 @@ void update(System* atmega)
 		Motor_drive_forward(mleft, SPEED_TURN);
 		Motor_drive_forward(mright, SPEED_TURN);
 
-		debug("sloooowly forward\n");
+		// debug("sloooowly forward\n");
 	}
  	else if (mid)
 	{
