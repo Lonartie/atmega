@@ -59,9 +59,9 @@ void update(System* atmega)
 	if (lleft == left && lmid == mid && lright == right)
 		return;
 
-	if (left) debug("reading left\n");
-	if (mid) debug("reading mid\n");
-	if (right) debug("reading right\n");
+	// if (left) debug("reading left\n");
+	// if (mid) debug("reading mid\n");
+	// if (right) debug("reading right\n");
 	ShiftRegister_write_n(&atmega->led_strip, 3, left, mid, right);
 
 	// if (left && right)
@@ -85,6 +85,7 @@ void update(System* atmega)
 		// left sensor -> steer left -> move right forward
 		Motor_stop(mleft);
 		Motor_drive_forward(mright, 15);
+		debug("reading left");
 	} 
 	else if (right)
 	{
