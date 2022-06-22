@@ -44,6 +44,7 @@
 // Well hmmm understand this by yourself. Become inspired.
 #define ADCMSG "ADC0: %5u\tADC1: %5u\tADC2: %5u\n"
 
+const int SPEED_DRIVE_SLOW = 50;
 const int SPEED_DRIVE = 150;
 const int SPEED_TURN = 150; 
 const int MEASURE_THRESHOLD_LEFT = 400;
@@ -178,8 +179,8 @@ void update(System* atmega)
 	if (left && right)
 	{
 		// weird situation, just drive forward slowly
-		Motor_drive_forward(mleft, SPEED_TURN);
-		Motor_drive_forward(mright, SPEED_TURN);
+		Motor_drive_forward(mleft, SPEED_DRIVE_SLOW);
+		Motor_drive_forward(mright, SPEED_DRIVE_SLOW);
 
 		// debug("sloooowly forward\n");
 	}
