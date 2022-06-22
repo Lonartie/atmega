@@ -45,8 +45,8 @@
 #define ADCMSG "ADC0: %5u\tADC1: %5u\tADC2: %5u\n"
 
 const int SPEED_DRIVE_SLOW = 0;
-const int SPEED_DRIVE = 180;
-const int SPEED_TURN = 200; 
+const int SPEED_DRIVE = 200;
+const int SPEED_TURN = 170; 
 const int MEASURE_THRESHOLD_LEFT = 330;
 const int MEASURE_THRESHOLD_MID = 400;
 const int MEASURE_THRESHOLD_RIGHT = 330;
