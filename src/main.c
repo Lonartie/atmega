@@ -153,6 +153,10 @@ typedef enum State
 
 static int lastTimeMS = 0;
 
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+#define MAX_3(a, b, c) MAX(MAX(a, b), c)
+#define IS_MAX()
+
 void update(System* atmega)
 {
 	static bool lleft = false, lmid = false, lright = false;
@@ -169,10 +173,9 @@ void update(System* atmega)
 		debug(FMT("adc: %d %d %d\n", left_measure, mid_measure, right_measure));
 	}
 
-	bool left = left_measure > MEASURE_THRESHOLD_LEFT;
-	bool mid = mid_measure > MEASURE_THRESHOLD_MID;
-	bool right = right_measure > MEASURE_THRESHOLD_RIGHT;
-
+	bool left = left_measure > mid_measure && left_measure > right_measure;
+	bool mid = mid_measure > left_measure && mid_measure > right_measure;
+	bool right = right_measure > left_measure && right_measure > mid_measure;
 
 	// // nothing has changed
 	// if (lleft == left && lmid == mid && lright == right)
