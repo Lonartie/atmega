@@ -23,5 +23,15 @@ USARTEvent USARTEvent_create(ShiftRegister led)
 
 ISR(USART_RX_vect)
 {
-  debug("Hello!");
+  char msg[32];
+  uint8_t i = 0;
+  while (1) {
+    msg[i] = USART_recv_byte(&usart);
+    if (msg[i] == '\r') {
+      break;
+    }
+    ++i;
+  }
+  msg[i] = '\0';
+  debug(msg);
 }
