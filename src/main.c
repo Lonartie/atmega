@@ -161,9 +161,9 @@ void update(System* atmega)
 	int mid_measure = ADC_read_avg(ADMUX_CHN_ADC1, ADC_AVG_WINDOW);
 	int right_measure = ADC_read_avg(ADMUX_CHN_ADC0, ADC_AVG_WINDOW);
 
-	bool left = left_measure > MEASURE_THRESHOLD;
-	bool mid = mid_measure > MEASURE_THRESHOLD;
-	bool right = right_measure > MEASURE_THRESHOLD;
+	bool left = left_measure > MEASURE_THRESHOLD_LEFT;
+	bool mid = mid_measure > MEASURE_THRESHOLD_MID;
+	bool right = right_measure > MEASURE_THRESHOLD_RIGHT;
 
 
 	// // nothing has changed
