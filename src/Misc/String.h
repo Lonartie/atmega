@@ -5,6 +5,7 @@
 #include <stdbool.h>
 
 typedef const char* String;
+typedef char* OwnedString;
 DECLARE_VECTORS(String);
 
 /// @returns true if the strings are equal

@@ -17,7 +17,8 @@ const int MEASURE_THRESHOLD_LEFT = 330;
 const int MEASURE_THRESHOLD_MID = 400;
 const int MEASURE_THRESHOLD_RIGHT = 330;
 
-void update(System* t);
+void update(void* t);
+void input(void* t);
 
 int main()
 {
@@ -26,10 +27,14 @@ int main()
 
 	// EventSystem* system = EventSystem_instance();
 	System atmega = System_create();
-	USARTEvent event MAYBE_UNUSED = USARTEvent_create(atmega.led_strip);
-	while (true) {
-		update(&atmega);
-	}
+	USARTEvent usart = USARTEvent_create("input");
+	Timer timer = Timer_create(0, "update");
+
+	EventSystem_reg_listener(EventSystem_instance(), Listener_create_r(&atmega, update, timer.event));
+	EventSystem_reg_listener(EventSystem_instance(), Listener_create_r(&usart, input, usart.event));
+
+	EventSystem_run(EventSystem_instance());
+	
 
 
 	// Timer timer = Timer_create(100, "update");
@@ -55,9 +60,16 @@ static int lastTimeMS = 0;
 #define MAX_3(a, b, c) MAX(MAX(a, b), c)
 #define IS_MAX()
 
-void update(System* atmega)
+void input(void* t)
+{
+	USARTEvent* usart = (USARTEvent*) t;
+	debug(FMT("Got: %s", usart->data));
+}
+
+void update(void* t)
 {
 	static bool left_fallback = false, right_fallback = false;
+	System* atmega = (System*)t;
 
 	Motor* mleft = &atmega->mt_left;
 	Motor* mright = &atmega->mt_right;
