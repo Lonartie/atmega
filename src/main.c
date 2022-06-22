@@ -9,6 +9,7 @@
 #include "System.h"
 #include <stdio.h>
 #include <util/delay.h>
+#include <avr/io.h>
 
 #define DR_ADC0 DDRC
 #define DP_ADC0 DDC0
@@ -146,7 +147,6 @@ typedef enum State
 void update(System* atmega)
 {
 	static bool lleft = false, lmid = false, lright = false;
-	static State state = idle;
 
 	Motor* mleft = &atmega->mt_left;
 	Motor* mright = &atmega->mt_right;
@@ -172,11 +172,10 @@ void update(System* atmega)
 	if (left && right)
 	{
 		// weird situation, just drive forward slowly
-		Motor_drive_forward(&mleft, SPEED_SLOW);
-		Motor_drive_forward(&mright, SPEED_SLOW);
+		Motor_drive_forward(mleft, SPEED_SLOW);
+		Motor_drive_forward(mright, SPEED_SLOW);
 
 		debug("sloooowly forward\n");
-		state = slowly_forward;
 	}
  	else if (mid)
 	{
