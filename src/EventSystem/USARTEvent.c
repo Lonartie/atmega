@@ -23,9 +23,14 @@ ISR(USART_RX_vect)
 {
   char data[64];
   uint8_t i = 0;
-  do {
+  while (1) {
     data[i] = USART_recv_byte(&usart);
-  } while(data[i++] != '\r');
+    if (data[i] == '\r') {
+      break;
+    }
+    i++;
+  }
+  data[i + 1] = '\0';
 
   debug(data);
 }
