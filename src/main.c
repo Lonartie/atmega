@@ -51,8 +51,30 @@ void update(void* t)
 	bool mid = Pin_read(&atmega->lf_middle);
 	bool right = Pin_read(&atmega->lf_right);
 
-	Motor_drive_forward(&mleft, 255);
-	Motor_drive_backward(&mright, 255);
+	Motor_drive_forward(&mleft, 100);
+	Motor_drive_backward(&mright, 100);
+
+	_delay_ms(500);
+
+	Motor_drive_backward(&mleft, 100);
+	Motor_drive_forward(&mright, 100);
+
+	_delay_ms(500);
+
+	Motor_stop(&mleft);
+	Motor_drive_forward(&mright, 100);
+
+	_delay_ms(500);
+
+	Motor_drive_forward(&mleft, 100);
+	Motor_stop(&mright);
+
+	_delay_ms(500);
+
+	Motor_stop(&mleft);
+	Motor_stop(&mright);
+
+
 
 	// // nothing has changed
 	// if (lleft == left && lmid == mid && lright == right)
