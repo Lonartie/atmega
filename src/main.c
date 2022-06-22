@@ -42,7 +42,6 @@ void update(void* t)
 {
 	static bool lleft = false, lmid = false, lright = false;
 	static State state = idle;
-	static uint64_t time = 0;
 
 	System* atmega = (System*) t;
 	Motor mleft = atmega->mt_left;
