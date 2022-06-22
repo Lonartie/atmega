@@ -54,11 +54,15 @@ void update(System* atmega)
 	bool mid = Pin_read(&atmega->lf_middle);
 	bool right = Pin_read(&atmega->lf_right);
 
-	ShiftRegister_write_n(&atmega->led_strip, 3, left, mid, right);
 
 	// // nothing has changed
 	if (lleft == left && lmid == mid && lright == right)
 		return;
+
+	if (left) debug("reading left\n");
+	if (mid) debug("reading mid\n");
+	if (right) debug("reading right\n");
+	ShiftRegister_write_n(&atmega->led_strip, 3, left, mid, right);
 
 	// if (left && right)
 	// {
