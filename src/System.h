@@ -4,6 +4,7 @@
 #include "Models/ShiftRegister.h"
 #include "Models/USART.h"
 #include "Models/Motor.h"
+#include "Models/ADCPin.h"
 
 /// @brief the abstraction of the microcontroller and all its components
 ///        currently configured for the ATmega328P-car-robot
@@ -11,9 +12,9 @@ typedef struct System
 {
   ShiftRegister led_strip;    // the LED strip (ShiftRegister)
   USART logger;               // the logger (USART)
-  Pin lf_left;                // the "Linienfolger" left (Pin)
-  Pin lf_middle;              // the "Linienfolger" middle (Pin)
-  Pin lf_right;               // the "Linienfolger" right (Pin)
+  ADCPin lf_left;             // the "Linienfolger" left (ADCPin)
+  ADCPin lf_middle;           // the "Linienfolger" middle (ADCPin)
+  ADCPin lf_right;            // the "Linienfolger" right (ADCPin)
   Motor mt_left;              // the left motor (Motor) 
   Motor mt_right;             // the right motor (Motor)
 } System;
