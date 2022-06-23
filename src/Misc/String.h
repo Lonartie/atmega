@@ -11,6 +11,9 @@ DECLARE_VECTORS(String);
 /// @returns true if the strings are equal
 bool String_equals(String a, String b);
 
+/// @returns true if string b is a substring of string a
+bool String_contains(String a, String b);
+
 /// @brief the buffer size for quick formatting of strings
 #define FMT_SIZE 64
 

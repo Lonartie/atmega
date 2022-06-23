@@ -7,3 +7,8 @@ bool String_equals(String a, String b)
 {
   return strcmp(a, b) == 0;
 }
+
+bool String_contains(String a, String b)
+{
+  return strstr(a, b) != NULL;
+}

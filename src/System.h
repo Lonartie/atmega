@@ -17,9 +17,13 @@ typedef struct System
   ADCPin lf_right;            // the "Linienfolger" right (ADCPin)
   Motor mt_left;              // the left motor (Motor) 
   Motor mt_right;             // the right motor (Motor)
+  bool started;
 } System;
 
 /// @brief creates a system with a shift register for the led strip and a usart as the logger
 System System_create();
+void System_start(void* _this);
+void System_stop(void* _this);
+void System_drive(void* _this);
 
 #endif // SYSTEM_H
