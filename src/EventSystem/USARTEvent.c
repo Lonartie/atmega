@@ -1,12 +1,9 @@
 #include "USARTEvent.h"
 #include "EventSystem.h"
-#include "../Misc/Debug.h"
 #include "../Models/USART.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
-#include <avr/sleep.h>
 #include <stdlib.h>
-#include <util/atomic.h>
 
 static USART usart;
 static bool initialized = false;
@@ -42,9 +39,12 @@ void USARTEvent_update(void* _this)
 {
   USARTEvent* usart_event = (USARTEvent*)_this;
   if (ready_read) {
+    // send event
     ready_read = false;
     usart_event->data = data;
     EventSystem_send_event(EventSystem_instance(), Event_create(usart_event->event));
+
+    // after event system has handled the event, free the data
     free(data);
     usart_event->data = NULL;
     data = NULL;
@@ -56,6 +56,7 @@ ISR(USART_RX_vect)
   data = (char*) malloc(sizeof(char) * 1);
   uint8_t i = 0;
 
+  // get the whole message
   while (1) {
     data[i] = USART_recv_byte(&usart);
     if (data[i] == '\r') {
@@ -64,6 +65,8 @@ ISR(USART_RX_vect)
     data = (char*) realloc(data, sizeof(char) * (i + 1));
     ++i;
   }
+
+  // mark as ready
   data[i] = '\0';
   ready_read = true;
 }

@@ -1,6 +1,5 @@
 #include "SensorWatcher.h"
 #include "EventSystem.h"
-#include "../Misc/Debug.h"
 
 SensorWatcher SensorWatcher_create(Pin pin, String event)
 {
