@@ -5,12 +5,14 @@
 #include "EventSystem/USARTEvent.h"
 DEFINE_VECTORS(Screen);
 
-#define SCREEN_INVALID_INPUT 0
-#define SCREEN_MAIN 1
+#define SCREEN_MAIN 0
+#define SCREEN_LOGS 1
+#define SCREEN_DEBUG_LOGS 2
 
 static Menu instance;
 static bool initialized = false;
 static USART usart;
+static LogLevel log_level = LOG_INFO;
 
 Vector_Screen_8 createScreens(Menu* menu);
 
@@ -43,6 +45,17 @@ void Menu_handle_input(void* usart)
   instance.current.handle_input(&instance, event->data);
 }
 
+void Menu_log(LogLevel level, const char* str)
+{
+  if ((Screen_equals(instance.current, instance.screens.data[SCREEN_LOGS]) ||
+       Screen_equals(instance.current, instance.screens.data[SCREEN_DEBUG_LOGS])) && 
+       log_level >= level) {
+    USART_send_str(&usart, level == LOG_INFO ? "i" : "d");
+    USART_send_str(&usart, " ");
+    USART_send_str(&usart, str);
+  }
+}
+
 Screen Screen_create(void(*show)(), void(*handle_input)(Menu* menu, const char* input), Menu* menu)
 {
   Screen screen;
@@ -52,47 +65,73 @@ Screen Screen_create(void(*show)(), void(*handle_input)(Menu* menu, const char* 
   return screen;
 }
 
+bool Screen_equals(Screen a, Screen b) {
+  return a.show == b.show && a.handle_input == b.handle_input;
+}
+
 void write(const char* str)
 {
   USART_send_str(&usart, str);
 }
 
-void screen_invalid_input_show() {
-  write("### Invalid input ###\n");
-  write(" Send anything to go back\n\n");
-}
-
-void screen_invalid_input_handle_input(Menu* menu, const char* input MAYBE_UNUSED) {
-  Menu_show(menu->last);
-}
-
 void screen_main_show() {
   write("### Main menu ###\n");
   write(" 1 - Start car\n");
-  write(" 2 - Stop car\n\n");
+  write(" 2 - Stop car\n");
+  write(" 3 - Show logs\n");
+  write(" 4 - Show debug logs\n\n");
 }
 
 void screen_main_handle_input(Menu* menu, const char* input) {
-  if (String_contains(input, "1")) {
+  if (String_equals_trimmed(input, "1")) {
     EventSystem_send_event(EventSystem_instance(), Event_create(menu->car_start_event));
-    write("!! car started !!\n\n");
+    write("!! Car started, brumm brumm !!\n\n");
     Menu_show(menu->screens.data[SCREEN_MAIN]);
   }
-  else if (String_contains(input, "2")) {
+  else if (String_equals_trimmed(input, "2")) {
     EventSystem_send_event(EventSystem_instance(), Event_create(menu->car_stop_event));
-    write("!! car stopped !!\n\n");
+    write("!! Car stopped !!\n\n");
     Menu_show(menu->screens.data[SCREEN_MAIN]);
   }
-  else
-    Menu_show(menu->screens.data[SCREEN_INVALID_INPUT]);
+  else if (String_equals_trimmed(input, "3")) {
+    Menu_show(menu->screens.data[SCREEN_LOGS]);
+  }
+  else if (String_equals_trimmed(input, "4")) {
+    Menu_show(menu->screens.data[SCREEN_DEBUG_LOGS]);
+  }
+  else {
+    write("!! Unknown command !!\n\n");
+    Menu_show(menu->current);
+  }
+}
+
+void screen_logs_show() {
+  log_level = LOG_INFO;
+  write("### Logs ###\n");
+  write("!! Send anything to go back !!\n\n");
+}
+
+void screen_logs_handle_input(Menu* menu, const char* input MAYBE_UNUSED) {
+  Menu_show(menu->screens.data[SCREEN_MAIN]);
+}
+
+void screen_debug_logs_show() {
+  log_level = LOG_DEBUG;
+  write("### Debug logs ###\n");
+  write("!! Send anything to go back !!\n\n");
+}
+
+void screen_debug_logs_handle_input(Menu* menu, const char* input MAYBE_UNUSED) {
+  Menu_show(menu->screens.data[SCREEN_MAIN]);
 }
 
 Vector_Screen_8 createScreens(Menu* menu)
 {
   Vector_Screen_8 screens;
 
-  Vector_Screen_8_push_back(&screens, Screen_create(screen_invalid_input_show, screen_invalid_input_handle_input, menu));
   Vector_Screen_8_push_back(&screens, Screen_create(screen_main_show, screen_main_handle_input, menu));
+  Vector_Screen_8_push_back(&screens, Screen_create(screen_logs_show, screen_logs_handle_input, menu));
+  Vector_Screen_8_push_back(&screens, Screen_create(screen_debug_logs_show, screen_debug_logs_handle_input, menu));
 
   return screens;
 }

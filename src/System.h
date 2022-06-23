@@ -11,7 +11,6 @@
 typedef struct System
 {
   ShiftRegister led_strip;    // the LED strip (ShiftRegister)
-  USART logger;               // the logger (USART)
   ADCPin lf_left;             // the "Linienfolger" left (ADCPin)
   ADCPin lf_middle;           // the "Linienfolger" middle (ADCPin)
   ADCPin lf_right;            // the "Linienfolger" right (ADCPin)
