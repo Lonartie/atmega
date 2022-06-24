@@ -79,7 +79,7 @@ void screen_main_show() {
   write(" 1 - Start car\n");
   write(" 2 - Stop car\n");
   write(" 3 - Show logs\n");
-  write(" 4 - Show debug logs\n\n");
+  write(" 4 - Show debug logs (!)\n\n");
 }
 
 void screen_main_handle_input(Menu* menu, const char* input) {

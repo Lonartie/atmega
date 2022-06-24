@@ -1,0 +1,6 @@
+#!/bin/bash
+
+./compilesim
+
+echo extracting hex..
+avr-objcopy -O ihex main main.hex

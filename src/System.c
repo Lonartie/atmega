@@ -11,6 +11,13 @@ const uint16_t MEASURE_THRESHOLD_LEFT = 330;
 const uint16_t MEASURE_THRESHOLD_MID = 400;
 const uint16_t MEASURE_THRESHOLD_RIGHT = 330;
 
+const char* TURN_LEFT_MESSAGE = "tl\n";
+const char* TURN_RIGHT_MESSAGE = "tr\n";
+const char* DRIVE_FORWARD_MESSAGE = "df\n";
+const char* TIMER_MESSAGE = "%ums\n";
+const char* SENSORS_MESSAGE = "%d%d%d\n";
+const char* SENSORS_DEBUG_MESSAGE = "%d %d %d\n";
+
 #define LED_CLK_DDR         DDRD
 #define LED_CLK_PORT        PORTD
 #define LED_CLK_DDR_PIN     DDD4
@@ -107,7 +114,7 @@ void drive_forward(System* atmega);
 void System_drive(void* _this) {
   static bool lleft = false, lmid = false, lright = false;
 	System* atmega = (System*) _this;
-  static uint16_t last_time = 0;
+  static uint32_t last_time = 0;
 
   if (!atmega->started)
     return;
@@ -121,21 +128,26 @@ void System_drive(void* _this) {
 	bool right = right_measure > MEASURE_THRESHOLD_RIGHT;
 
   if (left != lleft || mid != lmid || right != lright) {
+    // update lights and sends log messages
     may_log = true;
     ShiftRegister_write_n(&atmega->led_strip, 3, left, mid, right);
-    uint16_t new_time = millis();
-    uint16_t time_diff = new_time - last_time;
+    uint32_t new_time = millis();
+    uint32_t time_diff = new_time - last_time;
     last_time = new_time;
-    Menu_log(LOG_DEBUG, FMT("%dms\n", time_diff));
-    Menu_log(LOG_INFO, FMT("%d%d%d\n", left, mid, right));
-    Menu_log(LOG_DEBUG, FMT("%d %d %d\n", (int) left_measure, (int) mid_measure, (int) right_measure));
+    Menu_log(LOG_DEBUG, FMT(TIMER_MESSAGE, time_diff));
+    Menu_log(LOG_INFO, FMT(SENSORS_MESSAGE, left, mid, right));
+    Menu_log(LOG_DEBUG, FMT(SENSORS_DEBUG_MESSAGE, (int) left_measure, (int) mid_measure, (int) right_measure));
   }
 
+  // there are rare cases where 011 -> 010 -> 000 is detected so 
+  // we need to memorize the x0x side and turn the car afterwards
+  // so it doesn't drive away from the black line
   State memorized_state = 
     state == STATE_DRV_FW_ML ? STATE_DRV_FW_ML : 
     state == STATE_DRV_FW_MR ? STATE_DRV_FW_MR : 
                                STATE_DRV_FW;
 
+  // update state
   if      (mid && left)               state = STATE_DRV_FW_ML;
   else if (mid && right)              state = STATE_DRV_FW_MR;
   else if (mid)                       state = memorized_state;
@@ -144,6 +156,7 @@ void System_drive(void* _this) {
   else if (state == STATE_DRV_FW_ML)  state = STATE_TRN_LEFT;
   else if (state == STATE_DRV_FW_MR)  state = STATE_TRN_RIGHT;
 
+  // execute state
   switch (state) {
     case STATE_LNF:       // fall through
     case STATE_DRV_FW:    // fall through
@@ -161,24 +174,21 @@ void System_drive(void* _this) {
 
 void turn_left(System* atmega)
 {
-  // left sensor -> steer left -> move right forward
-  if (may_log) Menu_log(LOG_DEBUG, "tl\n");
+  if (may_log) Menu_log(LOG_DEBUG, TURN_LEFT_MESSAGE);
   Motor_drive_backward(&atmega->mt_left, SPEED_TURN);
   Motor_drive_forward(&atmega->mt_right, SPEED_TURN);
 }
 
 void turn_right(System* atmega)
 {
-  // right sensor -> steer right -> move left forward
-  if (may_log) Menu_log(LOG_DEBUG, "tr\n");
+  if (may_log) Menu_log(LOG_DEBUG, TURN_RIGHT_MESSAGE);
   Motor_drive_forward(&atmega->mt_left, SPEED_TURN);
   Motor_drive_backward(&atmega->mt_right, SPEED_TURN);
 }
 
 void drive_forward(System* atmega)
 {
-  // only mid sensor -> move forward
-  if (may_log) Menu_log(LOG_DEBUG, "df\n");
+  if (may_log) Menu_log(LOG_DEBUG, DRIVE_FORWARD_MESSAGE);
   Motor_drive_forward(&atmega->mt_left, SPEED_DRIVE);
   Motor_drive_forward(&atmega->mt_right, SPEED_DRIVE);
 }
