@@ -1,5 +1,6 @@
 #include "System.h"
 #include "Misc/utils.h"
+#include "EventSystem/HardwareTimer.h"
 #include "Menu.h"
 #include <avr/io.h>
 
@@ -106,6 +107,7 @@ void drive_forward(System* atmega);
 void System_drive(void* _this) {
   static bool lleft = false, lmid = false, lright = false;
 	System* atmega = (System*) _this;
+  static uint16_t last_time = 0;
 
   if (!atmega->started)
     return;
@@ -121,13 +123,22 @@ void System_drive(void* _this) {
   if (left != lleft || mid != lmid || right != lright) {
     may_log = true;
     ShiftRegister_write_n(&atmega->led_strip, 3, left, mid, right);
+    uint16_t new_time = millis();
+    uint16_t time_diff = new_time - last_time;
+    last_time = new_time;
+    Menu_log(LOG_DEBUG, FMT("%dms\n", time_diff));
     Menu_log(LOG_INFO, FMT("%d%d%d\n", left, mid, right));
     Menu_log(LOG_DEBUG, FMT("%d %d %d\n", (int) left_measure, (int) mid_measure, (int) right_measure));
   }
 
-  if (mid && left)                    state = STATE_DRV_FW_ML;
+  State memorized_state = 
+    state == STATE_DRV_FW_ML ? STATE_DRV_FW_ML : 
+    state == STATE_DRV_FW_MR ? STATE_DRV_FW_MR : 
+                               STATE_DRV_FW;
+
+  if      (mid && left)               state = STATE_DRV_FW_ML;
   else if (mid && right)              state = STATE_DRV_FW_MR;
-  else if (mid)                       state = STATE_DRV_FW;
+  else if (mid)                       state = memorized_state;
   else if (left)                      state = STATE_TRN_LEFT;
   else if (right)                     state = STATE_TRN_RIGHT;
   else if (state == STATE_DRV_FW_ML)  state = STATE_TRN_LEFT;
@@ -142,10 +153,10 @@ void System_drive(void* _this) {
     case STATE_TRN_RIGHT: turn_right(atmega); break;
   }
 
-  lleft = left;
-  lmid = mid;
-  lright = right;
-  may_log = false;
+  lleft    = left;
+  lmid     = mid;
+  lright   = right;
+  may_log  = false;
 }
 
 void turn_left(System* atmega)

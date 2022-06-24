@@ -19,7 +19,7 @@ ShiftRegister ShiftRegister_create(
   return sr;
 }
 
-void ShiftRegister_clear(ShiftRegister* sr)
+void ShiftRegister_clear(ShiftRegister* sr) 
 {
   for (uint16_t i = 0; i < sr->size; i++)
     ShiftRegister_write(sr, false);
