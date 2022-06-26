@@ -11,16 +11,15 @@ DEFINE_VECTORS(Screen);
 
 static Menu instance;
 static bool initialized = false;
-static USART usart;
 static LogLevel log_level = LOG_INFO;
 
 Vector_Screen_8 createScreens(Menu* menu);
+void write(const char* str);
 
 void Menu_init(String car_start_event, String car_stop_event)
 {
   if (initialized) return;
   initialized = true;
-  usart = USART_create();
   instance.screens = createScreens(&instance);
   instance.current = instance.screens.data[SCREEN_MAIN];
   instance.car_start_event = car_start_event;
@@ -50,9 +49,8 @@ void Menu_log(LogLevel level, const char* str)
   if ((Screen_equals(instance.current, instance.screens.data[SCREEN_LOGS]) ||
        Screen_equals(instance.current, instance.screens.data[SCREEN_DEBUG_LOGS])) && 
        log_level >= level) {
-    USART_send_str(&usart, level == LOG_INFO ? "i" : "d");
-    USART_send_str(&usart, " ");
-    USART_send_str(&usart, str);
+    write(level == LOG_INFO ? "i " : "d ");
+    write(str);
   }
 }
 
@@ -71,7 +69,7 @@ bool Screen_equals(Screen a, Screen b) {
 
 void write(const char* str)
 {
-  USART_send_str(&usart, str);
+  USART_send_str(USART_instance(), str);
 }
 
 void screen_main_show() {
@@ -87,19 +85,15 @@ void screen_main_handle_input(Menu* menu, const char* input) {
     EventSystem_send_event(EventSystem_instance(), Event_create(menu->car_start_event));
     write("!! Car started, brumm brumm !!\n\n");
     Menu_show(menu->screens.data[SCREEN_MAIN]);
-  }
-  else if (String_equals_trimmed(input, "2")) {
+  } else if (String_equals_trimmed(input, "2")) {
     EventSystem_send_event(EventSystem_instance(), Event_create(menu->car_stop_event));
     write("!! Car stopped !!\n\n");
     Menu_show(menu->screens.data[SCREEN_MAIN]);
-  }
-  else if (String_equals_trimmed(input, "3")) {
+  } else if (String_equals_trimmed(input, "3")) {
     Menu_show(menu->screens.data[SCREEN_LOGS]);
-  }
-  else if (String_equals_trimmed(input, "4")) {
+  } else if (String_equals_trimmed(input, "4")) {
     Menu_show(menu->screens.data[SCREEN_DEBUG_LOGS]);
-  }
-  else {
+  } else {
     write("!! Unknown command !!\n\n");
     Menu_show(menu->current);
   }

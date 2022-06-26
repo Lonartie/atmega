@@ -5,7 +5,6 @@
 #include <avr/interrupt.h>
 #include <stdlib.h>
 
-static USART usart;
 static bool initialized = false;
 static char* volatile  data;
 static volatile bool ready_read = false;
@@ -13,7 +12,6 @@ static volatile bool ready_read = false;
 USARTEvent USARTEvent_create(String event)
 {
   if (!initialized) {
-    usart = USART_create();
     data = NULL;
     initialized = true;
   }
@@ -58,7 +56,7 @@ ISR(USART_RX_vect)
 
   // get the whole message
   while (1) {
-    data[i] = USART_recv_byte(&usart);
+    data[i] = USART_recv_byte(USART_instance());
     if (data[i] == '\r') {
       break;
     }

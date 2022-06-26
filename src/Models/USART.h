@@ -10,8 +10,8 @@ typedef struct USART {
   bool heap;    //< whether or not the object is allocated on the heap
 } USART;
 
-/// @returns a new USART (stack)
-USART USART_create();
+/// @returns the static singleton instance 
+USART* USART_instance();
 
 /// @brief sends a single byte through the USART
 void USART_send_byte(USART* usart, char byte);

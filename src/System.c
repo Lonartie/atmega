@@ -67,6 +67,10 @@ typedef enum State {
 static State state = STATE_LNF;
 static bool may_log = false;
 
+void turn_left(System* atmega);
+void turn_right(System* atmega);
+void drive_forward(System* atmega);
+
 System System_create()
 {
   System system;
@@ -106,10 +110,6 @@ void System_stop(void* _this) {
   Motor_stop(&((System*)_this)->mt_left);
   Motor_stop(&((System*)_this)->mt_right);
 }
-
-void turn_left(System* atmega);
-void turn_right(System* atmega);
-void drive_forward(System* atmega);
 
 void System_drive(void* _this) {
   static bool lleft = false, lmid = false, lright = false;
