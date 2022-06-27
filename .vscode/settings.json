@@ -1,0 +1,11 @@
+{
+  "files.associations": {
+    "phasedtimer.h": "c",
+    "hardwaretimer.h": "c",
+    "anysensorwatcher.h": "c",
+    "utils.h": "c",
+    "eventsystem.h": "c",
+    "timer.h": "c",
+    "adcpin.h": "c"
+  }
+}
