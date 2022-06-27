@@ -54,3 +54,6 @@ dkms.conf
 robo
 robo.hex
 test
+.vscode/targets.log
+.vscode/dryrun.log
+.vscode/configurationCache.log
