@@ -19,7 +19,8 @@
                     "/opt/homebrew/Cellar/avr-gcc@9/9.4.0/lib/avr-gcc/9/gcc/avr/9.4.0/include-fixed",
                     "/opt/homebrew/Cellar/avr-gcc@9/9.4.0/lib/avr-gcc/9/gcc/avr/9.4.0/../../../../../../avr/include"
                 ]
-            }
+            },
+            "configurationProvider": "ms-vscode.makefile-tools"
         }
     ],
     "version": 4

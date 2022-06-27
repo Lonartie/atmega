@@ -12,7 +12,7 @@ typedef struct Screen {
   struct Menu* menu;
 } Screen;
 
-DECLARE_VECTORS(Screen);
+DECLARE_VECTORS(Screen); 
 
 typedef struct Menu {
   Screen current;

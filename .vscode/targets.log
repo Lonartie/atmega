@@ -1,0 +1,1229 @@
+make all --print-data-base --no-builtin-variables --no-builtin-rules --question
+# GNU Make 3.81
+# Copyright (C) 2006  Free Software Foundation, Inc.
+# This is free software; see the source for copying conditions.
+# There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE.
+
+# This program built for i386-apple-darwin11.3.0
+ 
+
+# Make data base, printed on Mon Jun 27 15:52:53 2022
+
+# Variables
+
+# automatic
+<D = $(patsubst %/,%,$(dir $<))
+# automatic
+?F = $(notdir $?)
+# makefile (from `Makefile', line 9)
+TEST_SRC_DIR = tests
+# environment
+VSCODE_LOG_NATIVE = false
+# environment
+ 
+NVM_INC = /Users/lonartie/.nvm/versions/node/v18.2.0/include/node
+# automatic
+?D = $(patsubst %/,%,$(dir $?))
+# automatic
+@D = $(patsubst %/,%,$(dir $@))
+# automatic
+@F = $(notdir $@)
+# makefile
+CURDIR := /Users/lonartie/git/atmega
+# makefile
+SHELL = /bin/sh
+# environment
+VSCODE_NLS_CONFIG = {"locale":"de","availableLanguages":{"*":"de"},"_languagePackId":"b61d3f473b0358bc955527db7340fd23.de","_translationsConfigFile":"/Users/lonartie/Library/Application Support/Code/clp/b61d3f473b0358bc955527db7340fd23.de/tcf.json","_cacheRoot":"/Users/lonartie/Library/Application Support/Code/clp/b61d3f473b0358bc955527db7340fd23.de","_resolvedLanguagePackCoreLocation":"/Users/lonartie/Library/Application Support/Code/clp/b61d3f473b0358bc955527db7340fd23.de/30d9c6cd9483b2cc586687151bcbcd635f373630","_corruptedFile":"/Users/lonartie/Library/Application Support/Code/clp/b61d3f473b0358bc955527db7340fd23.de/corrupted.info","_languagePackSupport":true}
+# makefile (from `Makefile', line 16)
+TEST_INC_WRAP = tests/include_wrappers
+# environment
+_ = /usr/bin/make
+# makefile (from `Makefile', line 8)
+ROBOT_SRC_DIR = robot
+# makefile (from `Makefile', line 1)
+MAKEFILE_LIST :=  Makefile
+# makefile (from `Makefile', line 22)
+ROBO_FLAGS = -ffunction-sections -fdata-sections -Wl,--gc-sections -Os -flto -Wall -Wextra -Wfatal-errors -D F_CPU=16000000 -mmcu=atmega328p -D MAIN=main
+# makefile (from `Makefile', line 1)
+ROBO_BINARY = robo
+# environment
+VSCODE_VERBOSE_LOGGING = true
+# environment
+__CFBundleIdentifier = com.microsoft.VSCode
+# environment
+INFOPATH = /opt/homebrew/share/info:/opt/homebrew/share/info:
+# makefile (from `Makefile', line 28)
+ROBO_SOURCES := robot/main.c robot/src/Misc/Vector.c robot/src/Misc/String.c robot/src/Menu.c robot/src/System.c robot/src/Models/ShiftRegister.c robot/src/Models/Pin.c robot/src/Models/ADCPin.c robot/src/Models/USART.c robot/src/Models/PWM.c robot/src/Models/Motor.c robot/src/EventSystem/Updater.c robot/src/EventSystem/Timer.c robot/src/EventSystem/AnySensorWatcher.c robot/src/EventSystem/SensorWatcher.c robot/src/EventSystem/PhasedTimer.c robot/src/EventSystem/wraps/HWMicroTimer.c robot/src/EventSystem/wraps/HWMilliTimer.c robot/src/EventSystem/EventSystem.c robot/src/EventSystem/Event.c robot/src/EventSystem/HardwareTimer.c robot/src/EventSystem/USARTEvent.c robot/src/EventSystem/Listener.c robot/src/EventSystem/HPTimer.c
+# environment
+VSCODE_IPC_HOOK_EXTHOST = /var/folders/8q/x4qxg0p554n2bmv6dn_js93r0000gn/T/vscode-ipc-a94f33f4-91be-453e-a54e-24cdf9f65e24.sock
+# environment
+VSCODE_CWD = /
+# environment
+PATH = /opt/homebrew/bin:/opt/homebrew/sbin:/opt/local/bin:/opt/local/sbin:/Users/lonartie/.nvm/versions/node/v18.2.0/bin:/opt/homebrew/anaconda3/bin:/opt/homebrew/anaconda3/condabin:/Users/lonartie/path:/opt/homebrew/anaconda3/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/lonartie/path:/Library/TeX/texbin:/usr/local/share/dotnet:~/.dotnet/tools:/Library/Apple/usr/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Users/lonartie/.cargo/bin
+# makefile (from `Makefile', line 29)
+ROBO_OBJECTS := obj/robo/robot/main.o obj/robo/robot/src/Misc/Vector.o obj/robo/robot/src/Misc/String.o obj/robo/robot/src/Menu.o obj/robo/robot/src/System.o obj/robo/robot/src/Models/ShiftRegister.o obj/robo/robot/src/Models/Pin.o obj/robo/robot/src/Models/ADCPin.o obj/robo/robot/src/Models/USART.o obj/robo/robot/src/Models/PWM.o obj/robo/robot/src/Models/Motor.o obj/robo/robot/src/EventSystem/Updater.o obj/robo/robot/src/EventSystem/Timer.o obj/robo/robot/src/EventSystem/AnySensorWatcher.o obj/robo/robot/src/EventSystem/SensorWatcher.o obj/robo/robot/src/EventSystem/PhasedTimer.o obj/robo/robot/src/EventSystem/wraps/HWMicroTimer.o obj/robo/robot/src/EventSystem/wraps/HWMilliTimer.o obj/robo/robot/src/EventSystem/EventSystem.o obj/robo/robot/src/EventSystem/Event.o obj/robo/robot/src/EventSystem/HardwareTimer.o obj/robo/robot/src/EventSystem/USARTEvent.o obj/robo/robot/src/EventSystem/Listener.o obj/robo/robot/src/EventSystem/HPTimer.o
+# makefile (from `Makefile', line 26)
+TEST_FLAGS = -Wall -Wextra -Wfatal-errors -I $(TEST_INC_WRAP) -D MAIN=robo_main
+# makefile (from `Makefile', line 30)
+ROBO_DEPENDS := obj/robo/robot/main.d obj/robo/robot/src/Misc/Vector.d obj/robo/robot/src/Misc/String.d obj/robo/robot/src/Menu.d obj/robo/robot/src/System.d obj/robo/robot/src/Models/ShiftRegister.d obj/robo/robot/src/Models/Pin.d obj/robo/robot/src/Models/ADCPin.d obj/robo/robot/src/Models/USART.d obj/robo/robot/src/Models/PWM.d obj/robo/robot/src/Models/Motor.d obj/robo/robot/src/EventSystem/Updater.d obj/robo/robot/src/EventSystem/Timer.d obj/robo/robot/src/EventSystem/AnySensorWatcher.d obj/robo/robot/src/EventSystem/SensorWatcher.d obj/robo/robot/src/EventSystem/PhasedTimer.d obj/robo/robot/src/EventSystem/wraps/HWMicroTimer.d obj/robo/robot/src/EventSystem/wraps/HWMilliTimer.d obj/robo/robot/src/EventSystem/EventSystem.d obj/robo/robot/src/EventSystem/Event.d obj/robo/robot/src/EventSystem/HardwareTimer.d obj/robo/robot/src/EventSystem/USARTEvent.d obj/robo/robot/src/EventSystem/Listener.d obj/robo/robot/src/EventSystem/HPTimer.d
+# environment
+NVM_BIN = /Users/lonartie/.nvm/versions/node/v18.2.0/bin
+# makefile (from `Makefile', line 4)
+TEST_BINARY = test
+# makefile (from `Makefile', line 11)
+ROBO_GCC = avr-gcc
+# environment
+VSCODE_LOG_STACK = false
+# environment
+ELECTRON_RUN_AS_NODE = 1
+# default
+.FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
+# makefile (from `Makefile', line 32)
+TEST_SOURCES := tests/include_wrappers/avr/io.c tests/include_wrappers/util/delay.c tests/main.c robot/main.c robot/src/Misc/Vector.c robot/src/Misc/String.c robot/src/Menu.c robot/src/System.c robot/src/Models/ShiftRegister.c robot/src/Models/Pin.c robot/src/Models/ADCPin.c robot/src/Models/USART.c robot/src/Models/PWM.c robot/src/Models/Motor.c robot/src/EventSystem/Updater.c robot/src/EventSystem/Timer.c robot/src/EventSystem/AnySensorWatcher.c robot/src/EventSystem/SensorWatcher.c robot/src/EventSystem/PhasedTimer.c robot/src/EventSystem/wraps/HWMicroTimer.c robot/src/EventSystem/wraps/HWMilliTimer.c robot/src/EventSystem/EventSystem.c robot/src/EventSystem/Event.c robot/src/EventSystem/HardwareTimer.c robot/src/EventSystem/USARTEvent.c robot/src/EventSystem/Listener.c robot/src/EventSystem/HPTimer.c
+# environment
+Qt6_DIR = /Users/lonartie/Qt/6.2.3/macos
+# environment
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.RX1DrKoPFv/Listeners
+# automatic
+%F = $(notdir $%)
+# environment
+CONDA_EXE = /opt/homebrew/anaconda3/bin/conda
+# makefile (from `Makefile', line 33)
+TEST_OBJECTS := obj/test/tests/include_wrappers/avr/io.o obj/test/tests/include_wrappers/util/delay.o obj/test/tests/main.o obj/test/robot/main.o obj/test/robot/src/Misc/Vector.o obj/test/robot/src/Misc/String.o obj/test/robot/src/Menu.o obj/test/robot/src/System.o obj/test/robot/src/Models/ShiftRegister.o obj/test/robot/src/Models/Pin.o obj/test/robot/src/Models/ADCPin.o obj/test/robot/src/Models/USART.o obj/test/robot/src/Models/PWM.o obj/test/robot/src/Models/Motor.o obj/test/robot/src/EventSystem/Updater.o obj/test/robot/src/EventSystem/Timer.o obj/test/robot/src/EventSystem/AnySensorWatcher.o obj/test/robot/src/EventSystem/SensorWatcher.o obj/test/robot/src/EventSystem/PhasedTimer.o obj/test/robot/src/EventSystem/wraps/HWMicroTimer.o obj/test/robot/src/EventSystem/wraps/HWMilliTimer.o obj/test/robot/src/EventSystem/EventSystem.o obj/test/robot/src/EventSystem/Event.o obj/test/robot/src/EventSystem/HardwareTimer.o obj/test/robot/src/EventSystem/USARTEvent.o obj/test/robot/src/EventSystem/Listener.o obj/test/robot/src/EventSystem/HPTimer.o
+# environment
+VSCODE_PIPE_LOGGING = true
+# environment
+PWD = /Users/lonartie/git/atmega
+# makefile (from `Makefile', line 13)
+ROBO_DUDE = avrdude
+# environment
+HOMEBREW_CELLAR = /opt/homebrew/Cellar
+# environment
+ORIGINAL_XDG_CURRENT_DESKTOP = undefined
+# makefile (from `Makefile', line 6)
+ROBO_OBJ_DIR = obj/robo
+# environment
+MANPATH = /opt/homebrew/share/man:/opt/local/share/man:/Users/lonartie/.nvm/versions/node/v18.2.0/share/man:/opt/homebrew/share/man:::
+# environment
+ 
+VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
+# environment
+HOME = /Users/lonartie
+# makefile (from `Makefile', line 15)
+TEST_GCC = gcc
+# default
+MAKEFILEPATH = $(shell /usr/bin/xcode-select -print-path 2>/dev/null || echo /Developer)/Makefiles
+# environment
+VSCODE_CODE_CACHE_PATH = /Users/lonartie/Library/Application Support/Code/CachedData/30d9c6cd9483b2cc586687151bcbcd635f373630
+# environment
+LOGNAME = lonartie
+# environment
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
+# environment
+CONDA_PROMPT_MODIFIER = (base) 
+# environment
+NVM_CD_FLAGS = -q
+# makefile (from `Makefile', line 12)
+ROBO_OBJ_COPY = avr-objcopy
+# environment
+VSCODE_HANDLES_UNCAUGHT_ERRORS = true
+# automatic
+^D = $(patsubst %/,%,$(dir $^))
+# environment
+CONDA_DEFAULT_ENV = base
+# environment
+XPC_FLAGS = 0x0
+# default
+MAKE = $(MAKE_COMMAND)
+# default
+MAKECMDGOALS := all
+# environment
+SHLVL = 1
+# default
+MAKE_VERSION := 3.81
+# environment
+USER = lonartie
+# makefile
+.DEFAULT_GOAL := all
+# makefile (from `Makefile', line 7)
+TEST_OBJ_DIR = obj/test
+# automatic
+%D = $(patsubst %/,%,$(dir $%))
+# environment
+CONDA_SHLVL = 1
+# default
+MAKE_COMMAND := /Library/Developer/CommandLineTools/usr/bin/make
+# default
+.VARIABLES := 
+# environment
+TMPDIR = /var/folders/8q/x4qxg0p554n2bmv6dn_js93r0000gn/T/
+# automatic
+*F = $(notdir $*)
+# environment
+VSCODE_IPC_HOOK = /Users/lonartie/Library/Application Support/Code/1.68.1-main.sock
+# makefile
+MAKEFLAGS = Rrqp
+# environment
+MFLAGS = -Rrqp
+# automatic
+*D = $(patsubst %/,%,$(dir $*))
+# environment
+NVM_DIR = /Users/lonartie/.nvm
+# environment
+XPC_SERVICE_NAME = application.com.microsoft.VSCode.18057582.18057590
+# environment
+HOMEBREW_PREFIX = /opt/homebrew
+# automatic
++D = $(patsubst %/,%,$(dir $+))
+# makefile (from `Makefile', line 34)
+TEST_DEPENDS := obj/test/tests/include_wrappers/avr/io.d obj/test/tests/include_wrappers/util/delay.d obj/test/tests/main.d obj/test/robot/main.d obj/test/robot/src/Misc/Vector.d obj/test/robot/src/Misc/String.d obj/test/robot/src/Menu.d obj/test/robot/src/System.d obj/test/robot/src/Models/ShiftRegister.d obj/test/robot/src/Models/Pin.d obj/test/robot/src/Models/ADCPin.d obj/test/robot/src/Models/USART.d obj/test/robot/src/Models/PWM.d obj/test/robot/src/Models/Motor.d obj/test/robot/src/EventSystem/Updater.d obj/test/robot/src/EventSystem/Timer.d obj/test/robot/src/EventSystem/AnySensorWatcher.d obj/test/robot/src/EventSystem/SensorWatcher.d obj/test/robot/src/EventSystem/PhasedTimer.d obj/test/robot/src/EventSystem/wraps/HWMicroTimer.d obj/test/robot/src/EventSystem/wraps/HWMilliTimer.d obj/test/robot/src/EventSystem/EventSystem.d obj/test/robot/src/EventSystem/Event.d obj/test/robot/src/EventSystem/HardwareTimer.d obj/test/robot/src/EventSystem/USARTEvent.d obj/test/robot/src/EventSystem/Listener.d obj/test/robot/src/EventSystem/HPTimer.d
+# automatic
++F = $(notdir $+)
+# environment
+HOMEBREW_REPOSITORY = /opt/homebrew
+# environment
+__CF_USER_TEXT_ENCODING = 0x1F5:0x0:0x3
+# environment
+COMMAND_MODE = unix2003
+# default
+MAKEFILES := 
+# automatic
+<F = $(notdir $<)
+# makefile (from `Makefile', line 2)
+ROBO_HEX = robo.hex
+# environment
+LC_ALL = C
+# environment
+CONDA_PYTHON_EXE = /opt/homebrew/anaconda3/bin/python
+# automatic
+^F = $(notdir $^)
+# default
+SUFFIXES := 
+# environment
+_CE_M = 
+# default
+.INCLUDE_DIRS = /usr/local/include
+# environment
+MAKELEVEL := 0
+# environment
+CONDA_PREFIX = /opt/homebrew/anaconda3
+# environment
+TERM = xterm-color
+# environment
+ 
+VSCODE_PID = 17431
+# environment
+_CE_CONDA = 
+# environment
+LANG = C
+# variable set hash-table stats:
+# Load=101/1024=10%, Rehash=0, Collisions=8/177=5%
+
+# Pattern-specific Variable Values
+
+# No pattern-specific variable values.
+
+# Directories
+
+# robot (device 16777233, inode 17111414): 3 files, no impossibilities so far.
+# . (device 16777233, inode 16413794): 17 files, no impossibilities.
+# tests (device 16777233, inode 19373090): No files, no impossibilities so far.
+
+# 20 files, no impossibilities in 3 directories.
+
+# Implicit Rules
+
+obj/robo/robot/%.o: robot/%.c Makefile
+#  commands to execute (from `Makefile', line 71):
+	@mkdir -p $(dir $@)
+	@echo "Compiling $(basename $<)"
+	@$(ROBO_GCC) $(ROBO_FLAGS) -MMD -MP -c $< -o $@
+	
+
+obj/test/tests/%.o: tests/%.c Makefile
+#  commands to execute (from `Makefile', line 85):
+	@mkdir -p $(dir $@)
+	@echo "Compiling $(basename $<)"
+	@$(TEST_GCC) $(TEST_FLAGS) -MMD -MP -c $< -o $@
+	
+
+obj/test/robot/%.o: robot/%.c Makefile
+#  commands to execute (from `Makefile', line 91):
+	@mkdir -p $(dir $@)
+	@echo "Compiling $(basename $<)"
+	@$(TEST_GCC) $(TEST_FLAGS) -MMD -MP -c $< -o $@
+	
+
+# 3 implicit rules, 0 (0.0%) terminal.
+
+# Files
+
+# Not a target:
+obj/test/robot/src/Models/Pin.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/test/robot/src/Models/ShiftRegister.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/robo/robot/src/Misc/String.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+ 
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/test/robot/src/EventSystem/wraps/HWMicroTimer.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/test/robot/src/EventSystem/Timer.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/robo/robot/src/EventSystem/AnySensorWatcher.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/test/robot/src/EventSystem/PhasedTimer.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/robo/robot/src/EventSystem/HPTimer.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/test/tests/main.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/robo/robot/src/EventSystem/USARTEvent.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/robo/robot/src/Menu.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/robo/robot/src/EventSystem/Event.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/test/robot/src/Models/USART.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/test/robot/src/EventSystem/HPTimer.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/robo/robot/src/Models/Motor.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/test/robot/src/Models/PWM.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/test/robot/src/Menu.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+ 
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+all: robo.hex
+#  Phony target (prerequisite of .PHONY).
+#  Command-line target.
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has been updated.
+#  Needs to be updated (-q is set).
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/4=0%
+
+# Not a target:
+obj/robo/robot/src/EventSystem/wraps/HWMilliTimer.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/test/robot/src/Models/Motor.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+.PHONY: all clean robo_flash
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/robo/robot/src/EventSystem/EventSystem.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/robo/robot/src/Models/ShiftRegister.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/test/tests/include_wrappers/util/delay.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/test/robot/src/Misc/Vector.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/robo/robot/src/System.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/test/robot/src/EventSystem/EventSystem.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+robo_flash: robo.hex
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 63):
+	@echo "Flashing $(ROBO_BINARY)"
+	@$(ROBO_DUDE) -p atmega328p -c arduino -P /dev/ttyACM0 -b 115200 -U flash:w:$(ROBO_HEX):i
+	
+
+# Not a target:
+obj/robo/robot/src/EventSystem/Updater.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/test/robot/src/EventSystem/Updater.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+obj/robo/robot/main.o: robot/main.c Makefile
+#  Implicit rule search has been done.
+#  Implicit/static pattern stem: `main'
+#  File does not exist.
+#  File has been updated.
+#  Needs to be updated (-q is set).
+# automatic
+ 
+# @ := obj/robo/robot/main.o
+# automatic
+# % := 
+# automatic
+# * := main
+# automatic
+# + := robot/main.c Makefile
+# automatic
+# | := 
+# automatic
+# < := robot/main.c
+# automatic
+# ^ := robot/main.c Makefile
+# automatic
+# ? := robot/main.c Makefile
+# variable set hash-table stats:
+# Load=8/32=25%, Rehash=0, Collisions=3/16=19%
+#  commands to execute (from `Makefile', line 71):
+	@mkdir -p $(dir $@)
+	@echo "Compiling $(basename $<)"
+	@$(ROBO_GCC) $(ROBO_FLAGS) -MMD -MP -c $< -o $@
+	
+
+# Not a target:
+obj/test/robot/src/EventSystem/Updater.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/robo/robot/src/EventSystem/Listener.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/test/robot/main.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+.SUFFIXES:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+Makefile:
+#  Implicit rule search has been done.
+#  Last modified 2022-06-27 15:52:21
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/robo/robot/src/EventSystem/HardwareTimer.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/test/robot/src/EventSystem/Listener.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/test/robot/src/Models/Pin.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/test/robot/src/Models/ShiftRegister.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/robo/robot/src/Misc/String.o:
+#  Implicit rule search has not been done.
+ 
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/robo/robot/src/Models/PWM.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/test/robot/src/EventSystem/HardwareTimer.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+test: obj/test/tests/include_wrappers/avr/io.o obj/test/tests/include_wrappers/util/delay.o obj/test/tests/main.o obj/test/robot/main.o obj/test/robot/src/Misc/Vector.o obj/test/robot/src/Misc/String.o obj/test/robot/src/Menu.o obj/test/robot/src/System.o obj/test/robot/src/Models/ShiftRegister.o obj/test/robot/src/Models/Pin.o obj/test/robot/src/Models/ADCPin.o obj/test/robot/src/Models/USART.o obj/test/robot/src/Models/PWM.o obj/test/robot/src/Models/Motor.o obj/test/robot/src/EventSystem/Updater.o obj/test/robot/src/EventSystem/Timer.o obj/test/robot/src/EventSystem/AnySensorWatcher.o obj/test/robot/src/EventSystem/SensorWatcher.o obj/test/robot/src/EventSystem/PhasedTimer.o obj/test/robot/src/EventSystem/wraps/HWMicroTimer.o obj/test/robot/src/EventSystem/wraps/HWMilliTimer.o obj/test/robot/src/EventSystem/EventSystem.o obj/test/robot/src/EventSystem/Event.o obj/test/robot/src/EventSystem/HardwareTimer.o obj/test/robot/src/EventSystem/USARTEvent.o obj/test/robot/src/EventSystem/Listener.o obj/test/robot/src/EventSystem/HPTimer.o
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 77):
+	@echo "Linking $(TEST_BINARY)"
+	@$(TEST_GCC) $(TEST_FLAGS) $^ -o $(TEST_BINARY)
+	
+
+# Not a target:
+obj/robo/robot/src/Models/ADCPin.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+robot/main.c:
+#  Implicit rule search has been done.
+#  Last modified 2022-06-27 15:01:56
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/robo/robot/src/EventSystem/AnySensorWatcher.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/test/robot/src/Misc/String.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+ 
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/robo/robot/src/EventSystem/USARTEvent.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/robo/robot/src/EventSystem/Event.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/test/robot/src/EventSystem/AnySensorWatcher.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/robo/robot/src/EventSystem/SensorWatcher.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/test/robot/src/EventSystem/HPTimer.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/test/robot/src/EventSystem/USARTEvent.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/test/robot/src/Menu.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/test/tests/include_wrappers/avr/io.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/test/robot/src/EventSystem/Event.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/robo/robot/src/EventSystem/wraps/HWMicroTimer.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/test/robot/src/Models/Motor.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+ 
+obj/robo/robot/src/EventSystem/Timer.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/test/robot/src/Models/PWM.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/robo/robot/src/EventSystem/PhasedTimer.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/test/robot/src/EventSystem/wraps/HWMilliTimer.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/test/tests/include_wrappers/util/delay.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/robo/robot/src/System.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/robo/robot/src/Models/USART.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/test/robot/src/EventSystem/EventSystem.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/test/robot/src/System.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/robo/robot/src/Misc/Vector.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+robo: obj/robo/robot/main.o obj/robo/robot/src/Misc/Vector.o obj/robo/robot/src/Misc/String.o obj/robo/robot/src/Menu.o obj/robo/robot/src/System.o obj/robo/robot/src/Models/ShiftRegister.o obj/robo/robot/src/Models/Pin.o obj/robo/robot/src/Models/ADCPin.o obj/robo/robot/src/Models/USART.o obj/robo/robot/src/Models/PWM.o obj/robo/robot/src/Models/Motor.o obj/robo/robot/src/EventSystem/Updater.o obj/robo/robot/src/EventSystem/Timer.o obj/robo/robot/src/EventSystem/AnySensorWatcher.o obj/robo/robot/src/EventSystem/SensorWatcher.o obj/robo/robot/src/EventSystem/PhasedTimer.o obj/robo/robot/src/EventSystem/wraps/HWMicroTimer.o obj/robo/robot/src/EventSystem/wraps/HWMilliTimer.o obj/robo/robot/src/EventSystem/EventSystem.o obj/robo/robot/src/EventSystem/Event.o obj/robo/robot/src/EventSystem/HardwareTimer.o obj/robo/robot/src/EventSystem/USARTEvent.o obj/robo/robot/src/EventSystem/Listener.o obj/robo/robot/src/EventSystem/HPTimer.o
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has been updated.
+#  Needs to be updated (-q is set).
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/4=0%
+#  commands to execute (from `Makefile', line 53):
+	@echo "Linking $(ROBO_BINARY)"
+	@$(ROBO_GCC) $(ROBO_FLAGS) $^ -o $(ROBO_BINARY)
+	
+
+robo.hex: robo
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has been updated.
+#  Needs to be updated (-q is set).
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/4=0%
+#  commands to execute (from `Makefile', line 58):
+	@echo "Creating $(ROBO_HEX)"
+	@$(ROBO_OBJ_COPY) -O ihex $(ROBO_BINARY) $(ROBO_HEX)
+	
+
+ 
+# Not a target:
+obj/test/robot/main.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/test/robot/src/EventSystem/Listener.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+.DEFAULT:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/test/robot/src/EventSystem/HardwareTimer.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/robo/robot/src/Models/ADCPin.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/test/robot/src/Misc/String.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/robo/robot/src/Models/PWM.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/test/robot/src/Models/ADCPin.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/test/robot/src/EventSystem/AnySensorWatcher.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/robo/robot/src/EventSystem/SensorWatcher.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/robo/robot/src/Models/Pin.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+clean:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 44):
+	@echo "Deleting $(ROBO_OBJ_DIR)"
+	@echo "Deleting $(TEST_OBJ_DIR)"
+	@echo "Deleting $(ROBO_HEX)"
+	@echo "Deleting $(ROBO_BINARY)"
+	@$(RM) -rf $(ROBO_OBJ_DIR) $(TEST_OBJ_DIR)
+	@$(RM) -f $(ROBO_BINARY) $(ROBO_HEX) $(TEST_BINARY)
+	
+
+# Not a target:
+obj/test/robot/src/EventSystem/USARTEvent.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/test/tests/include_wrappers/avr/io.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/test/robot/src/EventSystem/Event.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/robo/robot/src/EventSystem/wraps/HWMicroTimer.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/test/robot/src/EventSystem/SensorWatcher.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/robo/robot/src/EventSystem/Timer.o:
+#  Implicit rule search has not been done.
+ 
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/robo/robot/src/EventSystem/PhasedTimer.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/test/robot/src/EventSystem/wraps/HWMilliTimer.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/test/robot/src/EventSystem/wraps/HWMicroTimer.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/test/robot/src/EventSystem/Timer.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/robo/robot/src/Models/USART.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/test/robot/src/EventSystem/PhasedTimer.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/robo/robot/src/EventSystem/HPTimer.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/test/tests/main.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/robo/robot/src/Menu.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/test/robot/src/System.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/test/robot/src/Models/USART.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+ 
+obj/robo/robot/src/Models/Motor.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/robo/robot/src/Misc/Vector.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/robo/robot/src/EventSystem/wraps/HWMilliTimer.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/robo/robot/src/EventSystem/EventSystem.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/test/robot/src/Misc/Vector.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/robo/robot/src/EventSystem/Updater.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/robo/robot/main.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/test/robot/src/Models/ADCPin.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/robo/robot/src/EventSystem/Listener.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+ 
+obj/robo/robot/src/Models/Pin.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/robo/robot/src/Models/ShiftRegister.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/robo/robot/src/EventSystem/HardwareTimer.d:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/test/robot/src/EventSystem/SensorWatcher.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# files hash-table stats:
+# Load=113/1024=11%, Rehash=0, Collisions=15/239=6%
+# VPATH Search Paths
+
+# No `vpath' search paths.
+
+# No general (`VPATH' variable) search path.
+
+# # of strings in strcache: 52
+# # of strcache buffers: 1
+# strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
+# strcache free: total = 2109 / max = 2109 / min = 2109 / avg = 2109
+
+# Finished Make data base on Mon Jun 27 15:52:53 2022
+
+ 

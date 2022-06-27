@@ -1,0 +1,98 @@
+make --dry-run --keep-going --print-directory
+make: Entering directory `/Users/lonartie/git/atmega'
+mkdir -p obj/robo/robot/
+echo "Compiling robot/main"
+avr-gcc -ffunction-sections -fdata-sections -Wl,--gc-sections -Os -flto -Wall -Wextra -Wfatal-errors -D F_CPU=16000000 -mmcu=atmega328p -D MAIN=main -MMD -MP -c robot/main.c -o obj/robo/robot/main.o
+ 
+mkdir -p obj/robo/robot/src/Misc/
+echo "Compiling robot/src/Misc/Vector"
+avr-gcc -ffunction-sections -fdata-sections -Wl,--gc-sections -Os -flto -Wall -Wextra -Wfatal-errors -D F_CPU=16000000 -mmcu=atmega328p -D MAIN=main -MMD -MP -c robot/src/Misc/Vector.c -o obj/robo/robot/src/Misc/Vector.o
+mkdir -p obj/robo/robot/src/Misc/
+echo "Compiling robot/src/Misc/String"
+avr-gcc -ffunction-sections -fdata-sections -Wl,--gc-sections -Os -flto -Wall -Wextra -Wfatal-errors -D F_CPU=16000000 -mmcu=atmega328p -D MAIN=main -MMD -MP -c robot/src/Misc/String.c -o obj/robo/robot/src/Misc/String.o
+mkdir -p obj/robo/robot/src/
+echo "Compiling robot/src/Menu"
+avr-gcc -ffunction-sections -fdata-sections -Wl,--gc-sections -Os -flto -Wall -Wextra -Wfatal-errors -D F_CPU=16000000 -mmcu=atmega328p -D MAIN=main -MMD -MP -c robot/src/Menu.c -o obj/robo/robot/src/Menu.o
+mkdir -p obj/robo/robot/src/
+echo "Compiling robot/src/System"
+avr-gcc -ffunction-sections -fdata-sections -Wl,--gc-sections -Os -flto -Wall -Wextra -Wfatal-errors -D F_CPU=16000000 -mmcu=atmega328p -D MAIN=main -MMD -MP -c robot/src/System.c -o obj/robo/robot/src/System.o
+mkdir -p obj/robo/robot/src/Models/
+echo "Compiling robot/src/Models/ShiftRegister"
+avr-gcc -ffunction-sections -fdata-sections -Wl,--gc-sections -Os -flto -Wall -Wextra -Wfatal-errors -D F_CPU=16000000 -mmcu=atmega328p -D MAIN=main -MMD -MP -c robot/src/Models/ShiftRegister.c -o obj/robo/robot/src/Models/ShiftRegister.o
+ 
+mkdir -p obj/robo/robot/src/Models/
+echo "Compiling robot/src/Models/Pin"
+avr-gcc -ffunction-sections -fdata-sections -Wl,--gc-sections -Os -flto -Wall -Wextra -Wfatal-errors -D F_CPU=16000000 -mmcu=atmega328p -D MAIN=main -MMD -MP -c robot/src/Models/Pin.c -o obj/robo/robot/src/Models/Pin.o
+ 
+mkdir -p obj/robo/robot/src/Models/
+echo "Compiling robot/src/Models/ADCPin"
+avr-gcc -ffunction-sections -fdata-sections -Wl,--gc-sections -Os -flto -Wall -Wextra -Wfatal-errors -D F_CPU=16000000 -mmcu=atmega328p -D MAIN=main -MMD -MP -c robot/src/Models/ADCPin.c -o obj/robo/robot/src/Models/ADCPin.o
+ 
+mkdir -p obj/robo/robot/src/Models/
+echo "Compiling robot/src/Models/USART"
+ 
+avr-gcc -ffunction-sections -fdata-sections -Wl,--gc-sections -Os -flto -Wall -Wextra -Wfatal-errors -D F_CPU=16000000 -mmcu=atmega328p -D MAIN=main -MMD -MP -c robot/src/Models/USART.c -o obj/robo/robot/src/Models/USART.o
+mkdir -p obj/robo/robot/src/Models/
+echo "Compiling robot/src/Models/PWM"
+avr-gcc -ffunction-sections -fdata-sections -Wl,--gc-sections -Os -flto -Wall -Wextra -Wfatal-errors -D F_CPU=16000000 -mmcu=atmega328p -D MAIN=main -MMD -MP -c robot/src/Models/PWM.c -o obj/robo/robot/src/Models/PWM.o
+ 
+mkdir -p obj/robo/robot/src/Models/
+echo "Compiling robot/src/Models/Motor"
+avr-gcc -ffunction-sections -fdata-sections -Wl,--gc-sections -Os -flto -Wall -Wextra -Wfatal-errors -D F_CPU=16000000 -mmcu=atmega328p -D MAIN=main -MMD -MP -c robot/src/Models/Motor.c -o obj/robo/robot/src/Models/Motor.o
+ 
+mkdir -p obj/robo/robot/src/EventSystem/
+echo "Compiling robot/src/EventSystem/Updater"
+avr-gcc -ffunction-sections -fdata-sections -Wl,--gc-sections -Os -flto -Wall -Wextra -Wfatal-errors -D F_CPU=16000000 -mmcu=atmega328p -D MAIN=main -MMD -MP -c robot/src/EventSystem/Updater.c -o obj/robo/robot/src/EventSystem/Updater.o
+ 
+mkdir -p obj/robo/robot/src/EventSystem/
+echo "Compiling robot/src/EventSystem/Timer"
+avr-gcc -ffunction-sections -fdata-sections -Wl,--gc-sections -Os -flto -Wall -Wextra -Wfatal-errors -D F_CPU=16000000 -mmcu=atmega328p -D MAIN=main -MMD -MP -c robot/src/EventSystem/Timer.c -o obj/robo/robot/src/EventSystem/Timer.o
+ 
+mkdir -p obj/robo/robot/src/EventSystem/
+echo "Compiling robot/src/EventSystem/AnySensorWatcher"
+avr-gcc -ffunction-sections -fdata-sections -Wl,--gc-sections -Os -flto -Wall -Wextra -Wfatal-errors -D F_CPU=16000000 -mmcu=atmega328p -D MAIN=main -MMD -MP -c robot/src/EventSystem/AnySensorWatcher.c -o obj/robo/robot/src/EventSystem/AnySensorWatcher.o
+ 
+mkdir -p obj/robo/robot/src/EventSystem/
+echo "Compiling robot/src/EventSystem/SensorWatcher"
+avr-gcc -ffunction-sections -fdata-sections -Wl,--gc-sections -Os -flto -Wall -Wextra -Wfatal-errors -D F_CPU=16000000 -mmcu=atmega328p -D MAIN=main -MMD -MP -c robot/src/EventSystem/SensorWatcher.c -o obj/robo/robot/src/EventSystem/SensorWatcher.o
+mkdir -p obj/robo/robot/src/EventSystem/
+echo "Compiling robot/src/EventSystem/PhasedTimer"
+avr-gcc -ffunction-sections -fdata-sections -Wl,--gc-sections -Os -flto -Wall -Wextra -Wfatal-errors -D F_CPU=16000000 -mmcu=atmega328p -D MAIN=main -MMD -MP -c robot/src/EventSystem/PhasedTimer.c -o obj/robo/robot/src/EventSystem/PhasedTimer.o
+ 
+mkdir -p obj/robo/robot/src/EventSystem/wraps/
+echo "Compiling robot/src/EventSystem/wraps/HWMicroTimer"
+avr-gcc -ffunction-sections -fdata-sections -Wl,--gc-sections -Os -flto -Wall -Wextra -Wfatal-errors -D F_CPU=16000000 -mmcu=atmega328p -D MAIN=main -MMD -MP -c robot/src/EventSystem/wraps/HWMicroTimer.c -o obj/robo/robot/src/EventSystem/wraps/HWMicroTimer.o
+ 
+mkdir -p obj/robo/robot/src/EventSystem/wraps/
+echo "Compiling robot/src/EventSystem/wraps/HWMilliTimer"
+avr-gcc -ffunction-sections -fdata-sections -Wl,--gc-sections -Os -flto -Wall -Wextra -Wfatal-errors -D F_CPU=16000000 -mmcu=atmega328p -D MAIN=main -MMD -MP -c robot/src/EventSystem/wraps/HWMilliTimer.c -o obj/robo/robot/src/EventSystem/wraps/HWMilliTimer.o
+ 
+mkdir -p obj/robo/robot/src/EventSystem/
+echo "Compiling robot/src/EventSystem/EventSystem"
+avr-gcc -ffunction-sections -fdata-sections -Wl,--gc-sections -Os -flto -Wall -Wextra -Wfatal-errors -D F_CPU=16000000 -mmcu=atmega328p -D MAIN=main -MMD -MP -c robot/src/EventSystem/EventSystem.c -o obj/robo/robot/src/EventSystem/EventSystem.o
+ 
+mkdir -p obj/robo/robot/src/EventSystem/
+echo "Compiling robot/src/EventSystem/Event"
+avr-gcc -ffunction-sections -fdata-sections -Wl,--gc-sections -Os -flto -Wall -Wextra -Wfatal-errors -D F_CPU=16000000 -mmcu=atmega328p -D MAIN=main -MMD -MP -c robot/src/EventSystem/Event.c -o obj/robo/robot/src/EventSystem/Event.o
+ 
+mkdir -p obj/robo/robot/src/EventSystem/
+echo "Compiling robot/src/EventSystem/HardwareTimer"
+avr-gcc -ffunction-sections -fdata-sections -Wl,--gc-sections -Os -flto -Wall -Wextra -Wfatal-errors -D F_CPU=16000000 -mmcu=atmega328p -D MAIN=main -MMD -MP -c robot/src/EventSystem/HardwareTimer.c -o obj/robo/robot/src/EventSystem/HardwareTimer.o
+mkdir -p obj/robo/robot/src/EventSystem/
+echo "Compiling robot/src/EventSystem/USARTEvent"
+avr-gcc -ffunction-sections -fdata-sections -Wl,--gc-sections -Os -flto -Wall -Wextra -Wfatal-errors -D F_CPU=16000000 -mmcu=atmega328p -D MAIN=main -MMD -MP -c robot/src/EventSystem/USARTEvent.c -o obj/robo/robot/src/EventSystem/USARTEvent.o
+ 
+mkdir -p obj/robo/robot/src/EventSystem/
+echo "Compiling robot/src/EventSystem/Listener"
+avr-gcc -ffunction-sections -fdata-sections -Wl,--gc-sections -Os -flto -Wall -Wextra -Wfatal-errors -D F_CPU=16000000 -mmcu=atmega328p -D MAIN=main -MMD -MP -c robot/src/EventSystem/Listener.c -o obj/robo/robot/src/EventSystem/Listener.o
+ 
+mkdir -p obj/robo/robot/src/EventSystem/
+echo "Compiling robot/src/EventSystem/HPTimer"
+avr-gcc -ffunction-sections -fdata-sections -Wl,--gc-sections -Os -flto -Wall -Wextra -Wfatal-errors -D F_CPU=16000000 -mmcu=atmega328p -D MAIN=main -MMD -MP -c robot/src/EventSystem/HPTimer.c -o obj/robo/robot/src/EventSystem/HPTimer.o
+echo "Linking robo"
+avr-gcc -ffunction-sections -fdata-sections -Wl,--gc-sections -Os -flto -Wall -Wextra -Wfatal-errors -D F_CPU=16000000 -mmcu=atmega328p -D MAIN=main obj/robo/robot/main.o obj/robo/robot/src/Misc/Vector.o obj/robo/robot/src/Misc/String.o obj/robo/robot/src/Menu.o obj/robo/robot/src/System.o obj/robo/robot/src/Models/ShiftRegister.o obj/robo/robot/src/Models/Pin.o obj/robo/robot/src/Models/ADCPin.o obj/robo/robot/src/Models/USART.o obj/robo/robot/src/Models/PWM.o obj/robo/robot/src/Models/Motor.o obj/robo/robot/src/EventSystem/Updater.o obj/robo/robot/src/EventSystem/Timer.o obj/robo/robot/src/EventSystem/AnySensorWatcher.o obj/robo/robot/src/EventSystem/SensorWatcher.o obj/robo/robot/src/EventSystem/PhasedTimer.o obj/robo/robot/src/EventSystem/wraps/HWMicroTimer.o obj/robo/robot/src/EventSystem/wraps/HWMilliTimer.o obj/robo/robot/src/EventSystem/EventSystem.o obj/robo/robot/src/EventSystem/Event.o obj/robo/robot/src/EventSystem/HardwareTimer.o obj/robo/robot/src/EventSystem/USARTEvent.o obj/robo/robot/src/EventSystem/Listener.o obj/robo/robot/src/EventSystem/HPTimer.o -o robo
+ 
+echo "Creating robo.hex"
+avr-objcopy -O ihex robo robo.hex
+make: Leaving directory `/Users/lonartie/git/atmega'
+ 

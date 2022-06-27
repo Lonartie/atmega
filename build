@@ -1,6 +1,0 @@
-#!/bin/bash
-
-./compile
-
-echo extracting hex..
-avr-objcopy -O ihex main main.hex

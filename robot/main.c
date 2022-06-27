@@ -1,13 +1,13 @@
-#include "Misc/utils.h"
-#include "EventSystem/USARTEvent.h"
-#include "EventSystem/HardwareTimer.h"
-#include "EventSystem/Timer.h"
-#include "EventSystem/EventSystem.h"
-#include "Models/PWM.h"
-#include "System.h"
-#include "Menu.h"
+#include "src/Misc/utils.h"
+#include "src/EventSystem/USARTEvent.h"
+#include "src/EventSystem/HardwareTimer.h"
+#include "src/EventSystem/Timer.h"
+#include "src/EventSystem/EventSystem.h"
+#include "src/Models/PWM.h"
+#include "src/System.h"
+#include "src/Menu.h"
 
-int main()
+int MAIN()
 {
 	// initializes globals
 	timer_init();
@@ -34,4 +34,6 @@ int main()
 
 	// start event loop
 	EventSystem_run(EventSystem_instance());
+	
+	return 0;
 }

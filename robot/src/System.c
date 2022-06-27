@@ -141,11 +141,11 @@ void System_drive(void* _this) {
 
   // there are rare cases where 011 -> 010 -> 000 is detected so 
   // we need to memorize the x0x side and turn the car afterwards
-  // so it doesn't drive away from the black line
+  // so it doesn't drive away from the black line 
   State memorized_state = 
     state == STATE_DRV_FW_ML ? STATE_DRV_FW_ML : 
     state == STATE_DRV_FW_MR ? STATE_DRV_FW_MR : 
-                               STATE_DRV_FW;
+                               STATE_DRV_FW; 
 
   // update state
   if      (mid && left)               state = STATE_DRV_FW_ML;
