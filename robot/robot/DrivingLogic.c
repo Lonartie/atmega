@@ -36,7 +36,7 @@ void turn_left(System* atmega);
 void turn_right(System* atmega);
 void drive_forward(System* atmega);
 
-uint32_t last_t = 0;
+static uint64_t last_t = 0;
 void System_drive(void* _this) {
   static bool lleft = false, lmid = false, lright = false;
 	System* atmega = (System*) _this;
