@@ -92,11 +92,11 @@ void System_drive(void* _this) {
     case STATE_TRN_RIGHT: turn_right(atmega); break;
   }
 
-  if (millis() - last_t > 500) {
+  // if (millis() - last_t > 500) {
     last_t = millis();
     uint8_t us_distance = UltraSoundSensor_get_distance(&atmega->us);
     Menu_log(LOG_DEBUG, FMT(US_SENSOR_MESSAGE, (int) us_distance));
-  }
+  // }
 
   lleft    = left;
   lmid     = mid;
