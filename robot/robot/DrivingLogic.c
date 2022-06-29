@@ -53,11 +53,18 @@ void System_drive(void* _this) {
 	bool mid = mid_measure > MEASURE_THRESHOLD_MID;
 	bool right = right_measure > MEASURE_THRESHOLD_RIGHT;
 
+  uint32_t new_time = millis();
+  if (new_time - last_t > 1000) {
+    last_t = new_time;
+    uint8_t us_distance = UltraSoundSensor_get_distance(&atmega->us);
+    Menu_log(LOG_DEBUG, FMT(US_SENSOR_MESSAGE, (int) us_distance));
+  }
+
   if (left != lleft || mid != lmid || right != lright) {
     // update lights and sends log messages
     may_log = true;
     ShiftRegister_write_n(&atmega->led_strip, 3, left, mid, right);
-    uint32_t new_time = millis();
+    new_time = millis();
     uint32_t time_diff = new_time - last_time;
     last_time = new_time;
     Menu_log(LOG_DEBUG, FMT(TIMER_MESSAGE, time_diff));
@@ -91,12 +98,6 @@ void System_drive(void* _this) {
     case STATE_TRN_LEFT:  turn_left(atmega); break;
     case STATE_TRN_RIGHT: turn_right(atmega); break;
   }
-
-  // if (millis() - last_t > 500) {
-    last_t = millis();
-    uint8_t us_distance = UltraSoundSensor_get_distance(&atmega->us);
-    Menu_log(LOG_DEBUG, FMT(US_SENSOR_MESSAGE, (int) us_distance));
-  // }
 
   lleft    = left;
   lmid     = mid;
