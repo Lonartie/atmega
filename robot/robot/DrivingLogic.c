@@ -36,6 +36,7 @@ void turn_left(System* atmega);
 void turn_right(System* atmega);
 void drive_forward(System* atmega);
 
+uint32_t last_t = 0;
 void System_drive(void* _this) {
   static bool lleft = false, lmid = false, lright = false;
 	System* atmega = (System*) _this;
@@ -91,7 +92,8 @@ void System_drive(void* _this) {
     case STATE_TRN_RIGHT: turn_right(atmega); break;
   }
 
-  if (left != lleft || mid != lmid || right != lright) {
+  if (last_t - millis() > 1000) {
+    last_t = millis();
     uint8_t us_distance = UltraSoundSensor_get_distance(&atmega->us);
     Menu_log(LOG_DEBUG, FMT(US_SENSOR_MESSAGE, (int) us_distance));
   }
