@@ -62,7 +62,7 @@ void System_drive(void* _this) {
     last_time = new_time;
     Menu_log(LOG_DEBUG, FMT(TIMER_MESSAGE, time_diff));
     Menu_log(LOG_INFO, FMT(SENSORS_MESSAGE, left, mid, right));
-    Menu_log(LOG_DEBUG, FMT(US_SENSOR_MESSAGE, (int) us_distance));
+    // Menu_log(LOG_DEBUG, FMT(US_SENSOR_MESSAGE, (int) us_distance));
     Menu_log(LOG_DEBUG, FMT(SENSORS_DEBUG_MESSAGE, (int) left_measure, (int) mid_measure, (int) right_measure));
   }
 
