@@ -60,7 +60,6 @@ uint8_t UltraSoundSensor_get_distance(UltraSoundSensor* _this)
   _delay_us(10);
   Pin_write(&_this->trigger, false);
   uint32_t start = millis();
-  while (!Pin_read(&_this->echo) && (millis() - start) < 20);
-  while (Pin_read(&_this->echo) && (millis() - start) < 20);
+  while (echo_duration == 0 && millis() - start < 20);
   return (uint8_t) (echo_duration * cm_per_us);
 }
