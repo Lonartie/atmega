@@ -51,7 +51,6 @@ void System_drive(void* _this) {
 	bool left = left_measure > MEASURE_THRESHOLD_LEFT;
 	bool mid = mid_measure > MEASURE_THRESHOLD_MID;
 	bool right = right_measure > MEASURE_THRESHOLD_RIGHT;
-  uint8_t us_distance = UltraSoundSensor_get_distance(&atmega->us);
 
   if (left != lleft || mid != lmid || right != lright) {
     // update lights and sends log messages
@@ -62,7 +61,6 @@ void System_drive(void* _this) {
     last_time = new_time;
     Menu_log(LOG_DEBUG, FMT(TIMER_MESSAGE, time_diff));
     Menu_log(LOG_INFO, FMT(SENSORS_MESSAGE, left, mid, right));
-    Menu_log(LOG_DEBUG, FMT(US_SENSOR_MESSAGE, (int) us_distance));
     Menu_log(LOG_DEBUG, FMT(SENSORS_DEBUG_MESSAGE, (int) left_measure, (int) mid_measure, (int) right_measure));
   }
 
@@ -91,6 +89,11 @@ void System_drive(void* _this) {
     case STATE_DRV_FW_MR: drive_forward(atmega); break;
     case STATE_TRN_LEFT:  turn_left(atmega); break;
     case STATE_TRN_RIGHT: turn_right(atmega); break;
+  }
+
+  if (left != lleft || mid != lmid || right != lright) {
+    uint8_t us_distance = UltraSoundSensor_get_distance(&atmega->us);
+    Menu_log(LOG_DEBUG, FMT(US_SENSOR_MESSAGE, (int) us_distance));
   }
 
   lleft    = left;
