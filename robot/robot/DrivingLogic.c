@@ -18,6 +18,7 @@ const char* DRIVE_FORWARD_MESSAGE = "df\n";
 const char* TIMER_MESSAGE = "%ums\n";
 const char* SENSORS_MESSAGE = "%d%d%d\n";
 const char* SENSORS_DEBUG_MESSAGE = "%d %d %d\n";
+const char* US_SENSOR_MESSAGE = "dist: %d\n";
 
 typedef enum State {
   STATE_LNF,
@@ -50,6 +51,7 @@ void System_drive(void* _this) {
 	bool left = left_measure > MEASURE_THRESHOLD_LEFT;
 	bool mid = mid_measure > MEASURE_THRESHOLD_MID;
 	bool right = right_measure > MEASURE_THRESHOLD_RIGHT;
+  uint8_t us_distance = UltraSoundSensor_get_distance(&atmega->us);
 
   if (left != lleft || mid != lmid || right != lright) {
     // update lights and sends log messages
@@ -60,6 +62,7 @@ void System_drive(void* _this) {
     last_time = new_time;
     Menu_log(LOG_DEBUG, FMT(TIMER_MESSAGE, time_diff));
     Menu_log(LOG_INFO, FMT(SENSORS_MESSAGE, left, mid, right));
+    Menu_log(LOG_DEBUG, FMT(US_SENSOR_MESSAGE, (int) us_distance));
     Menu_log(LOG_DEBUG, FMT(SENSORS_DEBUG_MESSAGE, (int) left_measure, (int) mid_measure, (int) right_measure));
   }
 
@@ -101,6 +104,7 @@ void turn_left(System* atmega)
   if (may_log) Menu_log(LOG_DEBUG, TURN_LEFT_MESSAGE);
   Motor_drive_backward(&atmega->mt_left, SPEED_TURN);
   Motor_drive_forward(&atmega->mt_right, SPEED_TURN);
+  Servo_set_angle(&atmega->us_servo, -90);
 }
 
 void turn_right(System* atmega)
@@ -108,6 +112,7 @@ void turn_right(System* atmega)
   if (may_log) Menu_log(LOG_DEBUG, TURN_RIGHT_MESSAGE);
   Motor_drive_forward(&atmega->mt_left, SPEED_TURN);
   Motor_drive_backward(&atmega->mt_right, SPEED_TURN);
+  Servo_set_angle(&atmega->us_servo, 90);
 }
 
 void drive_forward(System* atmega)
@@ -115,4 +120,5 @@ void drive_forward(System* atmega)
   if (may_log) Menu_log(LOG_DEBUG, DRIVE_FORWARD_MESSAGE);
   Motor_drive_forward(&atmega->mt_left, SPEED_DRIVE);
   Motor_drive_forward(&atmega->mt_right, SPEED_DRIVE);
+  Servo_set_angle(&atmega->us_servo, 0);
 }

@@ -40,6 +40,28 @@
 #define MOTOR_RIGHT_BW_DDR_PIN     DDB1
 #define MOTOR_RIGHT_BW_PORT_PIN    PORTB1
 
+#define US_TRIGGER_DDR             DDRB
+#define US_TRIGGER_PORT            PORTB
+#define US_TRIGGER_DDR_PIN         DDB5
+#define US_TRIGGER_PORT_PIN        PORTB5
+
+#define US_ECHO_DDR                DDRB
+#define US_ECHO_PORT               PORTB
+#define US_ECHO_DDR_PIN            DDB4
+#define US_ECHO_PORT_PIN           PORTB4
+
+#define US_PCI_REG                 PCICR
+#define US_PCI_GROUP               PCIE0
+#define US_PCI_MASK                PCMSK0
+#define US_PCI_PIN                 PCINT4
+
+#define US_SERVO_DDR               DDRD
+#define US_SERVO_PORT              PORTD
+#define US_SERVO_DDR_PIN           DDD3
+#define US_SERVO_PORT_PIN          PORTD3
+#define US_SERVO_OCR               OCR2B
+#define US_SERVO_DELAY_MS          50
+
 System System_create()
 {
   System system;
@@ -61,7 +83,19 @@ System System_create()
 
   system.mt_right = Motor_create(MOTOR_RIGHT_PWM_PIN, 
     Pin_create(&MOTOR_RIGHT_FW_DDR, &MOTOR_RIGHT_FW_PORT, MOTOR_RIGHT_FW_DDR_PIN, MOTOR_RIGHT_FW_PORT_PIN), 
-    Pin_create(&MOTOR_RIGHT_BW_DDR, &MOTOR_RIGHT_BW_PORT, MOTOR_RIGHT_BW_DDR_PIN, MOTOR_RIGHT_BW_PORT_PIN));
+    Pin_create(&MOTOR_RIGHT_BW_DDR, &MOTOR_RIGHT_BW_PORT, MOTOR_RIGHT_BW_DDR_PIN, MOTOR_RIGHT_BW_PORT_PIN)
+  );
+
+  system.us = UltraSoundSensor_create(
+    Pin_create(&US_TRIGGER_DDR, &US_TRIGGER_PORT, US_TRIGGER_DDR_PIN, US_TRIGGER_PORT_PIN), 
+    Pin_create(&US_ECHO_DDR, &US_ECHO_PORT, US_ECHO_DDR_PIN, US_ECHO_PORT_PIN),
+    &US_PCI_REG, US_PCI_GROUP, &US_PCI_MASK, US_PCI_PIN
+  );
+
+  system.us_servo = Servo_create(
+    Pin_create(&US_SERVO_DDR, &US_SERVO_PORT, US_SERVO_DDR_PIN, US_SERVO_PORT_PIN),
+    &US_SERVO_OCR, US_SERVO_DELAY_MS
+  );
 
   system.started = false;
 

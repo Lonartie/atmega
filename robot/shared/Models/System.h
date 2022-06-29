@@ -5,6 +5,8 @@
 #include "Models/USART.h"
 #include "Models/Motor.h"
 #include "Models/ADCPin.h"
+#include "Models/UltraSoundSensor.h"
+#include "Models/Servo.h"
 
 /// @brief the abstraction of the microcontroller and all its components
 ///        currently configured for the ATmega328P-car-robot
@@ -16,6 +18,8 @@ typedef struct System
   ADCPin lf_right;            // the "Linienfolger" right (ADCPin)
   Motor mt_left;              // the left motor (Motor) 
   Motor mt_right;             // the right motor (Motor)
+  UltraSoundSensor us;        // the ultrasonic sensor (UltraSoundSensor)
+  Servo us_servo;             // the ultrasonic sensor servo (Servo)
   bool started;
 } System;
 
