@@ -60,7 +60,7 @@
 #define US_SERVO_DDR_PIN           DDD3
 #define US_SERVO_PORT_PIN          PORTD3
 #define US_SERVO_OCR               OCR2B
-#define US_SERVO_DELAY_MS          50
+#define US_SERVO_DELAY_MS          0
 
 System System_create()
 {

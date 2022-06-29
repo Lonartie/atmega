@@ -32,6 +32,8 @@ void Servo_set_angle(Servo* _this, char angle)
     return;
   }
 
+  angle *= -1;
+
   unsigned char value = 0;
 
   if (angle >= 0) 
