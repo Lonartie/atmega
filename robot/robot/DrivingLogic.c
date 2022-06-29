@@ -51,7 +51,7 @@ void System_drive(void* _this) {
 	bool left = left_measure > MEASURE_THRESHOLD_LEFT;
 	bool mid = mid_measure > MEASURE_THRESHOLD_MID;
 	bool right = right_measure > MEASURE_THRESHOLD_RIGHT;
-  uint8_t us_distance = UltraSoundSensor_get_distance(&atmega->us);
+  // uint8_t us_distance = UltraSoundSensor_get_distance(&atmega->us);
 
   if (left != lleft || mid != lmid || right != lright) {
     // update lights and sends log messages
