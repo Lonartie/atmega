@@ -52,10 +52,11 @@ ISR(PCINT0_vect)
 
 uint8_t UltraSoundSensor_get_distance(UltraSoundSensor* _this)
 {
+  uint32_t start = millis();
   Pin_write(&_this->trigger, true);
   _delay_us(10);
   Pin_write(&_this->trigger, false);
-  while (!Pin_read(&_this->echo));
-  while (Pin_read(&_this->echo));
+  while (!Pin_read(&_this->echo) && (millis() - start) < 20);
+  while (Pin_read(&_this->echo) && (millis() - start) < 20);
   return (uint8_t) (echo_duration / 58.0f);
 }
