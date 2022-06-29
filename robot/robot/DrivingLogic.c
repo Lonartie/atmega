@@ -6,7 +6,7 @@
 
 const int SPEED_DRIVE_SLOW = 0;
 const int SPEED_DRIVE = 200;
-const int SPEED_TURN = 150;
+const int SPEED_TURN = 180;
 
 const uint16_t MEASURE_THRESHOLD_LEFT = 330;
 const uint16_t MEASURE_THRESHOLD_MID = 400;
@@ -51,7 +51,7 @@ void System_drive(void* _this) {
 	bool left = left_measure > MEASURE_THRESHOLD_LEFT;
 	bool mid = mid_measure > MEASURE_THRESHOLD_MID;
 	bool right = right_measure > MEASURE_THRESHOLD_RIGHT;
-  // uint8_t us_distance = UltraSoundSensor_get_distance(&atmega->us);
+  uint8_t us_distance = UltraSoundSensor_get_distance(&atmega->us);
 
   if (left != lleft || mid != lmid || right != lright) {
     // update lights and sends log messages
@@ -62,7 +62,7 @@ void System_drive(void* _this) {
     last_time = new_time;
     Menu_log(LOG_DEBUG, FMT(TIMER_MESSAGE, time_diff));
     Menu_log(LOG_INFO, FMT(SENSORS_MESSAGE, left, mid, right));
-    // Menu_log(LOG_DEBUG, FMT(US_SENSOR_MESSAGE, (int) us_distance));
+    Menu_log(LOG_DEBUG, FMT(US_SENSOR_MESSAGE, (int) us_distance));
     Menu_log(LOG_DEBUG, FMT(SENSORS_DEBUG_MESSAGE, (int) left_measure, (int) mid_measure, (int) right_measure));
   }
 

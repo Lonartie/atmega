@@ -46,7 +46,7 @@
 #define US_TRIGGER_PORT_PIN        PORTB5
 
 #define US_ECHO_DDR                DDRB
-#define US_ECHO_PORT               PORTB
+#define US_ECHO_PORT               PINB
 #define US_ECHO_DDR_PIN            DDB4
 #define US_ECHO_PORT_PIN           PORTB4
 
