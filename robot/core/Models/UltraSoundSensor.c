@@ -10,7 +10,7 @@
 static Pin echo_pin_inst;
 static uint16_t echo_start_us = 0;
 static uint16_t echo_duration = 0;
-static bool echo_ready_read = false;
+static bool echo_ready_read = true;
 static uint8_t event_distance_instance = 255;
 
 UltraSoundSensor UltraSoundSensor_create(
@@ -92,11 +92,14 @@ uint8_t UltraSoundSensor_get_distance(UltraSoundSensor* _this)
   return (uint8_t) (echo_duration * half_cm_per_us);
 }
 
-void UltraSoundSensor_update(void* obj) {
+void UltraSoundSensor_update(void* obj) {  
+  if (echo_ready_read) 
+  {
     Menu_log(LOG_INFO, "CHECK");
-  if (echo_ready_read && echo_duration <= event_distance_instance) {
-    Menu_log(LOG_INFO, "WALL");
-    // EventSystem_send_event(EventSystem_instance(), Event_create(((UltraSoundSensor*)obj)->event));
-    // UltraSoundSensor_trigger((UltraSoundSensor*)obj);
+    if (echo_duration <= event_distance_instance) {
+      Menu_log(LOG_INFO, "WALL");
+      // EventSystem_send_event(EventSystem_instance(), Event_create(((UltraSoundSensor*)obj)->event));
+      // UltraSoundSensor_trigger((UltraSoundSensor*)obj);
+    }
   }
 }
