@@ -143,7 +143,7 @@ void turn_left(System* atmega)
   if (may_log) Menu_log(LOG_DEBUG, TURN_LEFT_MESSAGE);
   Motor_drive_backward(&atmega->mt_left, SPEED_TURN);
   Motor_drive_forward(&atmega->mt_right, SPEED_TURN);
-  Servo_set_angle(&atmega->us_servo, -90);
+  // Servo_set_angle(&atmega->us_servo, -90);
 }
 
 void turn_right(System* atmega)
@@ -151,7 +151,7 @@ void turn_right(System* atmega)
   if (may_log) Menu_log(LOG_DEBUG, TURN_RIGHT_MESSAGE);
   Motor_drive_forward(&atmega->mt_left, SPEED_TURN);
   Motor_drive_backward(&atmega->mt_right, SPEED_TURN);
-  Servo_set_angle(&atmega->us_servo, 90);
+  // Servo_set_angle(&atmega->us_servo, 90);
 }
 
 void drive_forward(System* atmega)
@@ -159,5 +159,5 @@ void drive_forward(System* atmega)
   if (may_log) Menu_log(LOG_DEBUG, DRIVE_FORWARD_MESSAGE);
   Motor_drive_forward(&atmega->mt_left, SPEED_DRIVE);
   Motor_drive_forward(&atmega->mt_right, SPEED_DRIVE);
-  Servo_set_angle(&atmega->us_servo, 0);
+  // Servo_set_angle(&atmega->us_servo, 0);
 }
