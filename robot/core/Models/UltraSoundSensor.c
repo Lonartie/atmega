@@ -103,7 +103,8 @@ void UltraSoundSensor_update(void* obj) {
     if (duration_to_distance(echo_duration) <= event_distance_instance) {
       Menu_log(LOG_INFO, "WALL");
       // EventSystem_send_event(EventSystem_instance(), Event_create(((UltraSoundSensor*)obj)->event));
-      UltraSoundSensor_trigger((UltraSoundSensor*)obj);
     }
+    
+    UltraSoundSensor_trigger((UltraSoundSensor*)obj);
   }
 }
