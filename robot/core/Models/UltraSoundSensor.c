@@ -2,6 +2,7 @@
 #include "Misc/Utils.h"
 #include "EventSystem/HardwareTimer.h"
 #include "EventSystem/EventSystem.h"
+#include "Menu.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
@@ -87,7 +88,8 @@ uint8_t UltraSoundSensor_get_distance(UltraSoundSensor* _this)
 
 void UltraSoundSensor_update(void* obj) {
   if (echo_ready_read && echo_duration <= event_distance_instance) {
-    EventSystem_send_event(EventSystem_instance(), Event_create(((UltraSoundSensor*)obj)->event));
-    UltraSoundSensor_trigger((UltraSoundSensor*)obj);
+    Menu_log(LOG_INFO, "WALL");
+    // EventSystem_send_event(EventSystem_instance(), Event_create(((UltraSoundSensor*)obj)->event));
+    // UltraSoundSensor_trigger((UltraSoundSensor*)obj);
   }
 }
