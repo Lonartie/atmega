@@ -49,6 +49,12 @@ void UltraSoundSensor_set_event(UltraSoundSensor* _this, uint8_t event_distance,
 
 ISR(PCINT0_vect)
 {
+  // not yet started
+  if (event_distance_instance == 255) 
+  {
+    return;
+  }
+
   // rising edge
   if (Pin_read(&echo_pin_inst))
   {

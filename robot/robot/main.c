@@ -20,6 +20,8 @@ int MAIN()
 	USARTEvent usart = USARTEvent_create("input");
 	Timer timer = Timer_create(0, "update");
 
+	Logic_start(&atmega);
+
 	// register event listeners
 	EventSystem_reg_listener(EventSystem_instance(), Listener_create_r(&atmega, Logic_drive, timer.event));
 	EventSystem_reg_listener(EventSystem_instance(), Listener_create_r(&usart, Menu_handle_input, usart.event));
