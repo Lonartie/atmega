@@ -51,7 +51,7 @@ void send_message_and_stop(void* system)
   if (millis() - last_wps_t > 250) {
     walls_per_second *= 4;
 
-    if (walls_per_second > 100) 
+    if (walls_per_second > 35) 
     {
       Menu_log(LOG_INFO, "WALL");
       System_stop(system);
