@@ -93,7 +93,7 @@ uint8_t UltraSoundSensor_get_distance(UltraSoundSensor* _this)
 
   UltraSoundSensor_trigger(_this);
   uint32_t start = millis();
-  while (echo_duration == 0 && millis() - start < 20);
+  while (!echo_ready_read && millis() - start < 200);
   return duration_to_distance(echo_duration);
 }
 

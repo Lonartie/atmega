@@ -75,11 +75,15 @@ void Logic_start(void* system)
 void Logic_drive(void* system) {
 
 	System* atmega = (System*) system;
-  turn_left(atmega);
-  _delay_ms(350);
-  turn_right(atmega);
-  _delay_ms(350);
-  System_stop(atmega);
+
+  uint8_t us_distance = UltraSoundSensor_get_distance(&atmega->us);
+  Menu_log(LOG_DEBUG, FMT(US_SENSOR_MESSAGE, (int) us_distance));
+
+  // turn_left(atmega);
+  // _delay_ms(550);
+  // turn_right(atmega);
+  // _delay_ms(350);
+  // System_stop(atmega);
 
   // static bool lleft = false, lmid = false, lright = false;
   // static uint32_t last_time = 0;
