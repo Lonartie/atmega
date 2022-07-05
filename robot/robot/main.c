@@ -21,7 +21,7 @@ int MAIN()
 	Timer timer = Timer_create(0, "update");
 
 	// register event listeners
-	EventSystem_reg_listener(EventSystem_instance(), Listener_create_r(&atmega, System_drive, timer.event));
+	EventSystem_reg_listener(EventSystem_instance(), Listener_create_r(&atmega, Logic_drive, timer.event));
 	EventSystem_reg_listener(EventSystem_instance(), Listener_create_r(&usart, Menu_handle_input, usart.event));
 	EventSystem_reg_listener(EventSystem_instance(), Listener_create_r(&atmega, System_start, Menu_instance().car_start_event));
 	EventSystem_reg_listener(EventSystem_instance(), Listener_create_r(&atmega, System_stop, Menu_instance().car_stop_event));

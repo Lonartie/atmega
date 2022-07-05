@@ -1,6 +1,7 @@
 #include "UltraSoundSensor.h"
 #include "Misc/Utils.h"
 #include "EventSystem/HardwareTimer.h"
+#include "EventSystem/EventSystem.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
@@ -8,6 +9,8 @@
 static Pin echo_pin_inst;
 static uint16_t echo_start_us = 0;
 static uint16_t echo_duration = 0;
+static bool echo_ready_read = false;
+static uint8_t event_distance_instance = 255;
 
 UltraSoundSensor UltraSoundSensor_create(
   Pin trigger, Pin echo, 
@@ -36,6 +39,13 @@ UltraSoundSensor UltraSoundSensor_create(
   return sensor;
 }
 
+void UltraSoundSensor_set_event(UltraSoundSensor* _this, uint8_t event_distance, String event)
+{
+  _this->event = event;
+  event_distance_instance = event_distance;
+  EventSystem_reg_updater(EventSystem_instance(), Updater_create(_this, UltraSoundSensor_update));
+}
+
 ISR(PCINT0_vect)
 {
   // rising edge
@@ -47,7 +57,17 @@ ISR(PCINT0_vect)
   else
   {
     echo_duration = micros() - echo_start_us;
+    echo_ready_read = true;
   }
+}
+
+void UltraSoundSensor_trigger(UltraSoundSensor* _this)
+{
+  echo_duration = 0;
+  echo_ready_read = false;
+  Pin_write(&_this->trigger, true);
+  _delay_us(10);
+  Pin_write(&_this->trigger, false);
 }
 
 uint8_t UltraSoundSensor_get_distance(UltraSoundSensor* _this)
@@ -55,11 +75,19 @@ uint8_t UltraSoundSensor_get_distance(UltraSoundSensor* _this)
   const float m_per_sec = 343.2f;
   const float cm_per_sec = m_per_sec * 100.0f;
   const float cm_per_us = cm_per_sec / 1000000.0f;
-  echo_duration = 0;
-  Pin_write(&_this->trigger, true);
-  _delay_us(10);
-  Pin_write(&_this->trigger, false);
+  const float half_cm_per_us = 2.0f * cm_per_us;
+
+  while (!echo_ready_read);
+
+  UltraSoundSensor_trigger(_this);
   uint32_t start = millis();
   while (echo_duration == 0 && millis() - start < 20);
-  return (uint8_t) (echo_duration * cm_per_us);
+  return (uint8_t) (echo_duration * half_cm_per_us);
+}
+
+void UltraSoundSensor_update(void* obj) {
+  if (echo_ready_read && echo_duration <= event_distance_instance) {
+    EventSystem_send_event(EventSystem_instance(), Event_create(((UltraSoundSensor*)obj)->event));
+    UltraSoundSensor_trigger((UltraSoundSensor*)obj);
+  }
 }

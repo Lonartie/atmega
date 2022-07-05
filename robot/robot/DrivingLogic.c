@@ -2,11 +2,14 @@
 #include "Models/System.h"
 #include "Models/Menu.h"
 #include "EventSystem/HardwareTimer.h"
+#include "EventSystem/EventSystem.h"
 #include <stdbool.h>
 
 const int SPEED_DRIVE_SLOW = 0;
 const int SPEED_DRIVE = 200;
 const int SPEED_TURN = 180;
+
+const uint8_t US_SENSOR_DISTANCE = 15;
 
 const uint16_t MEASURE_THRESHOLD_LEFT = 330;
 const uint16_t MEASURE_THRESHOLD_MID = 400;
@@ -37,9 +40,24 @@ void turn_right(System* atmega);
 void drive_forward(System* atmega);
 
 static uint64_t last_t = 0;
-void System_drive(void* _this) {
+
+void send_message_and_stop(void* system)
+{
+  Menu_log(LOG_INFO, "!!WALL!!\n");
+  System_stop(system);
+}
+
+void Logic_start(void* system)
+{
+	System* atmega = (System*) system;
+
+  UltraSoundSensor_set_event(&atmega->us, US_SENSOR_DISTANCE, "US_SENSOR");
+  EventSystem_reg_listener(EventSystem_instance(), Listener_create_r(system, send_message_and_stop, "US_SENSOR"));
+}
+
+void Logic_drive(void* system) {
   static bool lleft = false, lmid = false, lright = false;
-	System* atmega = (System*) _this;
+	System* atmega = (System*) system;
   static uint32_t last_time = 0;
 
   if (!atmega->started)
