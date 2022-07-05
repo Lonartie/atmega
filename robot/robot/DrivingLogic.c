@@ -51,9 +51,9 @@ void Logic_start(void* system)
 {
 	System* atmega = (System*) system;
 
-  /*UltraSoundSensor_set_event(&atmega->us, US_SENSOR_DISTANCE, "US_SENSOR");
+  UltraSoundSensor_set_event(&atmega->us, US_SENSOR_DISTANCE, "US_SENSOR");
   EventSystem_reg_listener(EventSystem_instance(), Listener_create_r(system, send_message_and_stop, "US_SENSOR"));
-*/}
+}
 
 void Logic_drive(void* system) {
   static bool lleft = false, lmid = false, lright = false;
