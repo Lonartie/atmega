@@ -10,7 +10,7 @@ const int SPEED_DRIVE_SLOW = 0;
 const int SPEED_DRIVE = 200;
 const int SPEED_TURN = 180;
 
-const uint8_t US_SENSOR_DISTANCE = 15;
+const uint8_t US_SENSOR_DISTANCE = 20;
 
 const uint16_t MEASURE_THRESHOLD_LEFT = 330;
 const uint16_t MEASURE_THRESHOLD_MID = 400;
@@ -76,79 +76,70 @@ void Logic_drive(void* system) {
 
 	System* atmega = (System*) system;
 
-  uint8_t us_distance = UltraSoundSensor_get_distance(&atmega->us);
-  Menu_log(LOG_DEBUG, FMT(US_SENSOR_MESSAGE, (int) us_distance));
+  static bool lleft = false, lmid = false, lright = false;
+  static uint32_t last_time = 0;
 
-  // turn_left(atmega);
-  // _delay_ms(550);
-  // turn_right(atmega);
-  // _delay_ms(350);
-  // System_stop(atmega);
+  if (!atmega->started)
+    return;
 
-  // static bool lleft = false, lmid = false, lright = false;
-  // static uint32_t last_time = 0;
+  uint16_t left_measure = ADCPin_read_avg(&atmega->lf_left, 10);
+  uint16_t mid_measure = ADCPin_read_avg(&atmega->lf_middle, 10);
+  uint16_t right_measure = ADCPin_read_avg(&atmega->lf_right, 10);
 
-  // if (!atmega->started)
-  //   return;
+	bool left = left_measure > MEASURE_THRESHOLD_LEFT;
+	bool mid = mid_measure > MEASURE_THRESHOLD_MID;
+	bool right = right_measure > MEASURE_THRESHOLD_RIGHT;
 
-  // uint16_t left_measure = ADCPin_read_avg(&atmega->lf_left, 10);
-  // uint16_t mid_measure = ADCPin_read_avg(&atmega->lf_middle, 10);
-  // uint16_t right_measure = ADCPin_read_avg(&atmega->lf_right, 10);
-
-	// bool left = left_measure > MEASURE_THRESHOLD_LEFT;
-	// bool mid = mid_measure > MEASURE_THRESHOLD_MID;
-	// bool right = right_measure > MEASURE_THRESHOLD_RIGHT;
-
-  // uint32_t new_time = millis();
-  // // if (new_time - last_t > 1000) {
-  // //   last_t = new_time;
-  // //   uint8_t us_distance = UltraSoundSensor_get_distance(&atmega->us);
-  // //   Menu_log(LOG_DEBUG, FMT(US_SENSOR_MESSAGE, (int) us_distance));
-  // // }
-
-  // if (left != lleft || mid != lmid || right != lright) {
-  //   // update lights and sends log messages
-  //   may_log = true;
-  //   ShiftRegister_write_n(&atmega->led_strip, 3, left, mid, right);
-  //   new_time = millis();
-  //   uint32_t time_diff = new_time - last_time;
-  //   last_time = new_time;
-  //   Menu_log(LOG_DEBUG, FMT(TIMER_MESSAGE, time_diff));
-  //   Menu_log(LOG_INFO, FMT(SENSORS_MESSAGE, left, mid, right));
-  //   Menu_log(LOG_DEBUG, FMT(SENSORS_DEBUG_MESSAGE, (int) left_measure, (int) mid_measure, (int) right_measure));
+  uint32_t new_time = millis();
+  // if (new_time - last_t > 1000) {
+  //   last_t = new_time;
+  //   uint8_t us_distance = UltraSoundSensor_get_distance(&atmega->us);
+  //   Menu_log(LOG_DEBUG, FMT(US_SENSOR_MESSAGE, (int) us_distance));
   // }
 
-  // // there are rare cases where 011 -> 010 -> 000 is detected so 
-  // // we need to memorize the x0x side and turn the car afterwards
-  // // so it doesn't drive away from the black line 
-  // State memorized_state = 
-  //   state == STATE_DRV_FW_ML ? STATE_DRV_FW_ML : 
-  //   state == STATE_DRV_FW_MR ? STATE_DRV_FW_MR : 
-  //                              STATE_DRV_FW; 
+  if (left != lleft || mid != lmid || right != lright) {
+    // update lights and sends log messages
+    may_log = true;
+    ShiftRegister_write_n(&atmega->led_strip, 3, left, mid, right);
+    new_time = millis();
+    uint32_t time_diff = new_time - last_time;
+    last_time = new_time;
+    Menu_log(LOG_DEBUG, FMT(TIMER_MESSAGE, time_diff));
+    Menu_log(LOG_INFO, FMT(SENSORS_MESSAGE, left, mid, right));
+    Menu_log(LOG_DEBUG, FMT(SENSORS_DEBUG_MESSAGE, (int) left_measure, (int) mid_measure, (int) right_measure));
+  }
 
-  // // update state
-  // if      (mid && left)               state = STATE_DRV_FW_ML;
-  // else if (mid && right)              state = STATE_DRV_FW_MR;
-  // else if (mid)                       state = memorized_state;
-  // else if (left)                      state = STATE_TRN_LEFT;
-  // else if (right)                     state = STATE_TRN_RIGHT;
-  // else if (state == STATE_DRV_FW_ML)  state = STATE_TRN_LEFT;
-  // else if (state == STATE_DRV_FW_MR)  state = STATE_TRN_RIGHT;
+  // there are rare cases where 011 -> 010 -> 000 is detected so 
+  // we need to memorize the x0x side and turn the car afterwards
+  // so it doesn't drive away from the black line 
+  State memorized_state = 
+    state == STATE_DRV_FW_ML ? STATE_DRV_FW_ML : 
+    state == STATE_DRV_FW_MR ? STATE_DRV_FW_MR : 
+                               STATE_DRV_FW; 
 
-  // // execute state
-  // switch (state) {
-  //   case STATE_LNF:       // fall through
-  //   case STATE_DRV_FW:    // fall through
-  //   case STATE_DRV_FW_ML: // fall through
-  //   case STATE_DRV_FW_MR: drive_forward(atmega); break;
-  //   case STATE_TRN_LEFT:  turn_left(atmega); break;
-  //   case STATE_TRN_RIGHT: turn_right(atmega); break;
-  // }
+  // update state
+  if      (mid && left)               state = STATE_DRV_FW_ML;
+  else if (mid && right)              state = STATE_DRV_FW_MR;
+  else if (mid)                       state = memorized_state;
+  else if (left)                      state = STATE_TRN_LEFT;
+  else if (right)                     state = STATE_TRN_RIGHT;
+  else if (state == STATE_DRV_FW_ML)  state = STATE_TRN_LEFT;
+  else if (state == STATE_DRV_FW_MR)  state = STATE_TRN_RIGHT;
 
-  // lleft    = left;
-  // lmid     = mid;
-  // lright   = right;
-  // may_log  = false;
+  // execute state
+  switch (state) {
+    case STATE_LNF:       // fall through
+    case STATE_DRV_FW:    // fall through
+    case STATE_DRV_FW_ML: // fall through
+    case STATE_DRV_FW_MR: drive_forward(atmega); break;
+    case STATE_TRN_LEFT:  turn_left(atmega); break;
+    case STATE_TRN_RIGHT: turn_right(atmega); break;
+  }
+
+  lleft    = left;
+  lmid     = mid;
+  lright   = right;
+  may_log  = false;
 }
 
 void turn_left(System* atmega)
