@@ -40,11 +40,26 @@ void turn_right(System* atmega);
 void drive_forward(System* atmega);
 
 static uint64_t last_t = 0;
+static uint8_t walls_per_second = 0;
+static uint32_t last_wps_t = 0;
+
 
 void send_message_and_stop(void* system)
 {
-  Menu_log(LOG_INFO, "!!WALL!!\n");
-  System_stop(system);
+  walls_per_second++;
+
+  if (millis() - last_wps_t > 250) {
+    walls_per_second *= 4;
+
+    if (walls_per_second > 10) 
+    {
+      Menu_log(LOG_INFO, "WALL");
+      System_stop(system);
+    }
+
+    last_wps_t = millis();
+    walls_per_second = 0;
+  }
 }
 
 void Logic_start(void* system)
