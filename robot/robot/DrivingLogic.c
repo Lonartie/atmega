@@ -48,8 +48,8 @@ void send_message_and_stop(void* system)
 {
   walls_per_second++;
 
-  if (millis() - last_wps_t > 250) {
-    walls_per_second *= 4;
+  if (millis() - last_wps_t > 100) {
+    walls_per_second *= 10;
 
     if (walls_per_second > 35) 
     {
