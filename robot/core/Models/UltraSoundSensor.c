@@ -13,6 +13,15 @@ static uint16_t echo_duration = 0;
 static bool echo_ready_read = true;
 static uint8_t event_distance_instance = 255;
 
+uint8_t duration_to_distance(uint16_t duration) 
+{
+  const float m_per_sec = 343.2f;
+  const float cm_per_sec = m_per_sec * 100.0f;
+  const float cm_per_us = cm_per_sec / 1000000.0f;
+  const float half_cm_per_us = 2.0f * cm_per_us;
+  return duration * half_cm_per_us;
+}
+
 UltraSoundSensor UltraSoundSensor_create(
   Pin trigger, Pin echo, 
   volatile uint8_t* pci_reg, uint8_t pci_group, 
@@ -79,27 +88,22 @@ void UltraSoundSensor_trigger(UltraSoundSensor* _this)
 
 uint8_t UltraSoundSensor_get_distance(UltraSoundSensor* _this)
 {
-  const float m_per_sec = 343.2f;
-  const float cm_per_sec = m_per_sec * 100.0f;
-  const float cm_per_us = cm_per_sec / 1000000.0f;
-  const float half_cm_per_us = 2.0f * cm_per_us;
 
   while (!echo_ready_read);
 
   UltraSoundSensor_trigger(_this);
   uint32_t start = millis();
   while (echo_duration == 0 && millis() - start < 20);
-  return (uint8_t) (echo_duration * half_cm_per_us);
+  return duration_to_distance(echo_duration);
 }
 
 void UltraSoundSensor_update(void* obj) {  
   if (echo_ready_read) 
   {
-    Menu_log(LOG_INFO, "CHECK");
-    if (echo_duration <= event_distance_instance) {
+    if (duration_to_distance(echo_duration) <= event_distance_instance) {
       Menu_log(LOG_INFO, "WALL");
       // EventSystem_send_event(EventSystem_instance(), Event_create(((UltraSoundSensor*)obj)->event));
-      // UltraSoundSensor_trigger((UltraSoundSensor*)obj);
+      UltraSoundSensor_trigger((UltraSoundSensor*)obj);
     }
   }
 }
