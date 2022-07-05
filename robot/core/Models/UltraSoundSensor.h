@@ -2,7 +2,6 @@
 #define ULTRA_SOUND_SENSOR_H
 
 #include "Pin.h"
-#include <avr/interrupt.h>
 #include <stdint.h>
 
 typedef struct UltraSoundSensor {

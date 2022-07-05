@@ -1,40 +1,40 @@
 ROBO_BINARY 	= robo
-ROBO_HEX 			= robo.hex
+ROBO_HEX 		= robo.hex
 
 TEST_BINARY 	= test
 
-CORE_DIR			= robot/core
+CORE_DIR		= robot/core
 SHARED_DIR		= robot/shared
 
 ROBO_OBJ_DIR 	= obj/robo
-TEST_OBJ_DIR  = obj/test
+TEST_OBJ_DIR  	= obj/test
 ROBOT_SRC_DIR	= robot/robot
-TEST_SRC_DIR  = robot/tests
+TEST_SRC_DIR  	= robot/tests
 
-ROBO_GCC 			= avr-gcc
-ROBO_OBJ_COPY = avr-objcopy
+ROBO_GCC 		= avr-gcc
+ROBO_OBJ_COPY 	= avr-objcopy
 ROBO_DUDE 		= avrdude
 
-TEST_GCC 			= gcc
+TEST_GCC 		= gcc
 TEST_INC_WRAP	= robot/tests/IncludeWrappers
 
 ROBO_FLAGS 		= -ffunction-sections -fdata-sections
-ROBO_FLAGS 	 += -Wl,--gc-sections -Os -flto
-ROBO_FLAGS 	 += -Wall -Wextra -Wfatal-errors
-ROBO_FLAGS 	 += -D F_CPU=16000000 -mmcu=atmega328p
-ROBO_FLAGS 	 += -D MAIN=main -I $(CORE_DIR) -I $(SHARED_DIR)
+ROBO_FLAGS 	 	+= -Wl,--gc-sections -Os -flto
+ROBO_FLAGS 	 	+= -Wall -Wextra -Wfatal-errors
+ROBO_FLAGS 	 	+= -D F_CPU=16000000 -mmcu=atmega328p
+ROBO_FLAGS 	 	+= -D MAIN=main -I $(CORE_DIR) -I $(SHARED_DIR)
 
 TEST_FLAGS 		= -Wall -Wextra -Wfatal-errors
-TEST_FLAGS   += -I $(TEST_INC_WRAP) -I $(CORE_DIR)
-TEST_FLAGS   += -D MAIN=robo_main
+TEST_FLAGS   	+= -I $(TEST_INC_WRAP) -I $(CORE_DIR) -I $(TEST_SRC_DIR)
+TEST_FLAGS   	+= -D MAIN=robo_main
 
-ROBO_SOURCES := $(shell find $(ROBOT_SRC_DIR) -name '*.c') $(shell find $(CORE_DIR) -name '*.c') $(shell find $(SHARED_DIR) -name '*.c')
-ROBO_OBJECTS := $(addprefix $(ROBO_OBJ_DIR)/, $(subst .c,.o,$(ROBO_SOURCES)))
-ROBO_DEPENDS := $(addprefix $(ROBO_OBJ_DIR)/, $(subst .c,.d,$(ROBO_SOURCES)))
+ROBO_SOURCES 	:= $(shell find $(ROBOT_SRC_DIR) -name '*.c') $(shell find $(CORE_DIR) -name '*.c') $(shell find $(SHARED_DIR) -name '*.c')
+ROBO_OBJECTS 	:= $(addprefix $(ROBO_OBJ_DIR)/, $(subst .c,.o,$(ROBO_SOURCES)))
+ROBO_DEPENDS 	:= $(addprefix $(ROBO_OBJ_DIR)/, $(subst .c,.d,$(ROBO_SOURCES)))
 
-TEST_SOURCES := $(shell find $(TEST_SRC_DIR) -name '*.c') $(ROBO_SOURCES)
-TEST_OBJECTS := $(addprefix $(TEST_OBJ_DIR)/, $(subst .c,.o,$(TEST_SOURCES)))
-TEST_DEPENDS := $(addprefix $(TEST_OBJ_DIR)/, $(subst .c,.d,$(TEST_SOURCES)))
+TEST_SOURCES 	:= $(shell find $(TEST_SRC_DIR) -name '*.c') $(ROBO_SOURCES)
+TEST_OBJECTS 	:= $(addprefix $(TEST_OBJ_DIR)/, $(subst .c,.o,$(TEST_SOURCES)))
+TEST_DEPENDS 	:= $(addprefix $(TEST_OBJ_DIR)/, $(subst .c,.d,$(TEST_SOURCES)))
 
 # execute even if exists
 .PHONY: all clean $(ROBO_BINARY)_flash
