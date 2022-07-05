@@ -51,9 +51,9 @@ void Logic_start(void* system)
 {
 	System* atmega = (System*) system;
 
-  UltraSoundSensor_set_event(&atmega->us, US_SENSOR_DISTANCE, "US_SENSOR");
+  /*UltraSoundSensor_set_event(&atmega->us, US_SENSOR_DISTANCE, "US_SENSOR");
   EventSystem_reg_listener(EventSystem_instance(), Listener_create_r(system, send_message_and_stop, "US_SENSOR"));
-}
+*/}
 
 void Logic_drive(void* system) {
   static bool lleft = false, lmid = false, lright = false;
@@ -72,11 +72,11 @@ void Logic_drive(void* system) {
 	bool right = right_measure > MEASURE_THRESHOLD_RIGHT;
 
   uint32_t new_time = millis();
-  if (new_time - last_t > 1000) {
-    last_t = new_time;
-    uint8_t us_distance = UltraSoundSensor_get_distance(&atmega->us);
-    Menu_log(LOG_DEBUG, FMT(US_SENSOR_MESSAGE, (int) us_distance));
-  }
+  // if (new_time - last_t > 1000) {
+  //   last_t = new_time;
+  //   uint8_t us_distance = UltraSoundSensor_get_distance(&atmega->us);
+  //   Menu_log(LOG_DEBUG, FMT(US_SENSOR_MESSAGE, (int) us_distance));
+  // }
 
   if (left != lleft || mid != lmid || right != lright) {
     // update lights and sends log messages
