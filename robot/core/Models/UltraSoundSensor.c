@@ -18,7 +18,7 @@ uint8_t duration_to_distance(uint16_t duration)
   const float m_per_sec = 343.2f;
   const float cm_per_sec = m_per_sec * 100.0f;
   const float cm_per_us = cm_per_sec / 1000000.0f;
-  const float half_cm_per_us = 2.0f * cm_per_us;
+  const float half_cm_per_us = 0.5f * cm_per_us;
   return duration * half_cm_per_us;
 }
 
