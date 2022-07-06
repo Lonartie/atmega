@@ -43,13 +43,15 @@ void turn_left(System* atmega, bool may_log);
 void turn_right(System* atmega, bool may_log);
 void drive_forward(System* atmega, bool may_log);
 
+static uint16_t dist_threshold = 15;
+
 void detect_wall(void* system) {
   static uint32_t last_detected = 0;
   System* atmega = (System*)system;
 
   if (micros() - last_detected < 1000000) {
     last_detected = micros();
-    wall_detected = UltraSoundSensor_dist(&atmega->us) <= 15;
+    wall_detected = UltraSoundSensor_dist(&atmega->us) <= dist_threshold;
   } else {
     wall_detected = false;
   }
@@ -128,8 +130,10 @@ void drive_logic(System* atmega) {
     Menu_log(LOG_INFO, "phase 0 -> 1\n");
     Servo_set_angle(&atmega->us_servo, -90);
     turn_right(atmega, may_log);
+    wall_detected = false;
     _delay_ms(250);
     wall_phase = 1;
+    dist_threshold = 20;
     return;
   } else if (wall_phase == 1) {
     Menu_log(LOG_INFO, FMT("wall: %d\n", (int)wall_detected));
@@ -139,15 +143,14 @@ void drive_logic(System* atmega) {
       turn_right(atmega, may_log);
       Servo_set_angle(&atmega->us_servo, 0);
       wall_phase = 0;
-    }
-
-    if (wall_detected) {
+      dist_threshold = 15;
+    } else if (wall_detected) {
       Menu_log(LOG_INFO, "phase 1 fw\n");
       drive_forward(atmega, may_log);
       return;
     } else {
-      Menu_log(LOG_INFO, "phase 1 tr\n");
-      turn_right(atmega, may_log);
+      Menu_log(LOG_INFO, "phase 1 tl\n");
+      turn_left(atmega, may_log);
       return;
     }
   }
