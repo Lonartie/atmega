@@ -80,9 +80,15 @@ ISR(PCINT0_vect) {
 void UltraSoundSensor_trigger(UltraSoundSensor* _this) {
   echo_duration = 0;
   echo_ready_read = false;
+  Pin_write(&_this->trigger, false);
+  _delay_us(10);
   Pin_write(&_this->trigger, true);
   _delay_us(10);
+  (*_this->pci_mask) |= (1 << _this->pci_pin);
+  (*_this->pci_mask) &= ~(1 << _this->pci_pin);
   Pin_write(&_this->trigger, false);
+  _delay_us(2);
+  (*_this->pci_mask) |= (1 << _this->pci_pin);
 }
 
 uint8_t UltraSoundSensor_get_distance(UltraSoundSensor* _this) {
