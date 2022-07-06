@@ -56,7 +56,7 @@ void detect_wall(void* system) {
 
   if (millis() - last_wps_t > 100) {
     walls_per_second *= 10;
-    wall_detected = walls_per_second > 30;
+    wall_detected = (walls_per_second > 30);
     last_wps_t = millis();
     walls_per_second = 0;
   }
