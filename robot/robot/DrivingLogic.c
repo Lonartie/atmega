@@ -126,7 +126,9 @@ void drive_logic(System* atmega) {
   } else if (wall_phase == 1) {
     Menu_log(LOG_INFO, FMT("wall: %d\n", (int)wall_detected));
     if (mid) {
+      Menu_log(LOG_INFO, "found track again\n");
       turn_right(atmega, may_log);
+      Servo_set_angle(&atmega->us_servo, 0);
       wall_phase = 0;
     }
 
