@@ -110,18 +110,18 @@ void drive_logic(System* atmega) {
 
   if (left && mid && right && !seeing_start) {
     seeing_start = true;
-    time_seeing_start = millis();
+    time_seeing_start = micros();
   } else {
     seeing_start = false;
   }
 
   if (seeing_start) {
-    Menu_log(LOG_INFO,
-             FMT("start for %d ms", (int)(millis() - time_seeing_start)));
+    Menu_log(LOG_INFO, FMT("start for %d ms\n",
+                           (int)((micros() - time_seeing_start) / 1000)));
   }
 
-  if (seeing_start && millis() - time_seeing_start >= 50) {
-    Menu_log(LOG_INFO, "start block!");
+  if (seeing_start && (micros() - time_seeing_start) / 1000 >= 50) {
+    Menu_log(LOG_INFO, "start block!\n");
     seeing_start = false;
   }
 
