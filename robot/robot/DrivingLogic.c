@@ -134,6 +134,11 @@ void drive_logic(System* atmega) {
       turn_left(atmega, may_log);
       return;
     }
+
+    if (mid) {
+      turn_right(atmega, may_log);
+      wall_phase = 0;
+    }
   }
 
   if (left && mid && right && !seeing_start && may_see_start) {
