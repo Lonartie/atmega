@@ -80,7 +80,7 @@ void drive_logic(System* atmega) {
   static bool lleft = false, lmid = false, lright = false;
   static uint32_t last_time = 0;
   static bool seeing_start = false;
-  static uint16_t time_seeing_start = 0;
+  static uint64_t time_seeing_start = 0;
 
   if (!atmega->started) return;
 
