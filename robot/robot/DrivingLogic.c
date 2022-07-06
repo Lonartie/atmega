@@ -36,24 +36,21 @@ typedef enum State {
   STATE_TRN_RIGHT
 } State;
 
+static bool wall_detected = false;
+
 void drive_logic(System* atmega);
 void turn_left(System* atmega, bool may_log);
 void turn_right(System* atmega, bool may_log);
 void drive_forward(System* atmega, bool may_log);
 
-void send_message_and_stop(void* system) {
+void detect_wall() {
   static uint8_t walls_per_second = 0;
   static uint32_t last_wps_t = 0;
   walls_per_second++;
 
   if (millis() - last_wps_t > 100) {
     walls_per_second *= 10;
-
-    if (walls_per_second > 40) {
-      Menu_log(LOG_INFO, "WALL");
-      System_stop(system);
-    }
-
+    wall_detected = walls_per_second > 40;
     last_wps_t = millis();
     walls_per_second = 0;
   }
@@ -64,9 +61,8 @@ void Logic_start(void* system) {
   Servo_set_angle(&atmega->us_servo, 0);
 
   UltraSoundSensor_set_event(&atmega->us, US_SENSOR_DISTANCE, "US_SENSOR");
-  EventSystem_reg_listener(
-      EventSystem_instance(),
-      Listener_create_r(system, send_message_and_stop, "US_SENSOR"));
+  EventSystem_reg_listener(EventSystem_instance(),
+                           Listener_create(detect_wall, "US_SENSOR"));
 }
 
 void Logic_drive_infinite(void* system) {
@@ -109,6 +105,22 @@ void drive_logic(System* atmega) {
     Menu_log(LOG_INFO, FMT(SENSORS_MESSAGE, left, mid, right));
     Menu_log(LOG_DEBUG, FMT(SENSORS_DEBUG_MESSAGE, (int)left_measure,
                             (int)mid_measure, (int)right_measure));
+  }
+
+  static uint8_t wall_phase = 0;
+
+  if (wall_detected && wall_phase == 0) {
+    Servo_set_angle(&atmega->us_servo, -90);
+    turn_right(atmega, may_log);
+    _delay_ms(250);
+    wall_phase = 1;
+    return;
+  } else if (wall_phase == 1) {
+    if (wall_detected) {
+      drive_forward(atmega, may_log);
+    } else {
+      turn_left(atmega, may_log);
+    }
   }
 
   if (left && mid && right && !seeing_start && may_see_start) {
