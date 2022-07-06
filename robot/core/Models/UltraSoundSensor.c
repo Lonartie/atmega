@@ -12,6 +12,7 @@
 static Pin echo_pin_inst;
 static uint16_t echo_start_us = 0;
 static uint16_t echo_duration = 0;
+static uint16_t last_echo_duration = 0;
 static bool echo_ready_read = true;
 static uint8_t event_distance_instance = 255;
 static bool manual_mode = false;
@@ -85,25 +86,28 @@ void UltraSoundSensor_trigger(UltraSoundSensor* _this) {
 }
 
 uint8_t UltraSoundSensor_get_distance(UltraSoundSensor* _this) {
-  while (!echo_ready_read)
-    ;
+  while (!echo_ready_read) {
+  }
 
   manual_mode = true;
   UltraSoundSensor_trigger(_this);
   uint32_t start = millis();
-  while (!echo_ready_read && millis() - start < 200)
-    ;
+  while (!echo_ready_read && millis() - start < 200) {
+  }
   manual_mode = false;
   return duration_to_distance(echo_duration);
 }
 
 void UltraSoundSensor_update(void* obj) {
   if (echo_ready_read) {
-    if (duration_to_distance(echo_duration) <= event_distance_instance) {
-      EventSystem_send_event(EventSystem_instance(),
-                             Event_create(((UltraSoundSensor*)obj)->event));
-    }
+    last_echo_duration = echo_duration;
+    EventSystem_send_event(EventSystem_instance(),
+                           Event_create(((UltraSoundSensor*)obj)->event));
 
     UltraSoundSensor_trigger((UltraSoundSensor*)obj);
   }
+}
+
+uint16_t UltraSoundSensor_dist(UltraSoundSensor* _this MAYBE_UNUSED) {
+  return duration_to_distance(last_echo_duration);
 }

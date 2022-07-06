@@ -32,4 +32,6 @@ uint8_t UltraSoundSensor_get_distance(UltraSoundSensor* _this);
 /// @brief updates the UltraSoundSensor to check for event trigger
 void UltraSoundSensor_update(void* obj);
 
+uint16_t UltraSoundSensor_dist(UltraSoundSensor* _this);
+
 #endif  // ULTRA_SOUND_SENSOR_H
