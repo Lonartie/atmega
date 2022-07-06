@@ -123,12 +123,15 @@ void drive_logic(System* atmega) {
     wall_phase = 1;
     return;
   } else if (wall_phase == 1) {
+    Menu_log(LOG_INFO, FMT("wall: %d", (int)wall_detected));
     if (wall_detected) {
       Menu_log(LOG_INFO, "phase 1 fw\n");
       drive_forward(atmega, may_log);
+      return;
     } else {
       Menu_log(LOG_INFO, "phase 1 tr\n");
       turn_left(atmega, may_log);
+      return;
     }
   }
 
