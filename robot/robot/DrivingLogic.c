@@ -79,6 +79,7 @@ void drive_logic(System* atmega) {
   static State state = STATE_LNF;
   static bool lleft = false, lmid = false, lright = false;
   static uint32_t last_time = 0;
+  static bool may_see_start = true;
   static bool seeing_start = false;
   static uint64_t time_seeing_start = 0;
 
@@ -108,12 +109,14 @@ void drive_logic(System* atmega) {
                             (int)mid_measure, (int)right_measure));
   }
 
-  if (left && mid && right && !seeing_start) {
+  if (left && mid && right && !seeing_start && may_see_start) {
     seeing_start = true;
+    may_see_start = false;
     time_seeing_start = micros();
     Menu_log(LOG_INFO, "reset time");
   } else if (!left || !mid || !right) {
     seeing_start = false;
+    may_see_start = true;
   }
 
   if (seeing_start) {
