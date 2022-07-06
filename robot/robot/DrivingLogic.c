@@ -146,8 +146,8 @@ void drive_logic(System* atmega) {
       drive_forward(atmega, may_log);
       return;
     } else {
-      Menu_log(LOG_INFO, "phase 1 tl\n");
-      turn_left(atmega, may_log);
+      Menu_log(LOG_INFO, "phase 1 tr\n");
+      turn_right(atmega, may_log);
       return;
     }
   }
