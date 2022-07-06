@@ -111,6 +111,7 @@ void drive_logic(System* atmega) {
   if (left && mid && right && !seeing_start) {
     seeing_start = true;
     time_seeing_start = micros();
+    Menu_log(LOG_INFO, "reset time");
   } else {
     seeing_start = false;
   }
