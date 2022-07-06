@@ -7,6 +7,7 @@
 #include "EventSystem/HardwareTimer.h"
 #include "Models/Menu.h"
 #include "Models/System.h"
+#include "Models/WatchDog.h"
 
 const int SPEED_DRIVE_SLOW = 0;
 const int SPEED_DRIVE = 200;
@@ -130,6 +131,10 @@ void drive_logic(System* atmega) {
     if (rounds == 4) {
       rounds = 0;
       System_stop(atmega);
+      Menu_log(LOG_DEBUG, "Reset in 5 secs...");
+      _delay_ms(1000);
+      watchdog_init(SEC_4);
+      _delay_ms(5000);
       return;
     }
 
