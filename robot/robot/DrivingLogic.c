@@ -49,13 +49,15 @@ void detect_wall(void* system) {
   static uint32_t last_detected = 0;
   System* atmega = (System*)system;
 
-  if (micros() - last_detected < 1000000 &&
+  wall_detected = UltraSoundSensor_dist(&atmega->us) <= dist_threshold;
+
+  /*if (micros() - last_detected < 1000000 &&
       UltraSoundSensor_dist(&atmega->us) <= dist_threshold) {
     last_detected = micros();
     wall_detected = true;
   } else {
     wall_detected = false;
-  }
+  }*/
 
   /*if (UltraSoundSensor_dist(&atmega->us) > 20) {
     return;
