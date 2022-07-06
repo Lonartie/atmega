@@ -44,9 +44,15 @@ void turn_right(System* atmega, bool may_log);
 void drive_forward(System* atmega, bool may_log);
 
 void detect_wall(void* system) {
+  static uint32_t last_detected = 0;
   System* atmega = (System*)system;
 
-  wall_detected = UltraSoundSensor_dist(&atmega->us) <= 15;
+  if (micros() - last_detected < 1000000) {
+    last_detected = micros();
+    wall_detected = UltraSoundSensor_dist(&atmega->us) <= 15;
+  } else {
+    wall_detected = false;
+  }
 
   /*if (UltraSoundSensor_dist(&atmega->us) > 20) {
     return;
