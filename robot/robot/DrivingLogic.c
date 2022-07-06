@@ -121,8 +121,10 @@ void drive_logic(System* atmega) {
   }
 
   static uint8_t wall_phase = 0;
+  static uint32_t init_t = 0;
 
   if (wall_detected && wall_phase == 0) {
+    init_t = micros();
     Menu_log(LOG_INFO, "phase 0 -> 1\n");
     Servo_set_angle(&atmega->us_servo, -90);
     turn_right(atmega, may_log);
@@ -131,7 +133,7 @@ void drive_logic(System* atmega) {
     return;
   } else if (wall_phase == 1) {
     Menu_log(LOG_INFO, FMT("wall: %d\n", (int)wall_detected));
-    if (mid) {
+    if (mid && micros() - init_t >= 1000000) {
       Menu_log(LOG_INFO, "found track again\n");
       wall_detected = false;
       turn_right(atmega, may_log);
