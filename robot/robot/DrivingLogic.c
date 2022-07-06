@@ -128,14 +128,16 @@ void drive_logic(System* atmega) {
   if (wall_detected && wall_phase == 0) {
     init_t = micros();
     Menu_log(LOG_INFO, "phase 0 -> 1\n");
-    Servo_set_angle(&atmega->us_servo, -90);
     turn_right(atmega, may_log);
-    wall_detected = false;
     _delay_ms(250);
     wall_phase = 1;
     dist_threshold = 20;
     return;
   } else if (wall_phase == 1) {
+    Servo_set_angle(&atmega->us_servo, -90);
+    wall_detected = false;
+    wall_phase = 2;
+  } else if (wall_detected && wall_phase == 2) {
     Menu_log(LOG_INFO, FMT("wall: %d\n", (int)wall_detected));
     if (mid && micros() - init_t >= 1000000) {
       Menu_log(LOG_INFO, "found track again\n");
@@ -145,11 +147,11 @@ void drive_logic(System* atmega) {
       wall_phase = 0;
       dist_threshold = 15;
     } else if (wall_detected) {
-      Menu_log(LOG_INFO, "phase 1 fw\n");
+      Menu_log(LOG_INFO, "phase 2 fw\n");
       drive_forward(atmega, may_log);
       return;
     } else {
-      Menu_log(LOG_INFO, "phase 1 tl\n");
+      Menu_log(LOG_INFO, "phase 2 tl\n");
       turn_left(atmega, may_log);
       return;
     }
