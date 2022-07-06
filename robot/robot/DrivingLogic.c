@@ -49,9 +49,10 @@ void detect_wall(void* system) {
   static uint32_t last_detected = 0;
   System* atmega = (System*)system;
 
-  if (micros() - last_detected < 1000000) {
+  if (micros() - last_detected < 1000000 &&
+      UltraSoundSensor_dist(&atmega->us)) {
     last_detected = micros();
-    wall_detected = UltraSoundSensor_dist(&atmega->us) <= dist_threshold;
+    wall_detected = true;
   } else {
     wall_detected = false;
   }
@@ -148,8 +149,9 @@ void drive_logic(System* atmega) {
     if (mid && micros() - init_t >= 1000000) {
       Menu_log(LOG_INFO, "found track again\n");
       wall_detected = false;
-      turn_right(atmega, may_log);
       Servo_set_angle(&atmega->us_servo, 0);
+      _delay_ms(250);
+      turn_right(atmega, may_log);
       wall_phase = 0;
       dist_threshold = 15;
     } else if (wall_detected) {
