@@ -54,10 +54,10 @@ void detect_wall(void* system) {
   static uint32_t last_wps_t = 0;
   walls_per_second++;
 
-  if (millis() - last_wps_t > 100) {
+  if (micros() - last_wps_t > 100000) {
     walls_per_second *= 10;
     wall_detected = (walls_per_second > 30);
-    last_wps_t = millis();
+    last_wps_t = micros();
     walls_per_second = 0;
   }
 }
