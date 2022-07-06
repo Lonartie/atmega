@@ -135,6 +135,7 @@ void drive_logic(System* atmega) {
     return;
   } else if (wall_phase == 1) {
     Servo_set_angle(&atmega->us_servo, -90);
+    _delay_ms(100);
     wall_detected = false;
     wall_phase = 2;
   } else if (wall_detected && wall_phase == 2) {
