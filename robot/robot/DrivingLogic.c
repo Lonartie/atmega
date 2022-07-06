@@ -115,7 +115,12 @@ void drive_logic(System* atmega) {
     seeing_start = false;
   }
 
-  if (seeing_start && millis() - time_seeing_start >= 150) {
+  if (seeing_start) {
+    Menu_log(LOG_INFO,
+             FMT("start for %d ms", (int)(millis() - time_seeing_start)));
+  }
+
+  if (seeing_start && millis() - time_seeing_start >= 50) {
     Menu_log(LOG_INFO, "start block!");
     seeing_start = false;
   }
