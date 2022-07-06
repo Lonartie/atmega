@@ -129,6 +129,10 @@ void drive_logic(System* atmega) {
     rounds++;
     Menu_log(LOG_INFO, FMT("Round %d/3\n", rounds));
     seeing_start = false;
+
+    if (rounds == 3) {
+      System_stop(atmega);
+    }
   }
 
   // there are rare cases where 011 -> 010 -> 000 is detected so
