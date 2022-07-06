@@ -7,9 +7,11 @@
 #include "Models/Menu.h"
 #include "Models/PWM.h"
 #include "Models/System.h"
+#include "Models/WatchDog.h"
 
 int MAIN() {
   // initializes globals
+  stop_watchdog();  // if resetted through watchdog, disable immediately
   timer_init();
   PWM_init();
   Menu_init("car_start", "car_stop");

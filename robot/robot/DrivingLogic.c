@@ -62,10 +62,10 @@ void Logic_start(void* system) {
   System* atmega = (System*)system;
   Servo_set_angle(&atmega->us_servo, 0);
 
-  UltraSoundSensor_set_event(&atmega->us, US_SENSOR_DISTANCE, "US_SENSOR");
-  EventSystem_reg_listener(
-      EventSystem_instance(),
-      Listener_create_r(system, send_message_and_stop, "US_SENSOR"));
+  // UltraSoundSensor_set_event(&atmega->us, US_SENSOR_DISTANCE, "US_SENSOR");
+  // EventSystem_reg_listener(
+  //     EventSystem_instance(),
+  //     Listener_create_r(system, send_message_and_stop, "US_SENSOR"));
 }
 
 void Logic_drive_infinite(void* system) {
@@ -82,6 +82,7 @@ void drive_logic(System* atmega) {
   static bool may_see_start = true;
   static bool seeing_start = false;
   static uint64_t time_seeing_start = 0;
+  static uint8_t rounds = 0;
 
   if (!atmega->started) return;
 
@@ -119,13 +120,14 @@ void drive_logic(System* atmega) {
     may_see_start = true;
   }
 
-  if (seeing_start) {
-    Menu_log(LOG_INFO, FMT("start for %d ms\n",
-                           (int)((micros() - time_seeing_start) / 1000)));
-  }
+  // if (seeing_start) {
+  //   Menu_log(LOG_INFO, FMT("start for %d ms\n",
+  //                          (int)((micros() - time_seeing_start) / 1000)));
+  // }
 
   if (seeing_start && (micros() - time_seeing_start) / 1000 >= 50) {
-    Menu_log(LOG_INFO, "start block!\n");
+    rounds++;
+    Menu_log(LOG_INFO, FMT("Round %d/3\n", rounds));
     seeing_start = false;
   }
 
