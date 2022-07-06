@@ -114,7 +114,6 @@ void drive_logic(System* atmega) {
     seeing_start = true;
     may_see_start = false;
     time_seeing_start = micros();
-    Menu_log(LOG_INFO, "reset time");
   } else if (!left || !mid || !right) {
     seeing_start = false;
     may_see_start = true;
@@ -127,12 +126,14 @@ void drive_logic(System* atmega) {
 
   if (seeing_start && (micros() - time_seeing_start) / 1000 >= 50) {
     rounds++;
+
+    if (rounds == 4) {
+      System_stop(atmega);
+      return;
+    }
+
     Menu_log(LOG_INFO, FMT("Round %d/3\n", rounds));
     seeing_start = false;
-
-    if (rounds == 3) {
-      System_stop(atmega);
-    }
   }
 
   // there are rare cases where 011 -> 010 -> 000 is detected so
