@@ -46,7 +46,9 @@ void drive_forward(System* atmega, bool may_log);
 void detect_wall(void* system) {
   System* atmega = (System*)system;
 
-  if (UltraSoundSensor_dist(&atmega->us) > 20) {
+  wall_detected = UltraSoundSensor_dist(&atmega->us) <= 15;
+
+  /*if (UltraSoundSensor_dist(&atmega->us) > 20) {
     return;
   }
 
@@ -58,7 +60,7 @@ void detect_wall(void* system) {
     wall_detected = (walls_per_second > 2);
     last_wps_t = micros();
     walls_per_second = 0;
-  }
+  }*/
 }
 
 void Logic_start(void* system) {
