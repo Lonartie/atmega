@@ -49,7 +49,7 @@ void send_message_and_stop(void* system) {
   if (millis() - last_wps_t > 100) {
     walls_per_second *= 10;
 
-    if (walls_per_second > 35) {
+    if (walls_per_second > 40) {
       Menu_log(LOG_INFO, "WALL");
       System_stop(system);
     }
@@ -63,10 +63,10 @@ void Logic_start(void* system) {
   System* atmega = (System*)system;
   Servo_set_angle(&atmega->us_servo, 0);
 
-  // UltraSoundSensor_set_event(&atmega->us, US_SENSOR_DISTANCE, "US_SENSOR");
-  // EventSystem_reg_listener(
-  //     EventSystem_instance(),
-  //     Listener_create_r(system, send_message_and_stop, "US_SENSOR"));
+  UltraSoundSensor_set_event(&atmega->us, US_SENSOR_DISTANCE, "US_SENSOR");
+  EventSystem_reg_listener(
+      EventSystem_instance(),
+      Listener_create_r(system, send_message_and_stop, "US_SENSOR"));
 }
 
 void Logic_drive_infinite(void* system) {
@@ -131,7 +131,7 @@ void drive_logic(System* atmega) {
     if (rounds == 4) {
       rounds = 0;
       System_stop(atmega);
-      Menu_log(LOG_DEBUG, "Reset in 5 secs...");
+      Menu_log(LOG_DEBUG, "Reset in 5 secs...\n");
       _delay_ms(1000);
       watchdog_init(SEC_4);
       _delay_ms(5000);
