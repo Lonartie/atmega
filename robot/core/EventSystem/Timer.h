@@ -2,9 +2,10 @@
 #define TIMER_H
 
 #include <stdint.h>
+
 #include "../Misc/String.h"
 
-typedef void(*TimerCallback)();
+typedef void (*TimerCallback)();
 
 /// @brief a timer that sends events in millisecond intervals
 typedef struct Timer {
@@ -28,4 +29,4 @@ void Timer_stop(Timer* timer);
 /// @brief updates the given timer
 void Timer_update(void* obj);
 
-#endif // TIMER_H
+#endif  // TIMER_H

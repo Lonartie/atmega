@@ -7,7 +7,8 @@
 typedef struct Updater {
   void* object;
 
-  /// @brief an update function that the event system will call every time period
+  /// @brief an update function that the event system will call every time
+  /// period
   /// @param object receiver of the update function
   void (*update)(void* object);
 } Updater;
@@ -20,4 +21,4 @@ DECLARE_VECTORS(Updater);
 /// @returns a new updater with the specified update function
 Updater Updater_create(void* object, void (*update)(void* object));
 
-#endif // UPDATER_H
+#endif  // UPDATER_H

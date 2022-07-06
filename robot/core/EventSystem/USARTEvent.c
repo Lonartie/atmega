@@ -1,16 +1,17 @@
 #include "USARTEvent.h"
-#include "EventSystem.h"
-#include "Models/USART.h"
-#include <avr/io.h>
+
 #include <avr/interrupt.h>
+#include <avr/io.h>
 #include <stdlib.h>
 
+#include "EventSystem.h"
+#include "Models/USART.h"
+
 static bool initialized = false;
-static char* volatile  data;
+static char* volatile data;
 static volatile bool ready_read = false;
 
-USARTEvent USARTEvent_create(String event)
-{
+USARTEvent USARTEvent_create(String event) {
   if (!initialized) {
     data = NULL;
     initialized = true;
@@ -23,24 +24,24 @@ USARTEvent USARTEvent_create(String event)
   return usart_event;
 }
 
-void USARTEvent_start(USARTEvent* _this)
-{
-  EventSystem_reg_updater(EventSystem_instance(), Updater_create(_this, USARTEvent_update));
+void USARTEvent_start(USARTEvent* _this) {
+  EventSystem_reg_updater(EventSystem_instance(),
+                          Updater_create(_this, USARTEvent_update));
 }
 
-void USARTEvent_stop(USARTEvent* _this)
-{
-  EventSystem_unreg_updater(EventSystem_instance(), Updater_create(_this, USARTEvent_update));
+void USARTEvent_stop(USARTEvent* _this) {
+  EventSystem_unreg_updater(EventSystem_instance(),
+                            Updater_create(_this, USARTEvent_update));
 }
 
-void USARTEvent_update(void* _this)
-{
+void USARTEvent_update(void* _this) {
   USARTEvent* usart_event = (USARTEvent*)_this;
   if (ready_read) {
     // send event
     ready_read = false;
     usart_event->data = data;
-    EventSystem_send_event(EventSystem_instance(), Event_create(usart_event->event));
+    EventSystem_send_event(EventSystem_instance(),
+                           Event_create(usart_event->event));
 
     // after event system has handled the event, free the data
     free(data);
@@ -49,9 +50,8 @@ void USARTEvent_update(void* _this)
   }
 }
 
-ISR(USART_RX_vect)
-{
-  data = (char*) malloc(sizeof(char) * 1);
+ISR(USART_RX_vect) {
+  data = (char*)malloc(sizeof(char) * 1);
   uint8_t i = 0;
 
   // get the whole message
@@ -60,7 +60,7 @@ ISR(USART_RX_vect)
     if (data[i] == '\r') {
       break;
     }
-    data = (char*) realloc(data, sizeof(char) * (i + 1));
+    data = (char*)realloc(data, sizeof(char) * (i + 1));
     ++i;
   }
 

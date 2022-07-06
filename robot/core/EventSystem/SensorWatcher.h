@@ -1,13 +1,13 @@
 #ifndef SENSOR_WATCHER_H
 #define SENSOR_WATCHER_H
 
-#include "Misc/Utils.h"
 #include "Misc/String.h"
+#include "Misc/Utils.h"
 #include "Models/Pin.h"
 
-/// @brief watches a sensor (pin) and triggers an event when the sensor has changed state
-typedef struct SensorWatcher
-{
+/// @brief watches a sensor (pin) and triggers an event when the sensor has
+/// changed state
+typedef struct SensorWatcher {
   Pin pin;
   String event;
   bool last_state;
@@ -28,4 +28,4 @@ void SensorWatcher_stop(SensorWatcher* _this);
 /// @brief updates the watcher
 void SensorWatcher_update(void* _this);
 
-#endif // SENSOR_WATCHER_H
+#endif  // SENSOR_WATCHER_H

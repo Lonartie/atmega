@@ -13,4 +13,4 @@ void USARTEvent_start(USARTEvent* _this);
 void USARTEvent_stop(USARTEvent* _this);
 void USARTEvent_update(void* _this);
 
-#endif // USART_EVENT_H
+#endif  // USART_EVENT_H

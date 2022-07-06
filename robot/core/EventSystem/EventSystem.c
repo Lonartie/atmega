@@ -1,21 +1,21 @@
 #include "EventSystem.h"
-#include "Misc/Utils.h"
+
 #include <stdbool.h>
+
+#include "Misc/Utils.h"
 
 #define USE_EVENT_QUEUE_DELAY false
 #if USE_EVENT_QUEUE_DELAY == true
-# include <util/delay.h>
+#include <util/delay.h>
 #endif
 
 static const uint64_t EVENT_PERIOD_US MAYBE_UNUSED = 100;
 
-EventSystem* EventSystem_instance()
-{
+EventSystem* EventSystem_instance() {
   static EventSystem instance;
   static bool initialized = false;
 
-  if (!initialized) 
-  {
+  if (!initialized) {
     instance.updaters = Vector_Updater_16_create();
     instance.listeners = Vector_Listener_64_create();
     instance.exit_flag = false;
@@ -26,45 +26,36 @@ EventSystem* EventSystem_instance()
   return &instance;
 }
 
-void EventSystem_reg_updater(EventSystem* _this, Updater updater)
-{
+void EventSystem_reg_updater(EventSystem* _this, Updater updater) {
   Vector_Updater_16_push_back(&_this->updaters, updater);
 }
 
-void EventSystem_unreg_updater(EventSystem* _this, Updater updater)
-{
+void EventSystem_unreg_updater(EventSystem* _this, Updater updater) {
   for (uint64_t i = 0; i < _this->updaters.size; i++)
-    if (_this->updaters.data[i].update == updater.update && 
-        _this->updaters.data[i].object == updater.object)
-    {
+    if (_this->updaters.data[i].update == updater.update &&
+        _this->updaters.data[i].object == updater.object) {
       Vector_Updater_16_erase(&_this->updaters, i);
       return;
     }
 }
 
-void EventSystem_reg_listener(EventSystem* _this, Listener listener)
-{
+void EventSystem_reg_listener(EventSystem* _this, Listener listener) {
   Vector_Listener_64_push_back(&_this->listeners, listener);
 }
 
-void EventSystem_unreg_listener(EventSystem* _this, Listener listener)
-{
+void EventSystem_unreg_listener(EventSystem* _this, Listener listener) {
   for (uint64_t i = 0; i < _this->listeners.size; i++)
-    if (_this->listeners.data[i].callback == listener.callback && 
-        String_equals(_this->listeners.data[i].event, listener.event))
-    {
+    if (_this->listeners.data[i].callback == listener.callback &&
+        String_equals(_this->listeners.data[i].event, listener.event)) {
       Vector_Listener_64_erase(&_this->listeners, i);
       return;
     }
 }
 
-void EventSystem_send_event(EventSystem* _this, Event event)
-{
+void EventSystem_send_event(EventSystem* _this, Event event) {
   // find listeners for this event
-  for (uint64_t j = 0; j < _this->listeners.size; ++j) 
-  {
-    if (String_equals(event.event, _this->listeners.data[j].event)) 
-    {
+  for (uint64_t j = 0; j < _this->listeners.size; ++j) {
+    if (String_equals(event.event, _this->listeners.data[j].event)) {
       Listener* listener = &_this->listeners.data[j];
       if (listener->callback_r != NULL)
         listener->callback_r(listener->receiver);
@@ -74,10 +65,8 @@ void EventSystem_send_event(EventSystem* _this, Event event)
   }
 }
 
-void EventSystem_run(EventSystem* _this)
-{
-  while (!_this->exit_flag)
-  {
+void EventSystem_run(EventSystem* _this) {
+  while (!_this->exit_flag) {
 #if USE_EVENT_QUEUE_DELAY == true
     _delay_us(EVENT_PERIOD_US);
 #endif
@@ -87,7 +76,4 @@ void EventSystem_run(EventSystem* _this)
   }
 }
 
-void EventSystem_exit(EventSystem* _this)
-{
-  _this->exit_flag = true;
-}
+void EventSystem_exit(EventSystem* _this) { _this->exit_flag = true; }

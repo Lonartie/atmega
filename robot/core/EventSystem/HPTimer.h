@@ -2,6 +2,7 @@
 #define HPTIMER_H
 
 #include <stdint.h>
+
 #include "../Misc/String.h"
 
 /// @brief a high precision timer that sends events in microsecond intervals
@@ -11,7 +12,8 @@ typedef struct HPTimer {
   String event;
 } HPTimer;
 
-/// @brief creates a new high precision timer with the specified event and interval
+/// @brief creates a new high precision timer with the specified event and
+/// interval
 HPTimer HPTimer_create(uint64_t interval_us, String event);
 
 /// @brief starts the given timer
@@ -23,4 +25,4 @@ void HPTimer_stop(HPTimer* timer);
 /// @brief updates the given timer
 void HPTimer_update(void* obj);
 
-#endif // TIMER_H
+#endif  // TIMER_H

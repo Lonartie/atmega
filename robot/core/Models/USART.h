@@ -1,16 +1,16 @@
 #ifndef SERIAL_H
 #define SERIAL_H
 
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
 
 /// @brief a serial port
 typedef struct USART {
   long ubrr;
-  bool heap;    //< whether or not the object is allocated on the heap
+  bool heap;  //< whether or not the object is allocated on the heap
 } USART;
 
-/// @returns the static singleton instance 
+/// @returns the static singleton instance
 USART* USART_instance();
 
 /// @brief sends a single byte through the USART
@@ -23,4 +23,4 @@ void USART_send_str(USART* usart, const char* str);
 /// @returns the received byte
 char USART_recv_byte(USART* usart);
 
-#endif // SERIAL_H
+#endif  // SERIAL_H

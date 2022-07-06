@@ -1,13 +1,14 @@
 #ifndef EVENT_QUEUE_H
 #define EVENT_QUEUE_H
 
+#include "../Misc/String.h"
 #include "Event.h"
 #include "Listener.h"
 #include "Updater.h"
-#include "../Misc/String.h"
 
 /// @brief the event system that can be used to send events and listen for them
-/// @note this is designed to be used as a singleton with 'EventSystem_instance()'
+/// @note this is designed to be used as a singleton with
+/// 'EventSystem_instance()'
 typedef struct EventSystem {
   Vector_Updater_16 updaters;
   Vector_Listener_64 listeners;
@@ -38,4 +39,4 @@ void EventSystem_run(EventSystem* _this);
 /// @brief exits the event system
 void EventSystem_exit(EventSystem* _this);
 
-#endif // EVENT_QUEUE_H
+#endif  // EVENT_QUEUE_H

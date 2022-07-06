@@ -1,10 +1,12 @@
 #include "DrivingLogic.h"
-#include "Models/System.h"
-#include "Models/Menu.h"
-#include "EventSystem/HardwareTimer.h"
-#include "EventSystem/EventSystem.h"
+
 #include <stdbool.h>
 #include <util/delay.h>
+
+#include "EventSystem/EventSystem.h"
+#include "EventSystem/HardwareTimer.h"
+#include "Models/Menu.h"
+#include "Models/System.h"
 
 const int SPEED_DRIVE_SLOW = 0;
 const int SPEED_DRIVE = 200;
@@ -33,27 +35,20 @@ typedef enum State {
   STATE_TRN_RIGHT
 } State;
 
-static State state = STATE_LNF;
-static bool may_log = false;
+void drive_logic(System* atmega);
+void turn_left(System* atmega, bool may_log);
+void turn_right(System* atmega, bool may_log);
+void drive_forward(System* atmega, bool may_log);
 
-void turn_left(System* atmega);
-void turn_right(System* atmega);
-void drive_forward(System* atmega);
-
-static uint64_t last_t = 0;
-static uint8_t walls_per_second = 0;
-static uint32_t last_wps_t = 0;
-
-
-void send_message_and_stop(void* system)
-{
+void send_message_and_stop(void* system) {
+  static uint8_t walls_per_second = 0;
+  static uint32_t last_wps_t = 0;
   walls_per_second++;
 
   if (millis() - last_wps_t > 100) {
     walls_per_second *= 10;
 
-    if (walls_per_second > 35) 
-    {
+    if (walls_per_second > 35) {
       Menu_log(LOG_INFO, "WALL");
       System_stop(system);
     }
@@ -63,39 +58,40 @@ void send_message_and_stop(void* system)
   }
 }
 
-void Logic_start(void* system)
-{
-	System* atmega = (System*) system;
+void Logic_start(void* system) {
+  System* atmega = (System*)system;
   Servo_set_angle(&atmega->us_servo, 0);
 
   UltraSoundSensor_set_event(&atmega->us, US_SENSOR_DISTANCE, "US_SENSOR");
-  EventSystem_reg_listener(EventSystem_instance(), Listener_create_r(system, send_message_and_stop, "US_SENSOR"));
+  EventSystem_reg_listener(
+      EventSystem_instance(),
+      Listener_create_r(system, send_message_and_stop, "US_SENSOR"));
 }
 
-void Logic_drive(void* system) {
+void Logic_drive_infinite(void* system) {
+  System* atmega = (System*)system;
+  drive_logic(atmega);
+}
 
-	System* atmega = (System*) system;
+void Logic_drive_3_rounds(void* system MAYBE_UNUSED) {}
 
+void drive_logic(System* atmega) {
+  static State state = STATE_LNF;
   static bool lleft = false, lmid = false, lright = false;
   static uint32_t last_time = 0;
 
-  if (!atmega->started)
-    return;
+  if (!atmega->started) return;
 
   uint16_t left_measure = ADCPin_read_avg(&atmega->lf_left, 10);
   uint16_t mid_measure = ADCPin_read_avg(&atmega->lf_middle, 10);
   uint16_t right_measure = ADCPin_read_avg(&atmega->lf_right, 10);
 
-	bool left = left_measure > MEASURE_THRESHOLD_LEFT;
-	bool mid = mid_measure > MEASURE_THRESHOLD_MID;
-	bool right = right_measure > MEASURE_THRESHOLD_RIGHT;
+  bool left = left_measure > MEASURE_THRESHOLD_LEFT;
+  bool mid = mid_measure > MEASURE_THRESHOLD_MID;
+  bool right = right_measure > MEASURE_THRESHOLD_RIGHT;
 
+  bool may_log = false;
   uint32_t new_time = millis();
-  // if (new_time - last_t > 1000) {
-  //   last_t = new_time;
-  //   uint8_t us_distance = UltraSoundSensor_get_distance(&atmega->us);
-  //   Menu_log(LOG_DEBUG, FMT(US_SENSOR_MESSAGE, (int) us_distance));
-  // }
 
   if (left != lleft || mid != lmid || right != lright) {
     // update lights and sends log messages
@@ -106,62 +102,69 @@ void Logic_drive(void* system) {
     last_time = new_time;
     Menu_log(LOG_DEBUG, FMT(TIMER_MESSAGE, time_diff));
     Menu_log(LOG_INFO, FMT(SENSORS_MESSAGE, left, mid, right));
-    Menu_log(LOG_DEBUG, FMT(SENSORS_DEBUG_MESSAGE, (int) left_measure, (int) mid_measure, (int) right_measure));
+    Menu_log(LOG_DEBUG, FMT(SENSORS_DEBUG_MESSAGE, (int)left_measure,
+                            (int)mid_measure, (int)right_measure));
   }
 
-  // there are rare cases where 011 -> 010 -> 000 is detected so 
+  // there are rare cases where 011 -> 010 -> 000 is detected so
   // we need to memorize the x0x side and turn the car afterwards
-  // so it doesn't drive away from the black line 
-  State memorized_state = 
-    state == STATE_DRV_FW_ML ? STATE_DRV_FW_ML : 
-    state == STATE_DRV_FW_MR ? STATE_DRV_FW_MR : 
-                               STATE_DRV_FW; 
+  // so it doesn't drive away from the black line
+  State memorized_state = state == STATE_DRV_FW_ML   ? STATE_DRV_FW_ML
+                          : state == STATE_DRV_FW_MR ? STATE_DRV_FW_MR
+                                                     : STATE_DRV_FW;
 
   // update state
-  if      (mid && left)               state = STATE_DRV_FW_ML;
-  else if (mid && right)              state = STATE_DRV_FW_MR;
-  else if (mid)                       state = memorized_state;
-  else if (left)                      state = STATE_TRN_LEFT;
-  else if (right)                     state = STATE_TRN_RIGHT;
-  else if (state == STATE_DRV_FW_ML)  state = STATE_TRN_LEFT;
-  else if (state == STATE_DRV_FW_MR)  state = STATE_TRN_RIGHT;
+  if (mid && left) {
+    state = STATE_DRV_FW_ML;
+  } else if (mid && right) {
+    state = STATE_DRV_FW_MR;
+  } else if (mid) {
+    state = memorized_state;
+  } else if (left) {
+    state = STATE_TRN_LEFT;
+  } else if (right) {
+    state = STATE_TRN_RIGHT;
+  } else if (state == STATE_DRV_FW_ML) {
+    state = STATE_TRN_LEFT;
+  } else if (state == STATE_DRV_FW_MR) {
+    state = STATE_TRN_RIGHT;
+  }
 
   // execute state
   switch (state) {
-    case STATE_LNF:       // fall through
-    case STATE_DRV_FW:    // fall through
-    case STATE_DRV_FW_ML: // fall through
-    case STATE_DRV_FW_MR: drive_forward(atmega); break;
-    case STATE_TRN_LEFT:  turn_left(atmega); break;
-    case STATE_TRN_RIGHT: turn_right(atmega); break;
+    case STATE_LNF:        // fall through
+    case STATE_DRV_FW:     // fall through
+    case STATE_DRV_FW_ML:  // fall through
+    case STATE_DRV_FW_MR:
+      drive_forward(atmega, may_log);
+      break;
+    case STATE_TRN_LEFT:
+      turn_left(atmega, may_log);
+      break;
+    case STATE_TRN_RIGHT:
+      turn_right(atmega, may_log);
+      break;
   }
 
-  lleft    = left;
-  lmid     = mid;
-  lright   = right;
-  may_log  = false;
+  lleft = left;
+  lmid = mid;
+  lright = right;
 }
 
-void turn_left(System* atmega)
-{
+void turn_left(System* atmega, bool may_log) {
   if (may_log) Menu_log(LOG_DEBUG, TURN_LEFT_MESSAGE);
   Motor_drive_backward(&atmega->mt_left, SPEED_TURN);
   Motor_drive_forward(&atmega->mt_right, SPEED_TURN);
-  // Servo_set_angle(&atmega->us_servo, -90);
 }
 
-void turn_right(System* atmega)
-{
+void turn_right(System* atmega, bool may_log) {
   if (may_log) Menu_log(LOG_DEBUG, TURN_RIGHT_MESSAGE);
   Motor_drive_forward(&atmega->mt_left, SPEED_TURN);
   Motor_drive_backward(&atmega->mt_right, SPEED_TURN);
-  // Servo_set_angle(&atmega->us_servo, 90);
 }
 
-void drive_forward(System* atmega)
-{
+void drive_forward(System* atmega, bool may_log) {
   if (may_log) Menu_log(LOG_DEBUG, DRIVE_FORWARD_MESSAGE);
   Motor_drive_forward(&atmega->mt_left, SPEED_DRIVE);
   Motor_drive_forward(&atmega->mt_right, SPEED_DRIVE);
-  // Servo_set_angle(&atmega->us_servo, 0);
 }

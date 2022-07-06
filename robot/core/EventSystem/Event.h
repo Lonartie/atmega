@@ -6,8 +6,7 @@
 
 /// @brief the event type that can be send to the event system
 /// @note in the future this may contain additional event data
-typedef struct Event
-{
+typedef struct Event {
   String event;
 } Event;
 
@@ -17,4 +16,4 @@ DECLARE_VECTORS(Event);
 /// @returns a new event with the specified event name
 Event Event_create(String event);
 
-#endif // EVENT_H
+#endif  // EVENT_H

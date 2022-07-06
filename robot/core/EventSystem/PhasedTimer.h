@@ -1,13 +1,13 @@
 #ifndef PHASED_TIMER_H
 #define PHASED_TIMER_H
 
-#include "Misc/Utils.h"
 #include "../Misc/String.h"
 #include "../Misc/Vector.h"
+#include "Misc/Utils.h"
 
-/// @brief a phased timer that can send events with different intervals (up to 8)
-typedef struct PhasedTimer
-{
+/// @brief a phased timer that can send events with different intervals (up to
+/// 8)
+typedef struct PhasedTimer {
   Vector_long_8 phases;
   String event;
   uint64_t last_time_ms;
@@ -29,4 +29,4 @@ void PhasedTimer_stop(PhasedTimer* timer);
 /// @brief updates the given timer
 void PhasedTimer_update(void* obj);
 
-#endif // PHASED_TIMER_H
+#endif  // PHASED_TIMER_H

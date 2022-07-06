@@ -2,6 +2,7 @@
 #define DRIVING_LOGIC_H
 
 void Logic_start(void* system);
-void Logic_drive(void* system);
+void Logic_drive_infinite(void* system);
+void Logic_drive_3_rounds(void* system);
 
-#endif // DRIVING_LOGIC_H
+#endif  // DRIVING_LOGIC_H

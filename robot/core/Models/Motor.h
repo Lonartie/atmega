@@ -4,8 +4,7 @@
 #include "Misc/Utils.h"
 #include "Pin.h"
 
-typedef struct Motor
-{
+typedef struct Motor {
   Pin forward;
   Pin backward;
   uint8_t pwm_pin;
@@ -16,5 +15,4 @@ void Motor_drive_forward(Motor* _this, uint8_t speed);
 void Motor_drive_backward(Motor* _this, uint8_t speed);
 void Motor_stop(Motor* _this);
 
-
-#endif // MOTOR_H
+#endif  // MOTOR_H

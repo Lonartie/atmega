@@ -2,8 +2,8 @@
 
 DEFINE_VECTORS(Listener);
 
-Listener Listener_create_r(void* receiver, ListenerReceiverCallback callback, String event_type)
-{
+Listener Listener_create_r(void* receiver, ListenerReceiverCallback callback,
+                           String event_type) {
   Listener listener;
   listener.receiver = receiver;
   listener.callback = NULL;
@@ -12,8 +12,7 @@ Listener Listener_create_r(void* receiver, ListenerReceiverCallback callback, St
   return listener;
 }
 
-Listener Listener_create(ListenerCallback callback, String event_type)
-{
+Listener Listener_create(ListenerCallback callback, String event_type) {
   Listener listener;
   listener.receiver = NULL;
   listener.callback = callback;
