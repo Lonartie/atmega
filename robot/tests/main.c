@@ -1,7 +1,12 @@
 #include <stdio.h>
 
-int main()
-{
+int main() {
   printf("TESTS\n");
-  return 0; 
+  return 0;
+
+  while (1) {
+    char c = USART_receiveByte();
+    if (c == 'S') {
+    }
+  }
 }

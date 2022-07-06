@@ -79,6 +79,8 @@ void drive_logic(System* atmega) {
   static State state = STATE_LNF;
   static bool lleft = false, lmid = false, lright = false;
   static uint32_t last_time = 0;
+  static bool seeing_start = false;
+  static uint16_t time_seeing_start = 0;
 
   if (!atmega->started) return;
 
@@ -104,6 +106,18 @@ void drive_logic(System* atmega) {
     Menu_log(LOG_INFO, FMT(SENSORS_MESSAGE, left, mid, right));
     Menu_log(LOG_DEBUG, FMT(SENSORS_DEBUG_MESSAGE, (int)left_measure,
                             (int)mid_measure, (int)right_measure));
+  }
+
+  if (left && mid && right && !seeing_start) {
+    seeing_start = true;
+    time_seeing_start = millis();
+  } else {
+    seeing_start = false;
+  }
+
+  if (seeing_start && millis() - time_seeing_start >= 150) {
+    Menu_log(LOG_INFO, "start block!");
+    seeing_start = false;
   }
 
   // there are rare cases where 011 -> 010 -> 000 is detected so
