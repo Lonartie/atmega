@@ -110,6 +110,7 @@ void drive_logic(System* atmega) {
   static uint8_t wall_phase = 0;
 
   if (wall_detected && wall_phase == 0) {
+    Menu_log(LOG_INFO, "phase 0 -> 1\n");
     Servo_set_angle(&atmega->us_servo, -90);
     turn_right(atmega, may_log);
     _delay_ms(250);
@@ -117,8 +118,10 @@ void drive_logic(System* atmega) {
     return;
   } else if (wall_phase == 1) {
     if (wall_detected) {
+      Menu_log(LOG_INFO, "phase 1 fw\n");
       drive_forward(atmega, may_log);
     } else {
+      Menu_log(LOG_INFO, "phase 1 tr\n");
       turn_left(atmega, may_log);
     }
   }
@@ -143,7 +146,7 @@ void drive_logic(System* atmega) {
     if (rounds == 4) {
       rounds = 0;
       System_stop(atmega);
-      Menu_log(LOG_DEBUG, "Reset in 5 secs...\n");
+      Menu_log(LOG_INFO, "Reset in 5 secs...\n");
       _delay_ms(1000);
       watchdog_init(SEC_4);
       _delay_ms(5000);
