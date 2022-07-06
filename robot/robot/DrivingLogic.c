@@ -128,6 +128,7 @@ void drive_logic(System* atmega) {
     rounds++;
 
     if (rounds == 4) {
+      rounds = 0;
       System_stop(atmega);
       return;
     }
