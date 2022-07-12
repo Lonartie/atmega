@@ -55,7 +55,6 @@ void detect_wall(void* system) {
     return;
   }
 
-  Menu_log(LOG_INFO, "d\n");
   if (((uint32_t)micros() - last_t) <= 1000000) {
     wall_detected = true;
   } else {
@@ -98,7 +97,7 @@ void drive_logic(System* atmega) {
   static bool log_1_sec = false;
 
   if (micros() - _time_ >= 500000) {
-    Menu_log(LOG_INFO, FMT("wall: %d\n", wall_detected));
+    // Menu_log(LOG_INFO, FMT("wall: %d\n", wall_detected));
     _time_ = micros();
     log_1_sec = true;
   } else {
