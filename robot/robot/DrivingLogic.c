@@ -57,10 +57,11 @@ void detect_wall(void* system) {
 
   if (micros() - last_t <= 100000) {
     wall_detected = true;
-    last_t = micros();
   } else {
     wall_detected = false;
   }
+
+  last_t = micros();
 }
 
 void Logic_restart(void* system) {
