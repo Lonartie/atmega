@@ -136,7 +136,7 @@ void drive_logic(System* atmega) {
   static uint8_t wall_phase = 0;
   static uint8_t last_wall_phase = UINT8_MAX;
 
-  if (wall_phase >= 2 && mid) {
+  if (wall_phase >= 3 && mid) {
     Menu_log(LOG_INFO, "found track again\n");
     Servo_set_angle(&atmega->us_servo, 0);
     _delay_ms(1000);
