@@ -81,10 +81,14 @@ void drive_logic(System* atmega) {
   static bool seeing_start = false;
   static uint64_t time_seeing_start = 0;
   static uint8_t rounds = 0;
+  static bool log_1_sec = false;
 
   if (micros() - _time_ >= 500000) {
     Menu_log(LOG_INFO, FMT("wall: %d\n", wall_detected));
     _time_ = micros();
+    log_1_sec = true;
+  } else {
+    log_1_sec = false;
   }
 
   if (!atmega->started) return;
@@ -130,9 +134,11 @@ void drive_logic(System* atmega) {
 
   if (wall_detected && wall_phase == 0) {
     // setup phase
+    if (log_1_sec) {
+      Menu_log(LOG_INFO, "p0\n");
+    }
     if (last_wall_phase != wall_phase) {
       init_t = micros();
-      Menu_log(LOG_INFO, "phase 0 ts\n");
       Servo_set_angle(&atmega->us_servo, -90);
       stop_driving(atmega, may_log);
       last_wall_phase = 0;
@@ -147,8 +153,10 @@ void drive_logic(System* atmega) {
 
   else if (wall_phase == 1) {
     // turn right phase
-    if (last_wall_phase != wall_phase) {
+    if (log_1_sec) {
       Menu_log(LOG_INFO, "phase 1 tr\n");
+    }
+    if (last_wall_phase != wall_phase) {
       turn_right(atmega, true);
       last_wall_phase = 1;
     }
@@ -161,8 +169,10 @@ void drive_logic(System* atmega) {
 
   else if (wall_phase == 2) {
     // drive forward phase
-    if (last_wall_phase != wall_phase) {
+    if (log_1_sec) {
       Menu_log(LOG_INFO, "phase 2 df\n");
+    }
+    if (last_wall_phase != wall_phase) {
       drive_forward(atmega, true);
       last_wall_phase = 2;
     }
@@ -175,8 +185,10 @@ void drive_logic(System* atmega) {
 
   else if (wall_phase == 3) {
     // turn left phase
-    if (last_wall_phase != wall_phase) {
+    if (log_1_sec) {
       Menu_log(LOG_INFO, "phase 3 tl\n");
+    }
+    if (last_wall_phase != wall_phase) {
       turn_left(atmega, true);
       last_wall_phase = 3;
     }
