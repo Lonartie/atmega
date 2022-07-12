@@ -47,27 +47,29 @@ void drive_forward(System* atmega, bool may_log);
 void stop_driving(System* atmega, bool may_log);
 
 void detect_wall(void* system) {
-  static uint32_t last_t = 0;
-  static uint8_t count = 0;
+  // static uint32_t last_t = 0;
+  // static uint8_t count = 0;
   System* atmega = (System*)system;
 
-  if ((UltraSoundSensor_dist(&atmega->us) > US_SENSOR_DISTANCE)) {
-    wall_detected = false;
-    return;
-  }
+  wall_detected = (UltraSoundSensor_dist(&atmega->us) <= US_SENSOR_DISTANCE);
 
-  if (((uint32_t)micros() - last_t) <= 1000000) {
-    count++;
-  } else {
-    count = 0;
-  }
+  // if ((UltraSoundSensor_dist(&atmega->us) > US_SENSOR_DISTANCE)) {
+  //   wall_detected = false;
+  //   return;
+  // }
 
-  if (count >= 5) {
-    wall_detected = true;
-  } else {
-    wall_detected = false;
-  }
-  last_t = micros();
+  // if (((uint32_t)micros() - last_t) <= 1000000) {
+  //   count++;
+  // } else {
+  //   count = 0;
+  // }
+
+  // if (count >= 5) {
+  //   wall_detected = true;
+  // } else {
+  //   wall_detected = false;
+  // }
+  // last_t = micros();
 }
 
 void Logic_restart(void* system) {
@@ -103,7 +105,7 @@ void drive_logic(System* atmega) {
   static bool log_1_sec = false;
 
   if (micros() - _time_ >= 500000) {
-    Menu_log(LOG_INFO, FMT("wall: %d\n", wall_detected));
+    // Menu_log(LOG_INFO, FMT("wall: %d\n", wall_detected));
     _time_ = micros();
     log_1_sec = true;
   } else {
