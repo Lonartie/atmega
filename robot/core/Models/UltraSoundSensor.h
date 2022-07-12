@@ -14,6 +14,7 @@ typedef struct UltraSoundSensor {
   volatile uint8_t* pci_mask;
   uint8_t pci_pin;
   String event;
+  bool dirty;
 } UltraSoundSensor;
 
 UltraSoundSensor UltraSoundSensor_create(Pin trigger, Pin echo,

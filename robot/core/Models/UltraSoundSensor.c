@@ -37,6 +37,7 @@ UltraSoundSensor UltraSoundSensor_create(Pin trigger, Pin echo,
   sensor.pci_group = pci_group;
   sensor.pci_mask = pci_mask;
   sensor.pci_pin = pci_pin;
+  sensor.dirty = false;
 
   echo_pin_inst = echo;
 
@@ -107,10 +108,13 @@ uint8_t UltraSoundSensor_get_distance(UltraSoundSensor* _this) {
 void UltraSoundSensor_update(void* obj) {
   if (echo_ready_read) {
     last_echo_duration = echo_duration;
+    ((UltraSoundSensor*)obj)->dirty = false;
   }
 
   EventSystem_send_event(EventSystem_instance(),
                          Event_create(((UltraSoundSensor*)obj)->event));
+
+  ((UltraSoundSensor*)obj)->dirty = true;
   UltraSoundSensor_trigger((UltraSoundSensor*)obj);
 }
 
