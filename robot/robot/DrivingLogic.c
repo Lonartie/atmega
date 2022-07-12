@@ -50,6 +50,8 @@ void detect_wall(void* system) {
   static uint16_t last_t = 0;
   System* atmega = (System*)system;
 
+  Menu_log(LOG_INFO, "d\n");
+
   if ((UltraSoundSensor_dist(&atmega->us) > US_SENSOR_DISTANCE)) {
     wall_detected = false;
     return;
