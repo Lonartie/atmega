@@ -124,7 +124,6 @@ void drive_logic(System* atmega) {
     _delay_ms(1000);
     turn_right(atmega, true);
     wall_phase = 0;
-    wall_detected = false;
     US_SENSOR_DISTANCE = 15;
   }
 
