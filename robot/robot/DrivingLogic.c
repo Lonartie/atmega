@@ -175,11 +175,11 @@ void drive_logic(System* atmega) {
     if (last_wall_phase != wall_phase) {
       Menu_log(LOG_INFO, "p2\n");
       turn_right(atmega, true);
-      _delay_us(150000);
       last_wall_phase = wall_phase;
     }
 
     if (wall_detected) {
+      _delay_us(350000);
       wall_phase = 3;
     }
     return;
@@ -193,11 +193,11 @@ void drive_logic(System* atmega) {
     if (last_wall_phase != wall_phase) {
       Menu_log(LOG_INFO, "p3\n");
       drive_forward(atmega, true);
-      _delay_us(150000);
       last_wall_phase = wall_phase;
     }
 
     if (!wall_detected) {
+      _delay_us(350000);
       wall_phase = 4;
     }
     return;
@@ -211,11 +211,11 @@ void drive_logic(System* atmega) {
     if (last_wall_phase != wall_phase) {
       Menu_log(LOG_INFO, "p4\n");
       turn_left(atmega, true);
-      _delay_us(150000);
       last_wall_phase = wall_phase;
     }
 
     if (wall_detected) {
+      _delay_us(350000);
       wall_phase = 3;
     }
     return;
