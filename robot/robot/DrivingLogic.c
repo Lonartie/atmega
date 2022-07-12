@@ -79,10 +79,16 @@ void drive_logic(System* atmega) {
   static State state = STATE_LNF;
   static bool lleft = false, lmid = false, lright = false;
   static uint32_t last_time = 0;
+  static uint32_t _time_ = 0;
   static bool may_see_start = true;
   static bool seeing_start = false;
   static uint64_t time_seeing_start = 0;
   static uint8_t rounds = 0;
+
+  if (micros() - _time_ >= 500000) {
+    Menu_log(LOG_INFO, FMT("wall: %d\n", wall_detected));
+    _time_ = micros();
+  }
 
   if (!atmega->started) return;
 
