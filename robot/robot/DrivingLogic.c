@@ -147,7 +147,7 @@ void drive_logic(System* atmega) {
     }
 
     if (!wall_detected) {
-      US_SENSOR_DISTANCE = 20;
+      // US_SENSOR_DISTANCE = 20;
       wall_phase = 2;
     }
     return;
