@@ -113,14 +113,14 @@ void drive_logic(System* atmega) {
   bool right = right_measure > MEASURE_THRESHOLD_RIGHT;
 
   bool may_log = false;
-  uint32_t new_time = millis();
+  uint32_t new_time = micros();
 
   if (left != lleft || mid != lmid || right != lright) {
     // update lights and sends log messages
     may_log = true;
     ShiftRegister_write_n(&atmega->led_strip, 3, left, mid, right);
-    new_time = millis();
-    uint32_t time_diff = new_time - last_time;
+    new_time = micros();
+    uint32_t time_diff = (new_time - last_time) / 1000;
     last_time = new_time;
     Menu_log(LOG_DEBUG, FMT(TIMER_MESSAGE, time_diff));
     Menu_log(LOG_INFO, FMT(SENSORS_MESSAGE, left, mid, right));
@@ -134,7 +134,7 @@ void drive_logic(System* atmega) {
   if (wall_phase != 0 && mid && micros() - init_t >= 3000000) {
     Menu_log(LOG_INFO, "found track again\n");
     Servo_set_angle(&atmega->us_servo, 0);
-    _delay_ms(250);
+    _delay_ms(1000);
     turn_right(atmega, may_log);
     wall_phase = 0;
     wall_detected = false;
@@ -146,7 +146,7 @@ void drive_logic(System* atmega) {
     init_t = micros();
     Menu_log(LOG_INFO, "phase 0 -> 1\n");
     Servo_set_angle(&atmega->us_servo, -90);
-    _delay_ms(250);
+    _delay_ms(1000);
     wall_phase = 1;
     US_SENSOR_DISTANCE = 20;
     return;
@@ -154,6 +154,7 @@ void drive_logic(System* atmega) {
     // turn right phase
     Menu_log(LOG_INFO, "phase 1 tr\n");
     turn_right(atmega, may_log);
+    _delay_ms(250);
 
     if (wall_detected) {
       wall_phase = 2;
@@ -163,6 +164,7 @@ void drive_logic(System* atmega) {
     // drive forward phase
     Menu_log(LOG_INFO, "phase 2 df\n");
     drive_forward(atmega, may_log);
+    _delay_ms(250);
 
     if (!wall_detected) {
       wall_phase = 3;
@@ -172,6 +174,7 @@ void drive_logic(System* atmega) {
     // turn left phase
     Menu_log(LOG_INFO, "phase 3 tl\n");
     turn_left(atmega, may_log);
+    _delay_ms(250);
 
     if (wall_detected) {
       wall_phase = 2;
