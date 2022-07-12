@@ -154,6 +154,7 @@ void drive_logic(System* atmega) {
       Menu_log(LOG_INFO, FMT("p0/1, w:%d\n", wall_detected));
       Servo_set_angle(&atmega->us_servo, -90);
       stop_driving(atmega, may_log);
+      _delay_us(500000);
       last_wall_phase = wall_phase;
       wall_phase = 1;
     }
