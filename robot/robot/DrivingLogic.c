@@ -22,6 +22,7 @@ const uint16_t MEASURE_THRESHOLD_RIGHT = 330;
 const char* TURN_LEFT_MESSAGE = "tl\n";
 const char* TURN_RIGHT_MESSAGE = "tr\n";
 const char* DRIVE_FORWARD_MESSAGE = "df\n";
+const char* STOP_MESSAGE = "s\n";
 const char* TIMER_MESSAGE = "%ums\n";
 const char* SENSORS_MESSAGE = "%d%d%d\n";
 const char* SENSORS_DEBUG_MESSAGE = "%d %d %d\n";
@@ -39,9 +40,11 @@ typedef enum State {
 static bool wall_detected = false;
 
 void drive_logic(System* atmega);
+
 void turn_left(System* atmega, bool may_log);
 void turn_right(System* atmega, bool may_log);
 void drive_forward(System* atmega, bool may_log);
+void stop_driving(System* atmega, bool may_log);
 
 void detect_wall(void* system) {
   System* atmega = (System*)system;
@@ -130,6 +133,7 @@ void drive_logic(System* atmega) {
     init_t = micros();
     Menu_log(LOG_INFO, "phase 0 ts\n");
     Servo_set_angle(&atmega->us_servo, -90);
+    stop_driving(atmega, may_log);
     last_wall_phase = 0;
     wall_phase = 1;
     US_SENSOR_DISTANCE = 20;
@@ -264,4 +268,10 @@ void drive_forward(System* atmega, bool may_log) {
   if (may_log) Menu_log(LOG_DEBUG, DRIVE_FORWARD_MESSAGE);
   Motor_drive_forward(&atmega->mt_left, SPEED_DRIVE);
   Motor_drive_forward(&atmega->mt_right, SPEED_DRIVE);
+}
+
+void stop_driving(System* atmega, bool may_log) {
+  if (may_log) Menu_log(LOG_DEBUG, STOP_MESSAGE);
+  Motor_drive_forward(&atmega->mt_left, 0);
+  Motor_drive_forward(&atmega->mt_right, 0);
 }
