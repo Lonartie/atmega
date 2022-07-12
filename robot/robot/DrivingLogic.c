@@ -134,14 +134,14 @@ void drive_logic(System* atmega) {
     Menu_log(LOG_INFO, "phase 0 ts\n");
     Servo_set_angle(&atmega->us_servo, -90);
     stop_driving(atmega, may_log);
-    wall_detected = false;
-    _delay_us(1000000);
-    wall_detected = false;
+    while (wall_detected) {
+    }
     last_wall_phase = 0;
     wall_phase = 1;
     US_SENSOR_DISTANCE = 20;
-    return;
-  } else if (wall_phase == 1) {
+  }
+
+  if (wall_phase == 1) {
     // turn right phase
     if (last_wall_phase != wall_phase) {
       Menu_log(LOG_INFO, "phase 1 tr\n");
@@ -152,8 +152,9 @@ void drive_logic(System* atmega) {
     if (wall_detected) {
       wall_phase = 2;
     }
-    return;
-  } else if (wall_phase == 2) {
+  }
+
+  if (wall_phase == 2) {
     // drive forward phase
     if (last_wall_phase != wall_phase) {
       Menu_log(LOG_INFO, "phase 2 df\n");
@@ -164,8 +165,9 @@ void drive_logic(System* atmega) {
     if (!wall_detected) {
       wall_phase = 3;
     }
-    return;
-  } else if (wall_phase == 3) {
+  }
+
+  if (wall_phase == 3) {
     // turn left phase
     if (last_wall_phase != wall_phase) {
       Menu_log(LOG_INFO, "phase 3 tl\n");
@@ -176,6 +178,9 @@ void drive_logic(System* atmega) {
     if (wall_detected) {
       wall_phase = 2;
     }
+  }
+
+  if (wall_phase != 0) {
     return;
   }
 
