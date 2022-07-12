@@ -133,28 +133,29 @@ void drive_logic(System* atmega) {
     US_SENSOR_DISTANCE = 15;
   }
 
-  if (wall_detected && wall_phase == 0) {
+  if (wall_detected && (wall_phase == 0 || wall_phase == 1)) {
     // setup phase
     if (log_1_sec) {
-      Menu_log(LOG_INFO, "p0\n");
+      Menu_log(LOG_INFO, "p0/1\n");
     }
     if (last_wall_phase != wall_phase) {
       Servo_set_angle(&atmega->us_servo, -90);
       stop_driving(atmega, may_log);
       last_wall_phase = wall_phase;
+      wall_phase = 1;
     }
 
     if (!wall_detected) {
       US_SENSOR_DISTANCE = 20;
-      wall_phase = 1;
+      wall_phase = 2;
     }
     return;
   }
 
-  else if (wall_phase == 1) {
+  else if (wall_phase == 2) {
     // turn right phase
     if (log_1_sec) {
-      Menu_log(LOG_INFO, "p1\n");
+      Menu_log(LOG_INFO, "p2\n");
     }
     if (last_wall_phase != wall_phase) {
       turn_right(atmega, true);
@@ -162,15 +163,15 @@ void drive_logic(System* atmega) {
     }
 
     if (wall_detected) {
-      wall_phase = 2;
+      wall_phase = 3;
     }
     return;
   }
 
-  else if (wall_phase == 2) {
+  else if (wall_phase == 3) {
     // drive forward phase
     if (log_1_sec) {
-      Menu_log(LOG_INFO, "p2\n");
+      Menu_log(LOG_INFO, "p3\n");
     }
     if (last_wall_phase != wall_phase) {
       drive_forward(atmega, true);
@@ -178,15 +179,15 @@ void drive_logic(System* atmega) {
     }
 
     if (!wall_detected) {
-      wall_phase = 3;
+      wall_phase = 4;
     }
     return;
   }
 
-  else if (wall_phase == 3) {
+  else if (wall_phase == 4) {
     // turn left phase
     if (log_1_sec) {
-      Menu_log(LOG_INFO, "p3\n");
+      Menu_log(LOG_INFO, "p4\n");
     }
     if (last_wall_phase != wall_phase) {
       turn_left(atmega, true);
@@ -194,7 +195,7 @@ void drive_logic(System* atmega) {
     }
 
     if (wall_detected) {
-      wall_phase = 2;
+      wall_phase = 3;
     }
     return;
   }
