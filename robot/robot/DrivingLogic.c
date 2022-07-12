@@ -13,7 +13,7 @@ const int SPEED_DRIVE_SLOW = 0;
 const int SPEED_DRIVE = 200;
 const int SPEED_TURN = 180;
 
-uint8_t US_SENSOR_DISTANCE = 12;
+uint8_t US_SENSOR_DISTANCE = 17;
 
 const uint16_t MEASURE_THRESHOLD_LEFT = 330;
 const uint16_t MEASURE_THRESHOLD_MID = 400;
