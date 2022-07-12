@@ -88,11 +88,11 @@ void Logic_drive_3_rounds(void* system MAYBE_UNUSED) {}
 void drive_logic(System* atmega) {
   static State state = STATE_LNF;
   static bool lleft = false, lmid = false, lright = false;
-  static uint32_t last_time = 0;
+  // static uint32_t last_time = 0;
   static uint32_t _time_ = 0;
   static bool may_see_start = true;
   static bool seeing_start = false;
-  static uint64_t time_seeing_start = 0;
+  static uint32_t time_seeing_start = 0;
   static uint8_t rounds = 0;
   static bool log_1_sec = false;
 
@@ -124,13 +124,13 @@ void drive_logic(System* atmega) {
     // update lights and sends log messages
     may_log = true;
     ShiftRegister_write_n(&atmega->led_strip, 3, left, mid, right);
-    new_time = micros();
-    uint32_t time_diff = (new_time - last_time) / 1000;
-    last_time = new_time;
-    Menu_log(LOG_DEBUG, FMT(TIMER_MESSAGE, time_diff));
-    Menu_log(LOG_INFO, FMT(SENSORS_MESSAGE, left, mid, right));
-    Menu_log(LOG_DEBUG, FMT(SENSORS_DEBUG_MESSAGE, (int)left_measure,
-                            (int)mid_measure, (int)right_measure));
+    // new_time = micros();
+    // uint32_t time_diff = (new_time - last_time) / 1000;
+    // last_time = new_time;
+    // Menu_log(LOG_DEBUG, FMT(TIMER_MESSAGE, time_diff));
+    // Menu_log(LOG_INFO, FMT(SENSORS_MESSAGE, left, mid, right));
+    // Menu_log(LOG_DEBUG, FMT(SENSORS_DEBUG_MESSAGE, (int)left_measure,
+    //                         (int)mid_measure, (int)right_measure));
   }
 
   static uint8_t wall_phase = 0;
