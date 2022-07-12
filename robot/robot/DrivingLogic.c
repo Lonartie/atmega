@@ -59,10 +59,10 @@ void detect_wall(void* system) {
   }
 
   calls++;
-  if (micros() - last_call_t >= 100000) {
+  if (micros() - last_call_t >= 250000) {
     last_call_t = micros();
-    calls = 0;
     wall_detected = (calls >= 5);
+    calls = 0;
   }
 
   // wall_detected = (UltraSoundSensor_dist(&atmega->us) <= US_SENSOR_DISTANCE);
