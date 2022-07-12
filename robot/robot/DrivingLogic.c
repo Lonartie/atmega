@@ -129,13 +129,15 @@ void drive_logic(System* atmega) {
   }
 
   static uint8_t wall_phase = 0;
+  static uint8_t last_wall_phase = 0;
+
   static uint32_t init_t = 0;
 
   if (wall_phase != 0 && mid && micros() - init_t >= 3000000) {
     Menu_log(LOG_INFO, "found track again\n");
     Servo_set_angle(&atmega->us_servo, 0);
     _delay_ms(1000);
-    turn_right(atmega, may_log);
+    turn_right(atmega, true);
     wall_phase = 0;
     wall_detected = false;
     US_SENSOR_DISTANCE = 15;
@@ -146,33 +148,46 @@ void drive_logic(System* atmega) {
     init_t = micros();
     Menu_log(LOG_INFO, "phase 0 ts\n");
     Servo_set_angle(&atmega->us_servo, -90);
+    last_wall_phase = 0;
     wall_phase = 1;
     US_SENSOR_DISTANCE = 20;
     return;
   } else if (wall_phase == 1) {
     // turn right phase
-    Menu_log(LOG_INFO, "phase 1 tr\n");
-    turn_right(atmega, may_log);
+    if (last_wall_phase != wall_phase) {
+      Menu_log(LOG_INFO, "phase 1 tr\n");
+      turn_right(atmega, true);
+      last_wall_phase = 1;
+    }
 
     if (wall_detected) {
+      last_wall_phase = 1;
       wall_phase = 2;
     }
     return;
   } else if (wall_phase == 2) {
     // drive forward phase
-    Menu_log(LOG_INFO, "phase 2 df\n");
-    drive_forward(atmega, may_log);
+    if (last_wall_phase != wall_phase) {
+      Menu_log(LOG_INFO, "phase 2 df\n");
+      drive_forward(atmega, true);
+      last_wall_phase = 1;
+    }
 
     if (!wall_detected) {
+      last_wall_phase = 2;
       wall_phase = 3;
     }
     return;
   } else if (wall_phase == 3) {
     // turn left phase
-    Menu_log(LOG_INFO, "phase 3 tl\n");
-    turn_left(atmega, may_log);
+    if (last_wall_phase != wall_phase) {
+      Menu_log(LOG_INFO, "phase 3 tl\n");
+      turn_left(atmega, true);
+      last_wall_phase = 1;
+    }
 
     if (wall_detected) {
+      last_wall_phase = 3;
       wall_phase = 2;
     }
     return;
