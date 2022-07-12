@@ -37,7 +37,6 @@ UltraSoundSensor UltraSoundSensor_create(Pin trigger, Pin echo,
   sensor.pci_group = pci_group;
   sensor.pci_mask = pci_mask;
   sensor.pci_pin = pci_pin;
-  sensor.dirty = false;
 
   echo_pin_inst = echo;
 
