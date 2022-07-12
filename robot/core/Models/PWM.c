@@ -24,10 +24,6 @@ void PWM_init() {
 }
 
 void PWM_set_duty_cycle(uint8_t pin, uint8_t value) {
-  // Suggestion to handle PD6 - note the code-clones wrt. PD5 below!
-  // Code-clones are extraordinary f cky! Correct this (tricky though
-  // due to the PP-macros, which you cannot simply pass to functions)!
-  // (But PP-macros can help you here....)
   if (pin == PD6) {
     if (value == 0) {
       TCCR0A &= ~(1 << COM0A1) & ~(1 << COM0A0);  // Normal port operation mode
