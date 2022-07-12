@@ -91,7 +91,10 @@ void drive_logic(System* atmega) {
     log_1_sec = false;
   }
 
-  if (!atmega->started) return;
+  if (!atmega->started) {
+    Menu_log(LOG_INFO, "not started\n");
+    return;
+  }
 
   uint16_t left_measure = ADCPin_read_avg(&atmega->lf_left, 10);
   uint16_t mid_measure = ADCPin_read_avg(&atmega->lf_middle, 10);
