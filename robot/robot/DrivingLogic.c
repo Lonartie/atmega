@@ -148,7 +148,7 @@ void drive_logic(System* atmega) {
       last_wall_phase = 1;
     }
 
-    if (wall_detected && !atmega->us.dirty) {
+    if (wall_detected) {
       wall_phase = 2;
     }
     return;
@@ -172,7 +172,7 @@ void drive_logic(System* atmega) {
       last_wall_phase = 3;
     }
 
-    if (wall_detected && !atmega->us.dirty) {
+    if (wall_detected) {
       wall_phase = 2;
     }
     return;
