@@ -103,7 +103,7 @@ void drive_logic(System* atmega) {
   static bool log_1_sec = false;
 
   if (micros() - _time_ >= 1000000) {
-    // Menu_log(LOG_INFO, FMT("wall: %d\n", wall_detected));
+    Menu_log(LOG_INFO, FMT("wall: %d\n", wall_detected));
     _time_ = micros();
     log_1_sec = true;
   } else {
