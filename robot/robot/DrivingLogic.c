@@ -161,7 +161,6 @@ void drive_logic(System* atmega) {
     }
 
     if (wall_detected) {
-      last_wall_phase = 1;
       wall_phase = 2;
     }
     return;
@@ -174,7 +173,6 @@ void drive_logic(System* atmega) {
     }
 
     if (!wall_detected) {
-      last_wall_phase = 2;
       wall_phase = 3;
     }
     return;
@@ -187,7 +185,6 @@ void drive_logic(System* atmega) {
     }
 
     if (wall_detected) {
-      last_wall_phase = 3;
       wall_phase = 2;
     }
     return;
