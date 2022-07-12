@@ -202,6 +202,10 @@ void drive_logic(System* atmega) {
     return;
   }
 
+  if (log_1_sec) {
+    Menu_log(LOG_INFO, "main\n");
+  }
+
   if (left && mid && right && !seeing_start && may_see_start) {
     seeing_start = true;
     may_see_start = false;
