@@ -96,7 +96,7 @@ void drive_logic(System* atmega) {
   static uint8_t rounds = 0;
   static bool log_1_sec = false;
 
-  if (micros() - _time_ >= 500000) {
+  if (micros() - _time_ >= 1000000) {
     // Menu_log(LOG_INFO, FMT("wall: %d\n", wall_detected));
     _time_ = micros();
     log_1_sec = true;
@@ -148,10 +148,10 @@ void drive_logic(System* atmega) {
   if ((wall_detected && wall_phase == 0) || wall_phase == 1) {
     // setup phase
     if (log_1_sec) {
-      Menu_log(LOG_INFO, "p0/1\n");
+      Menu_log(LOG_INFO, FMT("p0/1, w:\n", wall_detected));
     }
     if (last_wall_phase != wall_phase) {
-      Menu_log(LOG_INFO, "p0/1\n");
+      Menu_log(LOG_INFO, FMT("p0/1, w:\n", wall_detected));
       Servo_set_angle(&atmega->us_servo, -90);
       stop_driving(atmega, may_log);
       last_wall_phase = wall_phase;
@@ -159,6 +159,7 @@ void drive_logic(System* atmega) {
     }
 
     if (!wall_detected) {
+      Menu_log(LOG_INFO, FMT("p0/1, w:\n", wall_detected));
       wall_phase = 2;
     }
     return;
