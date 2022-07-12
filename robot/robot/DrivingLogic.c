@@ -44,11 +44,11 @@ void turn_right(System* atmega, bool may_log);
 void drive_forward(System* atmega, bool may_log);
 
 void detect_wall(void* system) {
-  static uint32_t last_detected = 0;
   System* atmega = (System*)system;
 
   wall_detected = UltraSoundSensor_dist(&atmega->us) <= US_SENSOR_DISTANCE;
 
+  // static uint32_t last_detected = 0;
   /*if (micros() - last_detected < 1000000 &&
       UltraSoundSensor_dist(&atmega->us) <= US_SENSOR_DISTANCE) {
     last_detected = micros();
@@ -131,40 +131,52 @@ void drive_logic(System* atmega) {
   static uint8_t wall_phase = 0;
   static uint32_t init_t = 0;
 
+  if (wall_phase != 0 && mid && micros() - init_t >= 3000000) {
+    Menu_log(LOG_INFO, "found track again\n");
+    Servo_set_angle(&atmega->us_servo, 0);
+    _delay_ms(250);
+    turn_right(atmega, may_log);
+    wall_phase = 0;
+    wall_detected = false;
+    US_SENSOR_DISTANCE = 15;
+  }
+
   if (wall_detected && wall_phase == 0) {
+    // setup phase
     init_t = micros();
     Menu_log(LOG_INFO, "phase 0 -> 1\n");
     Servo_set_angle(&atmega->us_servo, -90);
     _delay_ms(250);
-    turn_right(atmega, may_log);
     wall_phase = 1;
     US_SENSOR_DISTANCE = 20;
     return;
   } else if (wall_phase == 1) {
-    _delay_ms(100);
-    wall_detected = false;
-    wall_phase = 2;
-    return;
-  } else if (wall_detected && wall_phase == 2) {
-    Menu_log(LOG_INFO, FMT("wall: %d\n", (int)wall_detected));
-    if (mid && micros() - init_t >= 3000000) {
-      Menu_log(LOG_INFO, "found track again\n");
-      wall_detected = false;
-      Servo_set_angle(&atmega->us_servo, 0);
-      _delay_ms(250);
-      turn_right(atmega, may_log);
-      wall_phase = 0;
-      US_SENSOR_DISTANCE = 15;
-      return;
-    } else if (wall_detected) {
-      Menu_log(LOG_INFO, "phase 2 fw\n");
-      drive_forward(atmega, may_log);
-      return;
-    } else {
-      Menu_log(LOG_INFO, "phase 2 tl\n");
-      turn_left(atmega, may_log);
-      return;
+    // turn right phase
+    Menu_log(LOG_INFO, "phase 1 tr\n");
+    turn_right(atmega, may_log);
+
+    if (wall_detected) {
+      wall_phase = 2;
     }
+    return;
+  } else if (wall_phase == 2) {
+    // drive forward phase
+    Menu_log(LOG_INFO, "phase 2 df\n");
+    drive_forward(atmega, may_log);
+
+    if (!wall_detected) {
+      wall_phase = 3;
+    }
+    return;
+  } else if (wall_phase == 3) {
+    // turn left phase
+    Menu_log(LOG_INFO, "phase 3 tl\n");
+    turn_left(atmega, may_log);
+
+    if (wall_detected) {
+      wall_phase = 2;
+    }
+    return;
   }
 
   if (left && mid && right && !seeing_start && may_see_start) {
