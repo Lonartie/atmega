@@ -10,8 +10,8 @@
 #include "Models/WatchDog.h"
 
 const int SPEED_DRIVE_SLOW = 0;
-const int SPEED_DRIVE = 200;
-const int SPEED_TURN = 180;
+const int SPEED_DRIVE = 170;
+const int SPEED_TURN = 150;
 
 static uint8_t US_SENSOR_DISTANCE = 17;
 
@@ -220,6 +220,8 @@ void drive_logic(System* atmega) {
     }
     return;
   }
+
+  US_SENSOR_DISTANCE = 17;
 
   // if (log_1_sec) {
   //   Menu_log(LOG_INFO, FMT("main wp: %d\n", wall_phase));
