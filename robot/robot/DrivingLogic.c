@@ -145,9 +145,7 @@ void drive_logic(System* atmega) {
     // setup phase
     init_t = micros();
     Menu_log(LOG_INFO, "phase 0 -> 1\n");
-    System_stop(&atmega);
     Servo_set_angle(&atmega->us_servo, -90);
-    _delay_ms(500);
     wall_phase = 1;
     US_SENSOR_DISTANCE = 20;
     return;
