@@ -123,9 +123,7 @@ void drive_logic(System* atmega) {
   static uint8_t wall_phase = 0;
   static uint8_t last_wall_phase = UINT8_MAX;
 
-  static uint32_t init_t = 0;
-
-  if (wall_phase != 0 && mid && micros() - init_t >= 3000000) {
+  if (wall_phase >= 2 && mid) {
     Menu_log(LOG_INFO, "found track again\n");
     Servo_set_angle(&atmega->us_servo, 0);
     _delay_ms(1000);
@@ -135,13 +133,12 @@ void drive_logic(System* atmega) {
     US_SENSOR_DISTANCE = 15;
   }
 
-  else if (wall_detected && wall_phase == 0) {
+  if (wall_detected && wall_phase == 0) {
     // setup phase
     if (log_1_sec) {
       Menu_log(LOG_INFO, "p0\n");
     }
     if (last_wall_phase != wall_phase) {
-      init_t = micros();
       Servo_set_angle(&atmega->us_servo, -90);
       stop_driving(atmega, may_log);
       last_wall_phase = 0;
