@@ -13,7 +13,7 @@ const int SPEED_DRIVE_SLOW = 0;
 const int SPEED_DRIVE = 170;
 const int SPEED_TURN = 150;
 
-static uint8_t US_SENSOR_DISTANCE = 17;
+static uint8_t US_SENSOR_DISTANCE = 13;
 
 const uint16_t MEASURE_THRESHOLD_LEFT = 330;
 const uint16_t MEASURE_THRESHOLD_MID = 400;
@@ -143,7 +143,7 @@ void drive_logic(System* atmega) {
     turn_right(atmega, true);
     wall_phase = 0;
     last_wall_phase = UINT8_MAX;
-    US_SENSOR_DISTANCE = 17;
+    US_SENSOR_DISTANCE = 13;
   }
 
   if ((wall_detected && wall_phase == 0) || wall_phase == 1) {
@@ -221,7 +221,7 @@ void drive_logic(System* atmega) {
     return;
   }
 
-  US_SENSOR_DISTANCE = 17;
+  US_SENSOR_DISTANCE = 13;
 
   // if (log_1_sec) {
   //   Menu_log(LOG_INFO, FMT("main wp: %d\n", wall_phase));
