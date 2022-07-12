@@ -112,7 +112,7 @@ void UltraSoundSensor_update(void* obj) {
     last_time = micros();
   }
 
-  if (micros() - last_time >= 50000) {
+  if (micros() - last_time >= 100000) {
     last_echo_duration = UINT16_MAX;
   }
 
