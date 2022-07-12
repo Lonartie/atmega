@@ -13,7 +13,7 @@ const int SPEED_DRIVE_SLOW = 0;
 const int SPEED_DRIVE = 200;
 const int SPEED_TURN = 180;
 
-uint8_t US_SENSOR_DISTANCE = 15;
+uint8_t US_SENSOR_DISTANCE = 12;
 
 const uint16_t MEASURE_THRESHOLD_LEFT = 330;
 const uint16_t MEASURE_THRESHOLD_MID = 400;
@@ -47,8 +47,20 @@ void drive_forward(System* atmega, bool may_log);
 void stop_driving(System* atmega, bool may_log);
 
 void detect_wall(void* system) {
+  static uint16_t last_t = 0;
   System* atmega = (System*)system;
-  wall_detected = (UltraSoundSensor_dist(&atmega->us) <= US_SENSOR_DISTANCE);
+
+  if ((UltraSoundSensor_dist(&atmega->us) > US_SENSOR_DISTANCE)) {
+    wall_detected = false;
+    return;
+  }
+
+  if (micros() - last_t <= 100000) {
+    wall_detected = true;
+    last_t = micros();
+  } else {
+    wall_detected = false;
+  }
 }
 
 void Logic_restart(void* system) {
@@ -130,7 +142,6 @@ void drive_logic(System* atmega) {
     turn_right(atmega, true);
     wall_phase = 0;
     last_wall_phase = UINT8_MAX;
-    US_SENSOR_DISTANCE = 15;
   }
 
   if ((wall_detected && wall_phase == 0) || wall_phase == 1) {
@@ -147,7 +158,6 @@ void drive_logic(System* atmega) {
     }
 
     if (!wall_detected) {
-      // US_SENSOR_DISTANCE = 20;
       wall_phase = 2;
     }
     return;
