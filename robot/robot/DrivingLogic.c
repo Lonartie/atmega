@@ -59,7 +59,7 @@ void detect_wall(void* system) {
   }
 
   calls++;
-  if (micros() - last_call_t >= 250000) {
+  if (micros() - last_call_t >= 100000) {
     last_call_t = micros();
     wall_detected = (calls >= 5);
     calls = 0;
@@ -183,7 +183,7 @@ void drive_logic(System* atmega) {
     }
 
     if (!wall_detected) {
-      US_SENSOR_DISTANCE = 40;
+      US_SENSOR_DISTANCE = 20;
       wall_phase = 2;
     }
     return;
