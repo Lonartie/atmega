@@ -55,7 +55,7 @@ void detect_wall(void* system) {
     return;
   }
 
-  if (((uint32_t)micros() - last_t) <= 100000) {
+  if (((uint32_t)micros() - last_t) <= 1000000) {
     wall_detected = true;
   } else {
     wall_detected = false;
