@@ -154,7 +154,7 @@ void drive_logic(System* atmega) {
   else if (wall_phase == 1) {
     // turn right phase
     if (log_1_sec) {
-      Menu_log(LOG_INFO, "phase 1 tr\n");
+      Menu_log(LOG_INFO, "p1\n");
     }
     if (last_wall_phase != wall_phase) {
       turn_right(atmega, true);
@@ -170,7 +170,7 @@ void drive_logic(System* atmega) {
   else if (wall_phase == 2) {
     // drive forward phase
     if (log_1_sec) {
-      Menu_log(LOG_INFO, "phase 2 df\n");
+      Menu_log(LOG_INFO, "p2\n");
     }
     if (last_wall_phase != wall_phase) {
       drive_forward(atmega, true);
@@ -186,7 +186,7 @@ void drive_logic(System* atmega) {
   else if (wall_phase == 3) {
     // turn left phase
     if (log_1_sec) {
-      Menu_log(LOG_INFO, "phase 3 tl\n");
+      Menu_log(LOG_INFO, "p3\n");
     }
     if (last_wall_phase != wall_phase) {
       turn_left(atmega, true);
