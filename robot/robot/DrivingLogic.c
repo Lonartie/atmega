@@ -84,7 +84,7 @@ void drive_logic(System* atmega) {
   static bool log_1_sec = false;
 
   if (micros() - _time_ >= 500000) {
-    Menu_log(LOG_INFO, FMT("wall: %d\n", wall_detected));
+    // Menu_log(LOG_INFO, FMT("wall: %d\n", wall_detected));
     _time_ = micros();
     log_1_sec = true;
   } else {
@@ -139,6 +139,7 @@ void drive_logic(System* atmega) {
       Menu_log(LOG_INFO, "p0/1\n");
     }
     if (last_wall_phase != wall_phase) {
+      Menu_log(LOG_INFO, "p0/1\n");
       Servo_set_angle(&atmega->us_servo, -90);
       stop_driving(atmega, may_log);
       last_wall_phase = wall_phase;
@@ -158,6 +159,7 @@ void drive_logic(System* atmega) {
       Menu_log(LOG_INFO, "p2\n");
     }
     if (last_wall_phase != wall_phase) {
+      Menu_log(LOG_INFO, "p2\n");
       turn_right(atmega, true);
       last_wall_phase = wall_phase;
     }
@@ -174,6 +176,7 @@ void drive_logic(System* atmega) {
       Menu_log(LOG_INFO, "p3\n");
     }
     if (last_wall_phase != wall_phase) {
+      Menu_log(LOG_INFO, "p3\n");
       drive_forward(atmega, true);
       last_wall_phase = wall_phase;
     }
@@ -190,6 +193,7 @@ void drive_logic(System* atmega) {
       Menu_log(LOG_INFO, "p4\n");
     }
     if (last_wall_phase != wall_phase) {
+      Menu_log(LOG_INFO, "p4\n");
       turn_left(atmega, true);
       last_wall_phase = wall_phase;
     }
@@ -200,9 +204,9 @@ void drive_logic(System* atmega) {
     return;
   }
 
-  if (log_1_sec) {
-    Menu_log(LOG_INFO, FMT("main wp: %d\n", wall_phase));
-  }
+  // if (log_1_sec) {
+  //   Menu_log(LOG_INFO, FMT("main wp: %d\n", wall_phase));
+  // }
 
   if (left && mid && right && !seeing_start && may_see_start) {
     seeing_start = true;
