@@ -170,7 +170,7 @@ void drive_logic(System* atmega) {
     if (last_wall_phase != wall_phase) {
       Menu_log(LOG_INFO, "phase 2 df\n");
       drive_forward(atmega, true);
-      last_wall_phase = 1;
+      last_wall_phase = 2;
     }
 
     if (!wall_detected) {
@@ -183,7 +183,7 @@ void drive_logic(System* atmega) {
     if (last_wall_phase != wall_phase) {
       Menu_log(LOG_INFO, "phase 3 tl\n");
       turn_left(atmega, true);
-      last_wall_phase = 1;
+      last_wall_phase = 3;
     }
 
     if (wall_detected) {
