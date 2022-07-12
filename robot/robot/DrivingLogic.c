@@ -114,7 +114,7 @@ void drive_logic(System* atmega) {
   }
 
   static uint8_t wall_phase = 0;
-  static uint8_t last_wall_phase = 0;
+  static uint8_t last_wall_phase = UINT8_MAX;
 
   static uint32_t init_t = 0;
 
@@ -124,6 +124,7 @@ void drive_logic(System* atmega) {
     _delay_ms(1000);
     turn_right(atmega, true);
     wall_phase = 0;
+    last_wall_phase = UINT8_MAX;
     US_SENSOR_DISTANCE = 15;
   }
 
@@ -135,17 +136,22 @@ void drive_logic(System* atmega) {
 
   if (wall_detected && wall_phase == 0) {
     // setup phase
-    init_t = micros();
-    Menu_log(LOG_INFO, "phase 0 ts\n");
-    Servo_set_angle(&atmega->us_servo, -90);
-    stop_driving(atmega, may_log);
-    last_wall_phase = 0;
-    wall_phase = 1;
-    US_SENSOR_DISTANCE = 20;
+    if (last_wall_phase != wall_phase) {
+      init_t = micros();
+      Menu_log(LOG_INFO, "phase 0 ts\n");
+      Servo_set_angle(&atmega->us_servo, -90);
+      stop_driving(atmega, may_log);
+      last_wall_phase = 0;
+    }
+
+    if (!wall_detected) {
+      US_SENSOR_DISTANCE = 20;
+      wall_phase = 1;
+    }
     return;
   }
 
-  if (wall_phase == 1) {
+  else if (wall_phase == 1) {
     // turn right phase
     if (last_wall_phase != wall_phase) {
       Menu_log(LOG_INFO, "phase 1 tr\n");
