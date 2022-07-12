@@ -135,6 +135,7 @@ void drive_logic(System* atmega) {
     Servo_set_angle(&atmega->us_servo, -90);
     stop_driving(atmega, may_log);
     _delay_us(1000000);
+    wall_detected = false;
     last_wall_phase = 0;
     wall_phase = 1;
     US_SENSOR_DISTANCE = 20;
