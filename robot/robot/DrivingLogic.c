@@ -55,7 +55,7 @@ void detect_wall(void* system) {
     return;
   }
 
-  if (((uint32_t)micros() - last_t) <= 10000) {
+  if (((uint32_t)micros() - last_t) <= 100000) {
     wall_detected = true;
   } else {
     wall_detected = false;
@@ -161,7 +161,7 @@ void drive_logic(System* atmega) {
     }
 
     if (!wall_detected) {
-      US_SENSOR_DISTANCE = 25;
+      US_SENSOR_DISTANCE = 40;
       wall_phase = 2;
     }
     return;
@@ -179,7 +179,7 @@ void drive_logic(System* atmega) {
     }
 
     if (wall_detected) {
-      _delay_us(350000);
+      _delay_us(100000);
       wall_phase = 3;
     }
     return;
@@ -197,7 +197,7 @@ void drive_logic(System* atmega) {
     }
 
     if (!wall_detected) {
-      _delay_us(350000);
+      _delay_us(100000);
       wall_phase = 4;
     }
     return;
@@ -215,7 +215,7 @@ void drive_logic(System* atmega) {
     }
 
     if (wall_detected) {
-      _delay_us(350000);
+      _delay_us(100000);
       wall_phase = 3;
     }
     return;
