@@ -105,13 +105,21 @@ uint8_t UltraSoundSensor_get_distance(UltraSoundSensor* _this) {
 }
 
 void UltraSoundSensor_update(void* obj) {
+  static uint16_t last_time = 0;
+
   if (echo_ready_read) {
     last_echo_duration = echo_duration;
-    EventSystem_send_event(EventSystem_instance(),
-                           Event_create(((UltraSoundSensor*)obj)->event));
-
-    UltraSoundSensor_trigger((UltraSoundSensor*)obj);
+    last_time = micros();
   }
+
+  if (micros() - last_time >= 50000) {
+    last_echo_duration = UINT16_MAX;
+  }
+
+  EventSystem_send_event(EventSystem_instance(),
+                         Event_create(((UltraSoundSensor*)obj)->event));
+
+  UltraSoundSensor_trigger((UltraSoundSensor*)obj);
 }
 
 uint16_t UltraSoundSensor_dist(UltraSoundSensor* _this MAYBE_UNUSED) {
