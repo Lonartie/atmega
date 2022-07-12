@@ -133,7 +133,7 @@ void drive_logic(System* atmega) {
     US_SENSOR_DISTANCE = 15;
   }
 
-  if (wall_detected && (wall_phase == 0 || wall_phase == 1)) {
+  if ((wall_detected && wall_phase == 0) || wall_phase == 1) {
     // setup phase
     if (log_1_sec) {
       Menu_log(LOG_INFO, "p0/1\n");
