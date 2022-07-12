@@ -13,7 +13,7 @@ const int SPEED_DRIVE_SLOW = 0;
 const int SPEED_DRIVE = 200;
 const int SPEED_TURN = 180;
 
-const uint8_t US_SENSOR_DISTANCE = 20;
+uint8_t US_SENSOR_DISTANCE = 15;
 
 const uint16_t MEASURE_THRESHOLD_LEFT = 330;
 const uint16_t MEASURE_THRESHOLD_MID = 400;
@@ -43,16 +43,14 @@ void turn_left(System* atmega, bool may_log);
 void turn_right(System* atmega, bool may_log);
 void drive_forward(System* atmega, bool may_log);
 
-static uint16_t dist_threshold = 15;
-
 void detect_wall(void* system) {
   static uint32_t last_detected = 0;
   System* atmega = (System*)system;
 
-  wall_detected = UltraSoundSensor_dist(&atmega->us) <= dist_threshold;
+  wall_detected = UltraSoundSensor_dist(&atmega->us) <= US_SENSOR_DISTANCE;
 
   /*if (micros() - last_detected < 1000000 &&
-      UltraSoundSensor_dist(&atmega->us) <= dist_threshold) {
+      UltraSoundSensor_dist(&atmega->us) <= US_SENSOR_DISTANCE) {
     last_detected = micros();
     wall_detected = true;
   } else {
@@ -136,26 +134,28 @@ void drive_logic(System* atmega) {
   if (wall_detected && wall_phase == 0) {
     init_t = micros();
     Menu_log(LOG_INFO, "phase 0 -> 1\n");
-    turn_right(atmega, may_log);
+    Servo_set_angle(&atmega->us_servo, -90);
     _delay_ms(250);
+    turn_right(atmega, may_log);
     wall_phase = 1;
-    dist_threshold = 20;
+    US_SENSOR_DISTANCE = 20;
     return;
   } else if (wall_phase == 1) {
-    Servo_set_angle(&atmega->us_servo, -90);
     _delay_ms(100);
     wall_detected = false;
     wall_phase = 2;
+    return;
   } else if (wall_detected && wall_phase == 2) {
     Menu_log(LOG_INFO, FMT("wall: %d\n", (int)wall_detected));
-    if (mid && micros() - init_t >= 1000000) {
+    if (mid && micros() - init_t >= 3000000) {
       Menu_log(LOG_INFO, "found track again\n");
       wall_detected = false;
       Servo_set_angle(&atmega->us_servo, 0);
       _delay_ms(250);
       turn_right(atmega, may_log);
       wall_phase = 0;
-      dist_threshold = 15;
+      US_SENSOR_DISTANCE = 15;
+      return;
     } else if (wall_detected) {
       Menu_log(LOG_INFO, "phase 2 fw\n");
       drive_forward(atmega, may_log);
