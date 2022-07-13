@@ -36,9 +36,10 @@ int MAIN() {
       EventSystem_instance(),
       Listener_create_r(&atmega, Logic_reset, Menu_instance().car_start_event));
 
-  EventSystem_reg_listener(
-      EventSystem_instance(),
-      Listener_create_r(&atmega, Logic_reset, Menu_instance().car_stop_event));
+  //   EventSystem_reg_listener(
+  //       EventSystem_instance(),
+  //       Listener_create_r(&atmega, Logic_reset,
+  //       Menu_instance().car_stop_event));
 
   EventSystem_reg_listener(EventSystem_instance(),
                            Listener_create_r(&atmega, System_start,
