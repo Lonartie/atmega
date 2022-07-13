@@ -16,6 +16,8 @@ const int16_t SPEED_TURN_B = 190;
 const int16_t SPEED_TURN_SLOW_A = 240;
 const int16_t SPEED_TURN_SLOW_B = 20;
 
+const uint32_t TIME_TO_TRY_SMOOTH_STEERING_US = 150000;
+
 const uint8_t US_SENSOR_DISTANCE_SMALL = 16;
 const uint8_t US_SENSOR_DISTANCE_LARGE = 23;
 static uint8_t US_CURRENT_SENSOR_DISTANCE = 16;
@@ -376,8 +378,8 @@ void turn_left(System* atmega, bool may_log MAYBE_UNUSED) {
     last_direction_update = micros();
     track_direction = TRACK_LEFT;
   }
-  // try smooth steer first for 100 ms
-  if ((micros() - smooth_steer_start) < 100000) {
+  // try smooth steer first
+  if ((micros() - smooth_steer_start) < TIME_TO_TRY_SMOOTH_STEERING_US) {
     if (!is_smooth_steering) {
       is_smooth_steering = true;
       smooth_steer_start = micros();
@@ -398,8 +400,8 @@ void turn_right(System* atmega, bool may_log MAYBE_UNUSED) {
     track_direction = TRACK_RIGHT;
   }
 
-  // try smooth steer first for 100 ms
-  if ((micros() - smooth_steer_start) < 100000) {
+  // try smooth steer first
+  if ((micros() - smooth_steer_start) < TIME_TO_TRY_SMOOTH_STEERING_US) {
     if (!is_smooth_steering) {
       is_smooth_steering = true;
       smooth_steer_start = micros();
