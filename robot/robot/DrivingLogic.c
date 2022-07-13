@@ -51,7 +51,7 @@ void turn_smooth_right(System* atmega, bool may_log);
 void drive_forward(System* atmega, bool may_log);
 void stop_driving(System* atmega, bool may_log);
 
-static uint64_t last_measure = 0;
+static uint32_t last_measure = 0;
 
 bool measure_was_recently() { return micros() - last_measure < 100000; }
 
