@@ -12,8 +12,8 @@
 const int8_t SPEED_DRIVE_SLOW = 0;
 const int16_t SPEED_DRIVE = 170;
 const int16_t SPEED_TURN_A = 150;
-const int16_t SPEED_TURN_B = -150;
-const int16_t SPEED_TURN_SLOW_A = 180;
+const int16_t SPEED_TURN_B = 150;
+const int16_t SPEED_TURN_SLOW_A = 190;
 const int16_t SPEED_TURN_SLOW_B = 0;
 
 static uint8_t US_SENSOR_DISTANCE = 13;
@@ -332,58 +332,26 @@ void drive_logic(System* atmega) {
 
 void turn_left(System* atmega, bool may_log) {
   if (may_log) Menu_log(LOG_DEBUG, TURN_LEFT_MESSAGE);
-  if (SPEED_TURN_B > 0) {
-    Motor_drive_forward(&atmega->mt_left, (uint8_t)SPEED_TURN_B);
-  } else {
-    Motor_drive_backward(&atmega->mt_left, (uint8_t)-SPEED_TURN_B);
-  }
-  if (SPEED_TURN_A > 0) {
-    Motor_drive_forward(&atmega->mt_right, (uint8_t)SPEED_TURN_A);
-  } else {
-    Motor_drive_backward(&atmega->mt_right, (uint8_t)-SPEED_TURN_A);
-  }
+  Motor_drive_backward(&atmega->mt_left, SPEED_TURN_B);
+  Motor_drive_forward(&atmega->mt_right, SPEED_TURN_A);
 }
 
 void turn_right(System* atmega, bool may_log) {
   if (may_log) Menu_log(LOG_DEBUG, TURN_RIGHT_MESSAGE);
-  if (SPEED_TURN_A > 0) {
-    Motor_drive_forward(&atmega->mt_left, (uint8_t)SPEED_TURN_A);
-  } else {
-    Motor_drive_backward(&atmega->mt_left, (uint8_t)-SPEED_TURN_A);
-  }
-  if (SPEED_TURN_B > 0) {
-    Motor_drive_forward(&atmega->mt_right, (uint8_t)SPEED_TURN_B);
-  } else {
-    Motor_drive_backward(&atmega->mt_right, (uint8_t)-SPEED_TURN_B);
-  }
+  Motor_drive_forward(&atmega->mt_left, SPEED_TURN_A);
+  Motor_drive_backward(&atmega->mt_right, SPEED_TURN_B);
 }
 
 void turn_smooth_left(System* atmega, bool may_log) {
   if (may_log) Menu_log(LOG_DEBUG, TURN_LEFT_MESSAGE);
-  if (SPEED_TURN_SLOW_B > 0) {
-    Motor_drive_forward(&atmega->mt_left, (uint8_t)SPEED_TURN_SLOW_B);
-  } else {
-    Motor_drive_backward(&atmega->mt_left, (uint8_t)-SPEED_TURN_SLOW_B);
-  }
-  if (SPEED_TURN_SLOW_A > 0) {
-    Motor_drive_forward(&atmega->mt_right, (uint8_t)SPEED_TURN_SLOW_A);
-  } else {
-    Motor_drive_backward(&atmega->mt_right, (uint8_t)-SPEED_TURN_SLOW_A);
-  }
+  Motor_drive_forward(&atmega->mt_right, SPEED_TURN_SLOW_A);
+  Motor_drive_backward(&atmega->mt_left, SPEED_TURN_SLOW_B);
 }
 
 void turn_smooth_right(System* atmega, bool may_log) {
   if (may_log) Menu_log(LOG_DEBUG, TURN_RIGHT_MESSAGE);
-  if (SPEED_TURN_SLOW_A > 0) {
-    Motor_drive_forward(&atmega->mt_left, (uint8_t)SPEED_TURN_SLOW_A);
-  } else {
-    Motor_drive_backward(&atmega->mt_left, (uint8_t)-SPEED_TURN_SLOW_A);
-  }
-  if (SPEED_TURN_SLOW_B > 0) {
-    Motor_drive_forward(&atmega->mt_right, (uint8_t)SPEED_TURN_SLOW_B);
-  } else {
-    Motor_drive_backward(&atmega->mt_right, (uint8_t)-SPEED_TURN_SLOW_B);
-  }
+  Motor_drive_forward(&atmega->mt_left, SPEED_TURN_SLOW_A);
+  Motor_drive_backward(&atmega->mt_right, SPEED_TURN_SLOW_B);
 }
 
 void drive_forward(System* atmega, bool may_log) {
