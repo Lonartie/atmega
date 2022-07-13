@@ -14,7 +14,7 @@ const int16_t SPEED_DRIVE = 170;
 const int16_t SPEED_TURN_A = 190;
 const int16_t SPEED_TURN_B = 190;
 const int16_t SPEED_TURN_SLOW_A = 220;
-const int16_t SPEED_TURN_SLOW_B = 0;
+const int16_t SPEED_TURN_SLOW_B = 20;
 
 static uint8_t US_SENSOR_DISTANCE = 13;
 
@@ -64,7 +64,7 @@ void stop_driving(System* atmega, bool may_log);
 
 static uint32_t last_measure = 0;
 
-bool measure_was_recently() { return (micros() - last_measure) <= 75000; }
+bool measure_was_recently() { return (micros() - last_measure) <= 50000; }
 
 void detect_wall(void* system) {
   System* atmega = (System*)system;
@@ -76,7 +76,7 @@ void detect_wall(void* system) {
     return;
   }
 
-  wall_detected = ((micros() - last_measure) < 50000);
+  wall_detected = ((micros() - last_measure) < 25000);
   last_measure = micros();
 
   // if (calls < UINT8_MAX) {
@@ -208,7 +208,7 @@ void drive_logic(System* atmega) {
         Servo_set_angle(&atmega->us_servo, 90);
       }
       stop_driving(atmega, may_log);
-      _delay_us(500000);
+      _delay_us(100000);
       last_wall_phase = wall_phase;
       wall_phase = 1;
     }
