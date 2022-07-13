@@ -54,19 +54,22 @@ void stop_driving(System* atmega, bool may_log);
 void detect_wall(void* system) {
   System* atmega = (System*)system;
 
-  static uint64_t last_call = 0;
+  static uint8_t calls = 0;
+  static uint64_t last_measure = 0;
 
   if (UltraSoundSensor_dist(&atmega->us) > US_SENSOR_DISTANCE) {
     return;
   }
 
-  if (micros() - last_call < 10000) {
-    wall_detected = true;
-  } else {
-    wall_detected = false;
+  if (calls < UINT8_MAX) {
+    calls++;
   }
 
-  last_call = micros();
+  if ((micros() - last_measure) >= 100000) {
+    last_measure = micros();
+    wall_detected = (calls >= 5);
+    calls = 0;
+  }
   // static uint8_t calls = 0;
   // static uint32_t last_call_t = 0;
 
