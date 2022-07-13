@@ -13,7 +13,7 @@ const int8_t SPEED_DRIVE_SLOW = 0;
 const int16_t SPEED_DRIVE = 170;
 const int16_t SPEED_TURN_A = 150;
 const int16_t SPEED_TURN_B = -150;
-const int16_t SPEED_TURN_SLOW_A = 200;
+const int16_t SPEED_TURN_SLOW_A = 180;
 const int16_t SPEED_TURN_SLOW_B = 0;
 
 static uint8_t US_SENSOR_DISTANCE = 13;
@@ -166,7 +166,8 @@ void drive_logic(System* atmega) {
   if (wall_phase >= 3 && mid) {
     Menu_log(LOG_INFO, "found track again\n");
     Servo_set_angle(&atmega->us_servo, 0);
-    _delay_ms(1000);
+    stop_driving(atmega, may_log);
+    _delay_us(500000);
     turn_right(atmega, true);
     wall_phase = 0;
     last_wall_phase = UINT8_MAX;
