@@ -157,7 +157,7 @@ void drive_logic(System* atmega) {
   }
 
   if (wall_phase != 0 || sees_wall) {
-    avoid_obstacle_logic(atmega, sees_wall, may_log, mid);
+    return avoid_obstacle_logic(atmega, sees_wall, may_log, mid);
   }
 
   if (left && mid && right && !seeing_start && may_see_start) {
