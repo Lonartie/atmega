@@ -14,7 +14,7 @@ const int16_t SPEED_DRIVE = 170;
 const int16_t SPEED_TURN_A = 150;
 const int16_t SPEED_TURN_B = -150;
 const int16_t SPEED_TURN_SLOW_A = 150;
-const int16_t SPEED_TURN_SLOW_B = -100;
+const int16_t SPEED_TURN_SLOW_B = 50;
 
 static uint8_t US_SENSOR_DISTANCE = 13;
 
@@ -58,13 +58,14 @@ void detect_wall(void* system) {
   static uint32_t last_call_t = 0;
 
   if (UltraSoundSensor_dist(&atmega->us) > US_SENSOR_DISTANCE) {
+    wall_detected = false;
     return;
   }
 
   calls++;
   if (micros() - last_call_t >= 100000) {
     last_call_t = micros();
-    wall_detected = (calls >= 5);
+    wall_detected = (calls >= 3);
     calls = 0;
   }
 }
