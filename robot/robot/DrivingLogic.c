@@ -66,6 +66,7 @@ void detect_wall(void* system) {
   }
 
   if ((micros() - last_measure) >= 100000) {
+    Menu_log(LOG_INFO, FMT("%d\n", calls));
     last_measure = micros();
     wall_detected = (calls >= 3);
     calls = 0;
