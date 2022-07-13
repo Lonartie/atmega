@@ -326,16 +326,16 @@ void obstacle_phase_3(System* atmega, bool sees_wall, bool may_log) {
     last_wall_phase = wall_phase;
   } else if (UltraSoundSensor_dist(&atmega->us) < US_CURRENT_SENSOR_DISTANCE) {
     if (track_direction == TRACK_RIGHT) {
-      turn_smooth_right(atmega, may_log);
+      turn_right(atmega, may_log);
     } else {
-      turn_smooth_left(atmega, may_log);
+      turn_left(atmega, may_log);
     }
     last_wall_phase = wall_phase;
   } else if (UltraSoundSensor_dist(&atmega->us) > US_CURRENT_SENSOR_DISTANCE) {
     if (track_direction == TRACK_RIGHT) {
-      turn_smooth_left(atmega, may_log);
+      turn_left(atmega, may_log);
     } else {
-      turn_smooth_right(atmega, may_log);
+      turn_right(atmega, may_log);
     }
     last_wall_phase = wall_phase;
   }
@@ -351,9 +351,9 @@ void obstacle_phase_4(System* atmega, bool sees_wall, bool may_log) {
   if (last_wall_phase != wall_phase) {
     Menu_log(LOG_INFO, "p4\n");
     if (track_direction == TRACK_RIGHT) {
-      turn_left(atmega, may_log);
+      turn_smooth_left(atmega, may_log);
     } else {
-      turn_right(atmega, may_log);
+      turn_smooth_right(atmega, may_log);
     }
     last_wall_phase = wall_phase;
   }
