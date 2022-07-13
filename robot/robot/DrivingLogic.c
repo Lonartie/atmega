@@ -13,10 +13,10 @@ const int8_t SPEED_DRIVE_SLOW = 0;
 const int16_t SPEED_DRIVE = 170;
 const int16_t SPEED_TURN_A = 190;
 const int16_t SPEED_TURN_B = 190;
-const int16_t SPEED_TURN_SLOW_A = 200;
-const int16_t SPEED_TURN_SLOW_B = 0;
+const int16_t SPEED_TURN_SLOW_A = 220;
+const int16_t SPEED_TURN_SLOW_B = 20;
 
-const uint8_t US_SENSOR_DISTANCE_SMALL = 18;
+const uint8_t US_SENSOR_DISTANCE_SMALL = 16;
 const uint8_t US_SENSOR_DISTANCE_LARGE = 23;
 static uint8_t US_CURRENT_SENSOR_DISTANCE = 16;
 
