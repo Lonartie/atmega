@@ -30,9 +30,12 @@ int MAIN() {
   EventSystem_reg_listener(
       EventSystem_instance(),
       Listener_create_r(&usart, Menu_handle_input, usart.event));
-  EventSystem_reg_listener(EventSystem_instance(),
-                           Listener_create_r(&atmega, Logic_restart,
-                                             Menu_instance().car_start_event));
+  EventSystem_reg_listener(
+      EventSystem_instance(),
+      Listener_create_r(&atmega, Logic_reset, Menu_instance().car_start_event));
+  EventSystem_reg_listener(
+      EventSystem_instance(),
+      Listener_create_r(&atmega, Logic_reset, Menu_instance().car_stop_event));
   EventSystem_reg_listener(EventSystem_instance(),
                            Listener_create_r(&atmega, System_start,
                                              Menu_instance().car_start_event));

@@ -84,7 +84,7 @@ void detect_wall(void* system) {
   // }
 }
 
-void Logic_restart(void* system) {
+void Logic_reset(void* system) {
   System* atmega = (System*)system;
   Servo_set_angle(&atmega->us_servo, 0);
 }
