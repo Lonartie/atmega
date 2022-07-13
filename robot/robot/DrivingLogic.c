@@ -51,11 +51,14 @@ void turn_smooth_right(System* atmega, bool may_log);
 void drive_forward(System* atmega, bool may_log);
 void stop_driving(System* atmega, bool may_log);
 
+static uint64_t last_measure = 0;
+
+bool measure_was_recently() { return micros() - last_measure < 100000; }
+
 void detect_wall(void* system) {
   System* atmega = (System*)system;
 
   static uint8_t calls = 0;
-  static uint64_t last_measure = 0;
 
   if (UltraSoundSensor_dist(&atmega->us) > US_SENSOR_DISTANCE) {
     return;
@@ -134,6 +137,7 @@ void drive_logic(System* atmega) {
   bool left = left_measure > MEASURE_THRESHOLD_LEFT;
   bool mid = mid_measure > MEASURE_THRESHOLD_MID;
   bool right = right_measure > MEASURE_THRESHOLD_RIGHT;
+  bool sees_wall = (wall_detected && measure_was_recently());
 
   bool may_log = false;
 
@@ -163,13 +167,13 @@ void drive_logic(System* atmega) {
     US_SENSOR_DISTANCE = 13;
   }
 
-  if ((wall_detected && wall_phase == 0) || wall_phase == 1) {
+  if ((sees_wall && wall_phase == 0) || wall_phase == 1) {
     // setup phase
     if (log_1_sec) {
-      Menu_log(LOG_INFO, FMT("p0/1, w:%d\n", wall_detected));
+      Menu_log(LOG_INFO, FMT("p0/1, w:%d\n", sees_wall));
     }
     if (last_wall_phase != wall_phase) {
-      Menu_log(LOG_INFO, FMT("p0/1, w:%d\n", wall_detected));
+      Menu_log(LOG_INFO, FMT("p0/1, w:%d\n", sees_wall));
       Servo_set_angle(&atmega->us_servo, -90);
       stop_driving(atmega, may_log);
       _delay_us(500000);
@@ -177,7 +181,7 @@ void drive_logic(System* atmega) {
       wall_phase = 1;
     }
 
-    if (!wall_detected) {
+    if (!sees_wall) {
       US_SENSOR_DISTANCE = 25;
       wall_phase = 2;
     }
@@ -195,7 +199,7 @@ void drive_logic(System* atmega) {
       last_wall_phase = wall_phase;
     }
 
-    if (wall_detected) {
+    if (sees_wall) {
       _delay_us(100000);
       wall_phase = 3;
     }
@@ -213,7 +217,7 @@ void drive_logic(System* atmega) {
       last_wall_phase = wall_phase;
     }
 
-    if (!wall_detected) {
+    if (!sees_wall) {
       _delay_us(100000);
       wall_phase = 4;
     }
@@ -231,7 +235,7 @@ void drive_logic(System* atmega) {
       last_wall_phase = wall_phase;
     }
 
-    if (wall_detected) {
+    if (sees_wall) {
       _delay_us(100000);
       wall_phase = 3;
     }
