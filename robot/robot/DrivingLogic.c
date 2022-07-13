@@ -366,7 +366,7 @@ void drive_logic(System* atmega) {
 
 void turn_left(System* atmega, bool may_log) {
   if (may_log) Menu_log(LOG_DEBUG, TURN_LEFT_MESSAGE);
-  if ((micros() - last_direction_update) >= 250000 && update_track_direction) {
+  if ((micros() - last_direction_update) >= 150000 && update_track_direction) {
     last_direction_update = micros();
     track_direction = TRACK_LEFT;
   }
@@ -376,7 +376,7 @@ void turn_left(System* atmega, bool may_log) {
 
 void turn_right(System* atmega, bool may_log) {
   if (may_log) Menu_log(LOG_DEBUG, TURN_RIGHT_MESSAGE);
-  if ((micros() - last_direction_update) >= 250000 && update_track_direction) {
+  if ((micros() - last_direction_update) >= 150000 && update_track_direction) {
     last_direction_update = micros();
     track_direction = TRACK_RIGHT;
   }
