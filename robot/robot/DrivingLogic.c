@@ -53,7 +53,7 @@ void stop_driving(System* atmega, bool may_log);
 
 static uint32_t last_measure = 0;
 
-bool measure_was_recently() { return micros() - last_measure < 100000; }
+bool measure_was_recently() { return micros() - last_measure <= 150000; }
 
 void detect_wall(void* system) {
   System* atmega = (System*)system;
