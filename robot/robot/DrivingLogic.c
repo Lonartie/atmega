@@ -9,9 +9,12 @@
 #include "Models/System.h"
 #include "Models/WatchDog.h"
 
-const int SPEED_DRIVE_SLOW = 0;
-const int SPEED_DRIVE = 170;
-const int SPEED_TURN = 150;
+const int8_t SPEED_DRIVE_SLOW = 0;
+const int16_t SPEED_DRIVE = 170;
+const int16_t SPEED_TURN_A = 150;
+const int16_t SPEED_TURN_B = -150;
+const int16_t SPEED_TURN_SLOW_A = 150;
+const int16_t SPEED_TURN_SLOW_B = -100;
 
 static uint8_t US_SENSOR_DISTANCE = 13;
 
@@ -43,12 +46,12 @@ void drive_logic(System* atmega);
 
 void turn_left(System* atmega, bool may_log);
 void turn_right(System* atmega, bool may_log);
+void turn_smooth_left(System* atmega, bool may_log);
+void turn_smooth_right(System* atmega, bool may_log);
 void drive_forward(System* atmega, bool may_log);
 void stop_driving(System* atmega, bool may_log);
 
 void detect_wall(void* system) {
-  // static uint32_t last_t = 0;
-  // static uint8_t count = 0;
   System* atmega = (System*)system;
 
   static uint8_t calls = 0;
@@ -64,26 +67,6 @@ void detect_wall(void* system) {
     wall_detected = (calls >= 5);
     calls = 0;
   }
-
-  // wall_detected = (UltraSoundSensor_dist(&atmega->us) <= US_SENSOR_DISTANCE);
-
-  // if ((UltraSoundSensor_dist(&atmega->us) > US_SENSOR_DISTANCE)) {
-  //   wall_detected = false;
-  //   return;
-  // }
-
-  // if (((uint32_t)micros() - last_t) <= 1000000) {
-  //   count++;
-  // } else {
-  //   count = 0;
-  // }
-
-  // if (count >= 5) {
-  //   wall_detected = true;
-  // } else {
-  //   wall_detected = false;
-  // }
-  // last_t = micros();
 }
 
 void Logic_restart(void* system) {
@@ -140,7 +123,6 @@ void drive_logic(System* atmega) {
   bool right = right_measure > MEASURE_THRESHOLD_RIGHT;
 
   bool may_log = false;
-  uint32_t new_time = micros();
 
   if (left != lleft || mid != lmid || right != lright) {
     // update lights and sends log messages
@@ -183,7 +165,7 @@ void drive_logic(System* atmega) {
     }
 
     if (!wall_detected) {
-      US_SENSOR_DISTANCE = 20;
+      US_SENSOR_DISTANCE = 25;
       wall_phase = 2;
     }
     return;
@@ -232,7 +214,7 @@ void drive_logic(System* atmega) {
     }
     if (last_wall_phase != wall_phase) {
       Menu_log(LOG_INFO, "p4\n");
-      turn_left(atmega, true);
+      turn_smooth_left(atmega, true);
       last_wall_phase = wall_phase;
     }
 
@@ -327,14 +309,58 @@ void drive_logic(System* atmega) {
 
 void turn_left(System* atmega, bool may_log) {
   if (may_log) Menu_log(LOG_DEBUG, TURN_LEFT_MESSAGE);
-  Motor_drive_backward(&atmega->mt_left, SPEED_TURN);
-  Motor_drive_forward(&atmega->mt_right, SPEED_TURN);
+  if (SPEED_TURN_B > 0) {
+    Motor_drive_forward(&atmega->mt_left, (uint8_t)SPEED_TURN_B);
+  } else {
+    Motor_drive_backward(&atmega->mt_left, (uint8_t)-SPEED_TURN_B);
+  }
+  if (SPEED_TURN_A > 0) {
+    Motor_drive_forward(&atmega->mt_right, (uint8_t)SPEED_TURN_A);
+  } else {
+    Motor_drive_backward(&atmega->mt_right, (uint8_t)-SPEED_TURN_A);
+  }
 }
 
 void turn_right(System* atmega, bool may_log) {
   if (may_log) Menu_log(LOG_DEBUG, TURN_RIGHT_MESSAGE);
-  Motor_drive_forward(&atmega->mt_left, SPEED_TURN);
-  Motor_drive_backward(&atmega->mt_right, SPEED_TURN);
+  if (SPEED_TURN_A > 0) {
+    Motor_drive_forward(&atmega->mt_left, (uint8_t)SPEED_TURN_A);
+  } else {
+    Motor_drive_backward(&atmega->mt_left, (uint8_t)-SPEED_TURN_A);
+  }
+  if (SPEED_TURN_B > 0) {
+    Motor_drive_forward(&atmega->mt_right, (uint8_t)SPEED_TURN_B);
+  } else {
+    Motor_drive_backward(&atmega->mt_right, (uint8_t)-SPEED_TURN_B);
+  }
+}
+
+void turn_smooth_left(System* atmega, bool may_log) {
+  if (may_log) Menu_log(LOG_DEBUG, TURN_LEFT_MESSAGE);
+  if (SPEED_TURN_SLOW_B > 0) {
+    Motor_drive_forward(&atmega->mt_left, (uint8_t)SPEED_TURN_SLOW_B);
+  } else {
+    Motor_drive_backward(&atmega->mt_left, (uint8_t)-SPEED_TURN_SLOW_B);
+  }
+  if (SPEED_TURN_SLOW_A > 0) {
+    Motor_drive_forward(&atmega->mt_right, (uint8_t)SPEED_TURN_SLOW_A);
+  } else {
+    Motor_drive_backward(&atmega->mt_right, (uint8_t)-SPEED_TURN_SLOW_A);
+  }
+}
+
+void turn_smooth_right(System* atmega, bool may_log) {
+  if (may_log) Menu_log(LOG_DEBUG, TURN_RIGHT_MESSAGE);
+  if (SPEED_TURN_SLOW_A > 0) {
+    Motor_drive_forward(&atmega->mt_left, (uint8_t)SPEED_TURN_SLOW_A);
+  } else {
+    Motor_drive_backward(&atmega->mt_left, (uint8_t)-SPEED_TURN_SLOW_A);
+  }
+  if (SPEED_TURN_SLOW_B > 0) {
+    Motor_drive_forward(&atmega->mt_right, (uint8_t)SPEED_TURN_SLOW_B);
+  } else {
+    Motor_drive_backward(&atmega->mt_right, (uint8_t)-SPEED_TURN_SLOW_B);
+  }
 }
 
 void drive_forward(System* atmega, bool may_log) {
