@@ -351,7 +351,6 @@ void obstacle_phase_4(System* atmega, bool sees_wall, bool may_log) {
 }
 
 void turn_left(System* atmega, bool may_log MAYBE_UNUSED) {
-  Menu_log(LOG_DEBUG, TURN_LEFT_MESSAGE);
   if ((micros() - last_direction_update) >= DIRECTION_UPDATE_DELAY_US &&
       update_track_direction) {
     Menu_log(LOG_DEBUG, "now!\n");
@@ -363,7 +362,6 @@ void turn_left(System* atmega, bool may_log MAYBE_UNUSED) {
 }
 
 void turn_right(System* atmega, bool may_log MAYBE_UNUSED) {
-  Menu_log(LOG_DEBUG, TURN_RIGHT_MESSAGE);
   if ((micros() - last_direction_update) >= DIRECTION_UPDATE_DELAY_US &&
       update_track_direction) {
     Menu_log(LOG_DEBUG, "now!\n");
