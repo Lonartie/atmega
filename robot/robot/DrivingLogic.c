@@ -50,6 +50,8 @@ static TrackDirection track_direction = TRACK_UNKNOWN;
 static bool wall_detected = false;
 static uint32_t last_direction_update = 0;
 static bool update_track_direction = true;
+static uint8_t wall_phase = 0;
+static uint8_t last_wall_phase = UINT8_MAX;
 
 void drive_logic(System* atmega);
 
@@ -102,6 +104,13 @@ void detect_wall(void* system) {
 void Logic_reset(void* system) {
   System* atmega = (System*)system;
   Servo_set_angle(&atmega->us_servo, 0);
+  Servo_set_angle(&atmega->us_servo, 0);
+  _delay_us(500000);
+  US_SENSOR_DISTANCE = 13;
+  wall_phase = 0;
+  last_wall_phase = UINT8_MAX;
+  update_track_direction = true;
+  last_direction_update = micros();
 }
 
 void Logic_start(void* system) {
@@ -169,13 +178,14 @@ void drive_logic(System* atmega) {
     //                         (int)mid_measure, (int)right_measure));
   }
 
-  static uint8_t wall_phase = 0;
-  static uint8_t last_wall_phase = UINT8_MAX;
-
   if (wall_phase >= 3 && mid) {
     Menu_log(LOG_INFO, "found track again\n");
     Servo_set_angle(&atmega->us_servo, 0);
-    turn_right(atmega, true);
+    if (track_direction == TRACK_RIGHT) {
+      turn_right(atmega, true);
+    } else {
+      turn_left(atmega, true);
+    }
     _delay_us(500000);
     wall_phase = 0;
     last_wall_phase = UINT8_MAX;
@@ -204,7 +214,7 @@ void drive_logic(System* atmega) {
     }
 
     if (!sees_wall) {
-      US_SENSOR_DISTANCE = 25;
+      US_SENSOR_DISTANCE = 20;
       wall_phase = 2;
     }
     return;
