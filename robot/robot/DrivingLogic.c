@@ -10,9 +10,9 @@
 #include "Models/WatchDog.h"
 
 const int8_t SPEED_DRIVE_SLOW = 0;
-const int16_t SPEED_DRIVE = 170;
-const int16_t SPEED_TURN_A = 190;
-const int16_t SPEED_TURN_B = 190;
+const int16_t SPEED_DRIVE = 220;
+const int16_t SPEED_TURN_A = 220;
+const int16_t SPEED_TURN_B = 220;
 const int16_t SPEED_TURN_SLOW_A = 240;
 const int16_t SPEED_TURN_SLOW_B = 20;
 
