@@ -20,6 +20,8 @@ const uint8_t US_SENSOR_DISTANCE_SMALL = 16;
 const uint8_t US_SENSOR_DISTANCE_LARGE = 25;
 static uint8_t US_CURRENT_SENSOR_DISTANCE = 16;
 
+const uint32_t DIRECTION_UPDATE_DELAY_US = 250000;
+
 const uint16_t MEASURE_THRESHOLD_LEFT = 330;
 const uint16_t MEASURE_THRESHOLD_MID = 400;
 const uint16_t MEASURE_THRESHOLD_RIGHT = 330;
@@ -350,7 +352,8 @@ void obstacle_phase_4(System* atmega, bool sees_wall, bool may_log) {
 
 void turn_left(System* atmega, bool may_log MAYBE_UNUSED) {
   Menu_log(LOG_DEBUG, TURN_LEFT_MESSAGE);
-  if ((micros() - last_direction_update) >= 150000 && update_track_direction) {
+  if ((micros() - last_direction_update) >= DIRECTION_UPDATE_DELAY_US &&
+      update_track_direction) {
     Menu_log(LOG_DEBUG, "now!\n");
     last_direction_update = micros();
     track_direction = TRACK_LEFT;
@@ -361,7 +364,8 @@ void turn_left(System* atmega, bool may_log MAYBE_UNUSED) {
 
 void turn_right(System* atmega, bool may_log MAYBE_UNUSED) {
   Menu_log(LOG_DEBUG, TURN_RIGHT_MESSAGE);
-  if ((micros() - last_direction_update) >= 150000 && update_track_direction) {
+  if ((micros() - last_direction_update) >= DIRECTION_UPDATE_DELAY_US &&
+      update_track_direction) {
     Menu_log(LOG_DEBUG, "now!\n");
     last_direction_update = micros();
     track_direction = TRACK_RIGHT;
