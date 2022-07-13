@@ -58,22 +58,27 @@ bool measure_was_recently() { return (micros() - last_measure) <= 150000; }
 void detect_wall(void* system) {
   System* atmega = (System*)system;
 
-  static uint8_t calls = 0;
+  // static uint8_t calls = 0;
 
   if (UltraSoundSensor_dist(&atmega->us) > US_SENSOR_DISTANCE) {
+    wall_detected = false;
     return;
   }
 
-  if (calls < UINT8_MAX) {
-    calls++;
-  }
+  wall_detected = true;
+  last_measure = micros();
 
-  if ((micros() - last_measure) >= 100000) {
-    Menu_log(LOG_INFO, "mes\n");
-    last_measure = micros();
-    wall_detected = (calls > 1);
-    calls = 0;
-  }
+  // if (calls < UINT8_MAX) {
+  //   calls++;
+  // }
+
+  // if ((micros() - last_measure) >= 100000) {
+  //   Menu_log(LOG_INFO, "mes\n");
+  //   last_measure = micros();
+  //   wall_detected = (calls > 1);
+  //   calls = 0;
+  // }
+
   // static uint8_t calls = 0;
   // static uint32_t last_call_t = 0;
 
