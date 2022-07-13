@@ -67,7 +67,7 @@ void detect_wall(void* system) {
 
   if ((micros() - last_measure) >= 100000) {
     last_measure = micros();
-    wall_detected = (calls >= 5);
+    wall_detected = (calls >= 3);
     calls = 0;
   }
   // static uint8_t calls = 0;
