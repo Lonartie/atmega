@@ -14,7 +14,7 @@ const int16_t SPEED_DRIVE = 170;
 const int16_t SPEED_TURN_A = 190;
 const int16_t SPEED_TURN_B = 190;
 const int16_t SPEED_TURN_SLOW_A = 220;
-const int16_t SPEED_TURN_SLOW_B = 20;
+const int16_t SPEED_TURN_SLOW_B = 40;
 
 const uint8_t US_SENSOR_DISTANCE_SMALL = 18;
 const uint8_t US_SENSOR_DISTANCE_LARGE = 23;
@@ -326,16 +326,16 @@ void obstacle_phase_3(System* atmega, bool sees_wall, bool may_log) {
     last_wall_phase = wall_phase;
   } else if (UltraSoundSensor_dist(&atmega->us) < US_CURRENT_SENSOR_DISTANCE) {
     if (track_direction == TRACK_RIGHT) {
-      turn_right(atmega, may_log);
+      turn_smooth_right(atmega, may_log);
     } else {
-      turn_left(atmega, may_log);
+      turn_smooth_left(atmega, may_log);
     }
     last_wall_phase = wall_phase;
   } else if (UltraSoundSensor_dist(&atmega->us) > US_CURRENT_SENSOR_DISTANCE) {
     if (track_direction == TRACK_RIGHT) {
-      turn_left(atmega, may_log);
+      turn_smooth_left(atmega, may_log);
     } else {
-      turn_right(atmega, may_log);
+      turn_smooth_right(atmega, may_log);
     }
     last_wall_phase = wall_phase;
   }
