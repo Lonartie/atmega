@@ -57,6 +57,8 @@ static bool update_track_direction = true;
 static uint8_t wall_phase = 0;
 static uint8_t last_wall_phase = UINT8_MAX;
 static uint32_t last_measure = 0;
+static uint32_t smooth_steer_start = 0;
+static bool is_smooth_steering = false;
 
 void drive_logic(System* atmega);
 void avoid_obstacle_logic(System* atmega, bool sees_wall, bool may_log,
@@ -372,8 +374,18 @@ void turn_left(System* atmega, bool may_log MAYBE_UNUSED) {
     last_direction_update = micros();
     track_direction = TRACK_LEFT;
   }
-  Motor_drive_backward(&atmega->mt_left, SPEED_TURN_B);
-  Motor_drive_forward(&atmega->mt_right, SPEED_TURN_A);
+  // try smooth steer first for 100 ms
+  if ((micros() - smooth_steer_start) < 100000) {
+    if (!is_smooth_steering) {
+      is_smooth_steering = true;
+      smooth_steer_start = micros();
+    }
+    turn_smooth_left(atmega, may_log);
+  } else {
+    is_smooth_steering = false;
+    Motor_drive_backward(&atmega->mt_left, SPEED_TURN_B);
+    Motor_drive_forward(&atmega->mt_right, SPEED_TURN_A);
+  }
 }
 
 void turn_right(System* atmega, bool may_log MAYBE_UNUSED) {
@@ -383,8 +395,19 @@ void turn_right(System* atmega, bool may_log MAYBE_UNUSED) {
     last_direction_update = micros();
     track_direction = TRACK_RIGHT;
   }
-  Motor_drive_forward(&atmega->mt_left, SPEED_TURN_A);
-  Motor_drive_backward(&atmega->mt_right, SPEED_TURN_B);
+
+  // try smooth steer first for 100 ms
+  if ((micros() - smooth_steer_start) < 100000) {
+    if (!is_smooth_steering) {
+      is_smooth_steering = true;
+      smooth_steer_start = micros();
+    }
+    turn_smooth_right(atmega, may_log);
+  } else {
+    is_smooth_steering = false;
+    Motor_drive_forward(&atmega->mt_left, SPEED_TURN_A);
+    Motor_drive_backward(&atmega->mt_right, SPEED_TURN_B);
+  }
 }
 
 void turn_smooth_left(System* atmega, bool may_log) {
@@ -402,6 +425,7 @@ void turn_smooth_right(System* atmega, bool may_log) {
 }
 
 void drive_forward(System* atmega, bool may_log) {
+  smooth_steer_start = micros();
   if (may_log) Menu_log(LOG_DEBUG, DRIVE_FORWARD_MESSAGE);
   last_direction_update = micros();
   Motor_drive_forward(&atmega->mt_left, SPEED_DRIVE);
