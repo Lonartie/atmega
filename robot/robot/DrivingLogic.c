@@ -320,9 +320,23 @@ void obstacle_phase_2(System* atmega, bool sees_wall, bool may_log) {
 
 void obstacle_phase_3(System* atmega, bool sees_wall, bool may_log) {
   // drive forward phase
-  if (last_wall_phase != wall_phase) {
-    Menu_log(LOG_INFO, "p3\n");
+  if (last_wall_phase != wall_phase &&
+      UltraSoundSensor_dist(&atmega->us) == US_CURRENT_SENSOR_DISTANCE) {
     drive_forward(atmega, may_log);
+    last_wall_phase = wall_phase;
+  } else if (UltraSoundSensor_dist(&atmega->us) < US_CURRENT_SENSOR_DISTANCE) {
+    if (track_direction == TRACK_RIGHT) {
+      turn_smooth_right(atmega, may_log);
+    } else {
+      turn_smooth_left(atmega, may_log);
+    }
+    last_wall_phase = wall_phase;
+  } else if (UltraSoundSensor_dist(&atmega->us) > US_CURRENT_SENSOR_DISTANCE) {
+    if (track_direction == TRACK_RIGHT) {
+      turn_smooth_left(atmega, may_log);
+    } else {
+      turn_smooth_right(atmega, may_log);
+    }
     last_wall_phase = wall_phase;
   }
 
