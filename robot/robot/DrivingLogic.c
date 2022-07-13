@@ -59,6 +59,7 @@ static bool update_track_direction = true;
 static uint8_t wall_phase = 0;
 static uint8_t last_wall_phase = UINT8_MAX;
 static uint32_t last_measure = 0;
+static uint32_t last_last_measure = 0;
 static uint32_t smooth_steer_start = 0;
 static bool is_smooth_steering = false;
 
@@ -83,7 +84,8 @@ void detect_wall(void* system) {
     return;
   }
 
-  wall_detected = ((micros() - last_measure) < 25000);
+  wall_detected = ((micros() - last_last_measure) < 20000);
+  last_last_measure = last_measure;
   last_measure = micros();
 }
 
