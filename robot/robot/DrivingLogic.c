@@ -266,6 +266,8 @@ void avoid_obstacle_logic(System* atmega, bool sees_wall, bool may_log,
 void obstacle_phase_reset(System* atmega) {
   Menu_log(LOG_INFO, "found track again\n");
   Servo_set_angle(&atmega->us_servo, 0);
+  // we don't want smooth steering here
+  smooth_steer_start = (micros() - 1000000);
   if (track_direction == TRACK_RIGHT) {
     turn_right(atmega, true);
   } else {
