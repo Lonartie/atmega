@@ -52,8 +52,11 @@ static uint32_t last_direction_update = 0;
 static bool update_track_direction = true;
 static uint8_t wall_phase = 0;
 static uint8_t last_wall_phase = UINT8_MAX;
+static uint32_t last_measure = 0;
 
 void drive_logic(System* atmega);
+void avoid_obstacle_logic(System* atmega, bool sees_wall, bool may_log,
+                          bool mid_sensor);
 
 void turn_left(System* atmega, bool may_log);
 void turn_right(System* atmega, bool may_log);
@@ -62,14 +65,10 @@ void turn_smooth_right(System* atmega, bool may_log);
 void drive_forward(System* atmega, bool may_log);
 void stop_driving(System* atmega, bool may_log);
 
-static uint32_t last_measure = 0;
-
-bool measure_was_recently() { return (micros() - last_measure) <= 50000; }
+bool measure_was_recently();
 
 void detect_wall(void* system) {
   System* atmega = (System*)system;
-
-  // static uint8_t calls = 0;
 
   if (UltraSoundSensor_dist(&atmega->us) > US_SENSOR_DISTANCE) {
     wall_detected = false;
@@ -78,27 +77,6 @@ void detect_wall(void* system) {
 
   wall_detected = ((micros() - last_measure) < 25000);
   last_measure = micros();
-
-  // if (calls < UINT8_MAX) {
-  //   calls++;
-  // }
-
-  // if ((micros() - last_measure) >= 100000) {
-  //   Menu_log(LOG_INFO, "mes\n");
-  //   last_measure = micros();
-  //   wall_detected = (calls > 1);
-  //   calls = 0;
-  // }
-
-  // static uint8_t calls = 0;
-  // static uint32_t last_call_t = 0;
-
-  // calls++;
-  // if (micros() - last_call_t >= 100000) {
-  //   last_call_t = micros();
-  //   wall_detected = (calls >= 3);
-  //   calls = 0;
-  // }
 }
 
 void Logic_reset(void* system) {
@@ -138,16 +116,16 @@ void drive_logic(System* atmega) {
   static bool seeing_start = false;
   static uint32_t time_seeing_start = 0;
   static uint8_t rounds = 0;
-  static bool log_1_sec = false;
+  // static bool log_1_sec = false;
 
   // if (micros() - _time_ >= 500000) {
-  if (false) {
-    // Menu_log(LOG_INFO, FMT("wall: %d\n", wall_detected));
-    // _time_ = micros();
-    log_1_sec = true;
-  } else {
-    log_1_sec = false;
-  }
+  // if (false) {
+  //   // Menu_log(LOG_INFO, FMT("wall: %d\n", wall_detected));
+  //   // _time_ = micros();
+  //   log_1_sec = true;
+  // } else {
+  //   log_1_sec = false;
+  // }
 
   if (!atmega->started) {
     Menu_log(LOG_INFO, "not started\n");
@@ -178,115 +156,9 @@ void drive_logic(System* atmega) {
     //                         (int)mid_measure, (int)right_measure));
   }
 
-  if (wall_phase >= 3 && mid) {
-    Menu_log(LOG_INFO, "found track again\n");
-    Servo_set_angle(&atmega->us_servo, 0);
-    if (track_direction == TRACK_RIGHT) {
-      turn_right(atmega, true);
-    } else {
-      turn_left(atmega, true);
-    }
-    _delay_us(500000);
-    wall_phase = 0;
-    last_wall_phase = UINT8_MAX;
-    US_SENSOR_DISTANCE = 13;
-    update_track_direction = true;
-    last_direction_update = micros();
+  if (wall_phase != 0 || sees_wall) {
+    avoid_obstacle_logic(atmega, sees_wall, may_log, mid);
   }
-
-  if ((sees_wall && wall_phase == 0) || wall_phase == 1) {
-    // setup phase
-    if (log_1_sec) {
-      Menu_log(LOG_INFO, FMT("p0/1, w:%d\n", sees_wall));
-    }
-    if (last_wall_phase != wall_phase) {
-      update_track_direction = false;
-      Menu_log(LOG_INFO, FMT("p0/1, w:%d\n", sees_wall));
-      if (track_direction == TRACK_RIGHT) {
-        Servo_set_angle(&atmega->us_servo, -90);
-      } else {
-        Servo_set_angle(&atmega->us_servo, 90);
-      }
-      stop_driving(atmega, may_log);
-      _delay_us(100000);
-      last_wall_phase = wall_phase;
-      wall_phase = 1;
-    }
-
-    if (!sees_wall) {
-      US_SENSOR_DISTANCE = 20;
-      wall_phase = 2;
-    }
-    return;
-  }
-
-  else if (wall_phase == 2) {
-    // turn right phase
-    if (log_1_sec) {
-      Menu_log(LOG_INFO, "p2\n");
-    }
-    if (last_wall_phase != wall_phase) {
-      Menu_log(LOG_INFO, "p2\n");
-      if (track_direction == TRACK_RIGHT) {
-        turn_right(atmega, true);
-      } else {
-        turn_left(atmega, true);
-      }
-      last_wall_phase = wall_phase;
-    }
-
-    if (sees_wall) {
-      _delay_us(100000);
-      wall_phase = 3;
-    }
-    return;
-  }
-
-  else if (wall_phase == 3) {
-    // drive forward phase
-    if (log_1_sec) {
-      Menu_log(LOG_INFO, "p3\n");
-    }
-    if (last_wall_phase != wall_phase) {
-      Menu_log(LOG_INFO, "p3\n");
-      drive_forward(atmega, true);
-      last_wall_phase = wall_phase;
-    }
-
-    if (!sees_wall) {
-      _delay_us(100000);
-      wall_phase = 4;
-    }
-    return;
-  }
-
-  else if (wall_phase == 4) {
-    // turn left phase
-    if (log_1_sec) {
-      Menu_log(LOG_INFO, "p4\n");
-    }
-    if (last_wall_phase != wall_phase) {
-      Menu_log(LOG_INFO, "p4\n");
-      if (track_direction == TRACK_RIGHT) {
-        turn_smooth_left(atmega, true);
-      } else {
-        turn_smooth_right(atmega, true);
-      }
-      last_wall_phase = wall_phase;
-    }
-
-    if (sees_wall) {
-      _delay_us(100000);
-      wall_phase = 3;
-    }
-    return;
-  }
-
-  US_SENSOR_DISTANCE = 13;
-
-  // if (log_1_sec) {
-  //   Menu_log(LOG_INFO, FMT("main wp: %d\n", wall_phase));
-  // }
 
   if (left && mid && right && !seeing_start && may_see_start) {
     seeing_start = true;
@@ -296,11 +168,6 @@ void drive_logic(System* atmega) {
     seeing_start = false;
     may_see_start = true;
   }
-
-  // if (seeing_start) {
-  //   Menu_log(LOG_INFO, FMT("start for %d ms\n",
-  //                          (int)((micros() - time_seeing_start) / 1000)));
-  // }
 
   if (seeing_start && (micros() - time_seeing_start) / 1000 >= 50) {
     rounds++;
@@ -364,9 +231,123 @@ void drive_logic(System* atmega) {
   lright = right;
 }
 
+void obstacle_phase_reset(System* atmega);
+void obstacle_phase_0(System* atmega, bool sees_wall, bool may_log);
+void obstacle_phase_1(System* atmega, bool sees_wall, bool may_log);
+void obstacle_phase_2(System* atmega, bool sees_wall, bool may_log);
+void obstacle_phase_3(System* atmega, bool sees_wall, bool may_log);
+void obstacle_phase_4(System* atmega, bool sees_wall, bool may_log);
+
+void avoid_obstacle_logic(System* atmega, bool sees_wall, bool may_log,
+                          bool mid_sensor) {
+  if (wall_phase >= 3 && mid_sensor) {
+    obstacle_phase_reset(atmega);
+  } else if (sees_wall && wall_phase == 0) {
+    obstacle_phase_0(atmega, sees_wall, may_log);
+  } else if (wall_phase == 1) {
+    obstacle_phase_1(atmega, sees_wall, may_log);
+  } else if (wall_phase == 2) {
+    obstacle_phase_2(atmega, sees_wall, may_log);
+  } else if (wall_phase == 3) {
+    obstacle_phase_3(atmega, sees_wall, may_log);
+  } else if (wall_phase == 4) {
+    obstacle_phase_4(atmega, sees_wall, may_log);
+  }
+}
+
+void obstacle_phase_reset(System* atmega) {
+  Menu_log(LOG_INFO, "found track again\n");
+  Servo_set_angle(&atmega->us_servo, 0);
+  if (track_direction == TRACK_RIGHT) {
+    turn_right(atmega, true);
+  } else {
+    turn_left(atmega, true);
+  }
+  _delay_us(500000);
+  wall_phase = 0;
+  last_wall_phase = UINT8_MAX;
+  US_SENSOR_DISTANCE = 13;
+  update_track_direction = true;
+  last_direction_update = micros();
+}
+
+void obstacle_phase_0(System* atmega, bool sees_wall, bool may_log) {
+  // setup phase
+  if (last_wall_phase != wall_phase) {
+    update_track_direction = false;
+    if (track_direction == TRACK_RIGHT) {
+      Servo_set_angle(&atmega->us_servo, -90);
+    } else {
+      Servo_set_angle(&atmega->us_servo, 90);
+    }
+    stop_driving(atmega, may_log);
+    _delay_us(100000);
+    last_wall_phase = wall_phase;
+    wall_phase = 1;
+  }
+
+  if (!sees_wall) {
+    US_SENSOR_DISTANCE = 20;
+    wall_phase = 2;
+  }
+}
+
+void obstacle_phase_1(System* atmega, bool sees_wall, bool may_log) {
+  obstacle_phase_0(atmega, sees_wall, may_log);
+}
+
+void obstacle_phase_2(System* atmega, bool sees_wall, bool may_log) {
+  // turn right phase
+  if (last_wall_phase != wall_phase) {
+    if (track_direction == TRACK_RIGHT) {
+      turn_right(atmega, may_log);
+    } else {
+      turn_left(atmega, may_log);
+    }
+    last_wall_phase = wall_phase;
+  }
+
+  if (sees_wall) {
+    _delay_us(100000);
+    wall_phase = 3;
+  }
+}
+
+void obstacle_phase_3(System* atmega, bool sees_wall, bool may_log) {
+  // drive forward phase
+  if (last_wall_phase != wall_phase) {
+    Menu_log(LOG_INFO, "p3\n");
+    drive_forward(atmega, may_log);
+    last_wall_phase = wall_phase;
+  }
+
+  if (!sees_wall) {
+    _delay_us(100000);
+    wall_phase = 4;
+  }
+}
+
+void obstacle_phase_4(System* atmega, bool sees_wall, bool may_log) {
+  // turn left phase
+  if (last_wall_phase != wall_phase) {
+    Menu_log(LOG_INFO, "p4\n");
+    if (track_direction == TRACK_RIGHT) {
+      turn_smooth_left(atmega, may_log);
+    } else {
+      turn_smooth_right(atmega, may_log);
+    }
+    last_wall_phase = wall_phase;
+  }
+
+  if (sees_wall) {
+    _delay_us(100000);
+    wall_phase = 3;
+  }
+}
+
 void turn_left(System* atmega, bool may_log) {
   if (may_log) Menu_log(LOG_DEBUG, TURN_LEFT_MESSAGE);
-  if ((micros() - last_direction_update) >= 150000 && update_track_direction) {
+  if ((micros() - last_direction_update) >= 75000 && update_track_direction) {
     last_direction_update = micros();
     track_direction = TRACK_LEFT;
   }
@@ -376,7 +357,7 @@ void turn_left(System* atmega, bool may_log) {
 
 void turn_right(System* atmega, bool may_log) {
   if (may_log) Menu_log(LOG_DEBUG, TURN_RIGHT_MESSAGE);
-  if ((micros() - last_direction_update) >= 150000 && update_track_direction) {
+  if ((micros() - last_direction_update) >= 75000 && update_track_direction) {
     last_direction_update = micros();
     track_direction = TRACK_RIGHT;
   }
@@ -407,3 +388,5 @@ void stop_driving(System* atmega, bool may_log) {
   Motor_drive_forward(&atmega->mt_left, 0);
   Motor_drive_forward(&atmega->mt_right, 0);
 }
+
+bool measure_was_recently() { return (micros() - last_measure) <= 50000; }
