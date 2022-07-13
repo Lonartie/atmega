@@ -14,7 +14,7 @@ const int16_t SPEED_DRIVE = 170;
 const int16_t SPEED_TURN_A = 150;
 const int16_t SPEED_TURN_B = -150;
 const int16_t SPEED_TURN_SLOW_A = 150;
-const int16_t SPEED_TURN_SLOW_B = 50;
+const int16_t SPEED_TURN_SLOW_B = -100;
 
 static uint8_t US_SENSOR_DISTANCE = 13;
 
