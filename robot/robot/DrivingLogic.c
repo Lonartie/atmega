@@ -374,24 +374,28 @@ void turn_right(System* atmega, bool may_log MAYBE_UNUSED) {
 
 void turn_smooth_left(System* atmega, bool may_log) {
   if (may_log) Menu_log(LOG_DEBUG, TURN_LEFT_MESSAGE);
+  last_direction_update = micros();
   Motor_drive_forward(&atmega->mt_right, SPEED_TURN_SLOW_A);
   Motor_drive_backward(&atmega->mt_left, SPEED_TURN_SLOW_B);
 }
 
 void turn_smooth_right(System* atmega, bool may_log) {
   if (may_log) Menu_log(LOG_DEBUG, TURN_RIGHT_MESSAGE);
+  last_direction_update = micros();
   Motor_drive_forward(&atmega->mt_left, SPEED_TURN_SLOW_A);
   Motor_drive_backward(&atmega->mt_right, SPEED_TURN_SLOW_B);
 }
 
 void drive_forward(System* atmega, bool may_log) {
   if (may_log) Menu_log(LOG_DEBUG, DRIVE_FORWARD_MESSAGE);
+  last_direction_update = micros();
   Motor_drive_forward(&atmega->mt_left, SPEED_DRIVE);
   Motor_drive_forward(&atmega->mt_right, SPEED_DRIVE);
 }
 
 void stop_driving(System* atmega, bool may_log) {
   if (may_log) Menu_log(LOG_DEBUG, STOP_MESSAGE);
+  last_direction_update = micros();
   Motor_drive_forward(&atmega->mt_left, 0);
   Motor_drive_forward(&atmega->mt_right, 0);
 }
