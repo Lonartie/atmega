@@ -263,7 +263,7 @@ void obstacle_phase_reset(System* atmega) {
   } else {
     turn_left(atmega, true);
   }
-  _delay_us(500000);
+  _delay_us(100000);
   wall_phase = 0;
   last_wall_phase = UINT8_MAX;
   US_SENSOR_DISTANCE = 13;
