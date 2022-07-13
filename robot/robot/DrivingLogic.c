@@ -16,7 +16,9 @@ const int16_t SPEED_TURN_B = 190;
 const int16_t SPEED_TURN_SLOW_A = 220;
 const int16_t SPEED_TURN_SLOW_B = 20;
 
-static uint8_t US_SENSOR_DISTANCE = 13;
+const uint8_t US_SENSOR_DISTANCE_SMALL = 16;
+const uint8_t US_SENSOR_DISTANCE_LARGE = 25;
+static uint8_t US_CURRENT_SENSOR_DISTANCE = US_SENSOR_DISTANCE_SMALL;
 
 const uint16_t MEASURE_THRESHOLD_LEFT = 330;
 const uint16_t MEASURE_THRESHOLD_MID = 400;
@@ -70,7 +72,7 @@ bool measure_was_recently();
 void detect_wall(void* system) {
   System* atmega = (System*)system;
 
-  if (UltraSoundSensor_dist(&atmega->us) > US_SENSOR_DISTANCE) {
+  if (UltraSoundSensor_dist(&atmega->us) > US_CURRENT_SENSOR_DISTANCE) {
     wall_detected = false;
     return;
   }
@@ -84,7 +86,7 @@ void Logic_reset(void* system) {
   Servo_set_angle(&atmega->us_servo, 0);
   Servo_set_angle(&atmega->us_servo, 0);
   _delay_us(500000);
-  US_SENSOR_DISTANCE = 13;
+  US_CURRENT_SENSOR_DISTANCE = US_SENSOR_DISTANCE_SMALL;
   wall_phase = 0;
   last_wall_phase = UINT8_MAX;
   update_track_direction = true;
@@ -95,7 +97,8 @@ void Logic_start(void* system) {
   System* atmega = (System*)system;
   Servo_set_angle(&atmega->us_servo, 0);
 
-  UltraSoundSensor_set_event(&atmega->us, US_SENSOR_DISTANCE, "US_SENSOR");
+  UltraSoundSensor_set_event(&atmega->us, US_CURRENT_SENSOR_DISTANCE,
+                             "US_SENSOR");
   EventSystem_reg_listener(EventSystem_instance(),
                            Listener_create_r(system, detect_wall, "US_SENSOR"));
 }
@@ -266,7 +269,7 @@ void obstacle_phase_reset(System* atmega) {
   _delay_us(100000);
   wall_phase = 0;
   last_wall_phase = UINT8_MAX;
-  US_SENSOR_DISTANCE = 13;
+  US_CURRENT_SENSOR_DISTANCE = US_SENSOR_DISTANCE_SMALL;
   update_track_direction = true;
   last_direction_update = micros();
 }
@@ -287,7 +290,7 @@ void obstacle_phase_0(System* atmega, bool sees_wall, bool may_log) {
   }
 
   if (!sees_wall) {
-    US_SENSOR_DISTANCE = 20;
+    US_CURRENT_SENSOR_DISTANCE = US_SENSOR_DISTANCE_LARGE;
     wall_phase = 2;
   }
 }
@@ -345,7 +348,7 @@ void obstacle_phase_4(System* atmega, bool sees_wall, bool may_log) {
   }
 }
 
-void turn_left(System* atmega, bool may_log) {
+void turn_left(System* atmega, bool may_log MAYBE_UNUSED) {
   Menu_log(LOG_DEBUG, TURN_LEFT_MESSAGE);
   if ((micros() - last_direction_update) >= 150000 && update_track_direction) {
     Menu_log(LOG_DEBUG, "now!\n");
@@ -356,7 +359,7 @@ void turn_left(System* atmega, bool may_log) {
   Motor_drive_forward(&atmega->mt_right, SPEED_TURN_A);
 }
 
-void turn_right(System* atmega, bool may_log) {
+void turn_right(System* atmega, bool may_log MAYBE_UNUSED) {
   Menu_log(LOG_DEBUG, TURN_RIGHT_MESSAGE);
   if ((micros() - last_direction_update) >= 150000 && update_track_direction) {
     Menu_log(LOG_DEBUG, "now!\n");
