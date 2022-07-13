@@ -166,9 +166,8 @@ void drive_logic(System* atmega) {
   if (wall_phase >= 3 && mid) {
     Menu_log(LOG_INFO, "found track again\n");
     Servo_set_angle(&atmega->us_servo, 0);
-    stop_driving(atmega, may_log);
-    _delay_us(500000);
     turn_right(atmega, true);
+    _delay_us(500000);
     wall_phase = 0;
     last_wall_phase = UINT8_MAX;
     US_SENSOR_DISTANCE = 13;
