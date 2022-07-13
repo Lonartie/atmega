@@ -60,7 +60,7 @@ static uint32_t last_measure = 0;
 
 void drive_logic(System* atmega);
 void avoid_obstacle_logic(System* atmega, bool sees_wall, bool may_log,
-                          bool mid_sensor);
+                          bool any_sensor);
 
 void turn_left(System* atmega, bool may_log);
 void turn_right(System* atmega, bool may_log);
@@ -162,7 +162,8 @@ void drive_logic(System* atmega) {
   }
 
   if (wall_phase != 0 || sees_wall) {
-    return avoid_obstacle_logic(atmega, sees_wall, may_log, mid);
+    return avoid_obstacle_logic(atmega, sees_wall, may_log,
+                                (left || mid || right));
   }
 
   if (left && mid && right && !seeing_start && may_see_start) {
@@ -244,8 +245,8 @@ void obstacle_phase_3(System* atmega, bool sees_wall, bool may_log);
 void obstacle_phase_4(System* atmega, bool sees_wall, bool may_log);
 
 void avoid_obstacle_logic(System* atmega, bool sees_wall, bool may_log,
-                          bool mid_sensor) {
-  if (wall_phase >= 3 && mid_sensor) {
+                          bool any_sensor) {
+  if (wall_phase >= 3 && any_sensor) {
     obstacle_phase_reset(atmega);
   } else if (sees_wall && wall_phase == 0) {
     obstacle_phase_0(atmega, sees_wall, may_log);
