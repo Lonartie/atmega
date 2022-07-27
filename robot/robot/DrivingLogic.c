@@ -163,7 +163,7 @@ void idle_state(System* atmega, bool left, bool mid, bool right) {
     return;
   }
 
-  if ((millis() - last_message_sent) >= 1000) {
+  if ((millis() - last_message_sent) >= one_seconds_ms) {
     last_message_sent = millis();
     USART_send_str(USART_instance(), IDLE_MESSAGE);
   }
@@ -191,7 +191,7 @@ void on_start_block(System* atmega, bool left, bool mid, bool right) {
     return;
   }
 
-  if ((millis() - last_message_sent) >= 1000) {
+  if ((millis() - last_message_sent) >= one_seconds_ms) {
     last_message_sent = millis();
     USART_send_str(USART_instance(), START_BLOCK_MESSAGE);
   }
@@ -241,7 +241,7 @@ void drive(System* atmega, bool left, bool mid, bool right, bool sees_wall) {
     seeing_start = false;
   }
 
-  if ((millis() - last_message_sent) >= 1000) {
+  if ((millis() - last_message_sent) >= one_seconds_ms) {
     last_message_sent = millis();
     USART_send_str(USART_instance(), FMT(ROUND_MESSAGE, rounds));
   }
@@ -317,7 +317,7 @@ void avoid_obstacle_logic(System* atmega, bool sees_wall, bool any_sensor) {
 void obstacle_phase_reset(System* atmega) {
   Servo_set_angle(&atmega->us_servo, 0);
   // we don't want smooth steering here
-  smooth_steer_start = (millis() - 1000);
+  smooth_steer_start = (millis() - one_seconds_ms);
   if (track_direction == TRACK_RIGHT) {
     turn_right(atmega);
   } else {
@@ -488,9 +488,9 @@ bool measure_was_recently() { return (millis() - last_measure) <= 50; }
 
 void reset_system(System* atmega) {
   System_stop(atmega);
-  _delay_ms(1000);
+  _delay_ms(one_seconds_ms);
   watchdog_init(SEC_4);
-  _delay_ms(5000);
+  _delay_ms(five_seconds_ms);
   return;
 }
 
@@ -520,7 +520,7 @@ void message_led_line(System* atmega, const char* message, uint16_t led_freq) {
     }
   }
 
-  if ((millis() - last_message_sent) >= 1000) {
+  if ((millis() - last_message_sent) >= one_seconds_ms) {
     last_message_sent = millis();
     USART_send_str(USART_instance(), message);
   }

@@ -69,6 +69,8 @@ static uint16_t smooth_steer_start = 0;
 static bool is_smooth_steering = false;
 static char* current_command = NULL;
 static bool safe_state = false;
+static const uint16_t one_seconds_ms = 5000;
+static const uint16_t five_seconds_ms = 5000;
 
 static uint16_t last_message_sent = 0;
 static uint16_t last_led_blink = 0;
