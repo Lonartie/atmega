@@ -27,7 +27,7 @@ void reset_system(System* atmega);
 void drive(System* atmega, bool left, bool mid, bool right, bool sees_wall);
 void show_commands();
 void safe_state_loop(System* atmega);
-void pause(System* atmega);
+void pause_driving(System* atmega);
 
 void Logic_command(void* usart) {
   if (current_command != NULL) {
@@ -138,7 +138,7 @@ void Logic_drive_3_rounds(void* system) {
         System_start(atmega);
         return;
       }
-      pause(atmega);
+      pause_driving(atmega);
       break;
     case DRIVING:
       if (current_command != NULL && strcmp(current_command, "P") == 0) {
@@ -210,11 +210,6 @@ void drive(System* atmega, bool left, bool mid, bool right, bool sees_wall) {
   static uint16_t time_seeing_start = 0;
   static uint16_t last_message_sent = 0;
 
-  if ((millis() - last_message_sent) >= 1000) {
-    last_message_sent = millis();
-    USART_send_str(USART_instance(), FMT(ROUND_MESSAGE, rounds));
-  }
-
   if (left != lleft || mid != lmid || right != lright) {
     ShiftRegister_write_n(&atmega->led_strip, 3, left, mid, right);
   }
@@ -250,6 +245,11 @@ void drive(System* atmega, bool left, bool mid, bool right, bool sees_wall) {
     }
 
     seeing_start = false;
+  }
+
+  if ((millis() - last_message_sent) >= 1000) {
+    last_message_sent = millis();
+    USART_send_str(USART_instance(), FMT(ROUND_MESSAGE, rounds));
   }
 
   // there are rare cases where 011 -> 010 -> 000 is detected so
@@ -534,7 +534,7 @@ void safe_state_loop(System* atmega) {
   }
 }
 
-void pause(System* atmega) {
+void pause_driving(System* atmega) {
   // static uint16_t last_led_update = 0;
   // static uint16_t last_message_sent = 0;
   // static bool ll_left = true, ll_mid = false, ll_right = false, to_right =
