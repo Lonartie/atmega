@@ -9,19 +9,17 @@
 #include "EventSystem/EventSystem.h"
 #include "EventSystem/HardwareTimer.h"
 #include "EventSystem/USARTEvent.h"
-#include "Models/Menu.h"
 #include "Models/System.h"
 #include "Models/WatchDog.h"
 #include "States.h"
 
-void avoid_obstacle_logic(System* atmega, bool sees_wall, bool may_log,
-                          bool any_sensor);
-void turn_left(System* atmega, bool may_log);
-void turn_right(System* atmega, bool may_log);
-void turn_smooth_left(System* atmega, bool may_log);
-void turn_smooth_right(System* atmega, bool may_log);
-void drive_forward(System* atmega, bool may_log);
-void stop_driving(System* atmega, bool may_log);
+void avoid_obstacle_logic(System* atmega, bool sees_wall, bool any_sensor);
+void turn_left(System* atmega);
+void turn_right(System* atmega);
+void turn_smooth_left(System* atmega);
+void turn_smooth_right(System* atmega);
+void drive_forward(System* atmega);
+void stop_driving(System* atmega);
 bool measure_was_recently();
 void idle_state(System* atmega, bool left, bool mid, bool right);
 void on_start_block(System* atmega, bool left, bool mid, bool right);
@@ -182,7 +180,6 @@ void drive(System* atmega, bool left, bool mid, bool right, bool sees_wall) {
   static bool seeing_start = false;
   static uint32_t time_seeing_start = 0;
   static uint32_t last_message_sent = 0;
-  bool may_log = false;
 
   if ((micros() - last_message_sent) >= 1000000) {
     last_message_sent = micros();
@@ -190,13 +187,11 @@ void drive(System* atmega, bool left, bool mid, bool right, bool sees_wall) {
   }
 
   if (left != lleft || mid != lmid || right != lright) {
-    may_log = true;
     ShiftRegister_write_n(&atmega->led_strip, 3, left, mid, right);
   }
 
   if (avoid_obstacles_enabled && (wall_phase != 0 || sees_wall)) {
-    return avoid_obstacle_logic(atmega, sees_wall, may_log,
-                                (left || mid || right));
+    return avoid_obstacle_logic(atmega, sees_wall, (left || mid || right));
   }
 
   if (left && mid && right && !seeing_start && may_see_start) {
@@ -257,13 +252,13 @@ void drive(System* atmega, bool left, bool mid, bool right, bool sees_wall) {
     case STATE_DRV_FW:     // fall through
     case STATE_DRV_FW_ML:  // fall through
     case STATE_DRV_FW_MR:
-      drive_forward(atmega, may_log);
+      drive_forward(atmega);
       break;
     case STATE_TRN_LEFT:
-      turn_left(atmega, may_log);
+      turn_left(atmega);
       break;
     case STATE_TRN_RIGHT:
-      turn_right(atmega, may_log);
+      turn_right(atmega);
       break;
   }
 
@@ -273,38 +268,36 @@ void drive(System* atmega, bool left, bool mid, bool right, bool sees_wall) {
 }
 
 void obstacle_phase_reset(System* atmega);
-void obstacle_phase_0(System* atmega, bool sees_wall, bool may_log);
-void obstacle_phase_1(System* atmega, bool sees_wall, bool may_log);
-void obstacle_phase_2(System* atmega, bool sees_wall, bool may_log);
-void obstacle_phase_3(System* atmega, bool sees_wall, bool may_log);
-void obstacle_phase_4(System* atmega, bool sees_wall, bool may_log);
+void obstacle_phase_0(System* atmega, bool sees_wall);
+void obstacle_phase_1(System* atmega, bool sees_wall);
+void obstacle_phase_2(System* atmega, bool sees_wall);
+void obstacle_phase_3(System* atmega, bool sees_wall);
+void obstacle_phase_4(System* atmega, bool sees_wall);
 
-void avoid_obstacle_logic(System* atmega, bool sees_wall, bool may_log,
-                          bool any_sensor) {
+void avoid_obstacle_logic(System* atmega, bool sees_wall, bool any_sensor) {
   if (wall_phase >= 3 && any_sensor) {
     obstacle_phase_reset(atmega);
   } else if (sees_wall && wall_phase == 0) {
-    obstacle_phase_0(atmega, sees_wall, may_log);
+    obstacle_phase_0(atmega, sees_wall);
   } else if (wall_phase == 1) {
-    obstacle_phase_1(atmega, sees_wall, may_log);
+    obstacle_phase_1(atmega, sees_wall);
   } else if (wall_phase == 2) {
-    obstacle_phase_2(atmega, sees_wall, may_log);
+    obstacle_phase_2(atmega, sees_wall);
   } else if (wall_phase == 3) {
-    obstacle_phase_3(atmega, sees_wall, may_log);
+    obstacle_phase_3(atmega, sees_wall);
   } else if (wall_phase == 4) {
-    obstacle_phase_4(atmega, sees_wall, may_log);
+    obstacle_phase_4(atmega, sees_wall);
   }
 }
 
 void obstacle_phase_reset(System* atmega) {
-  Menu_log(LOG_INFO, "found track again\n");
   Servo_set_angle(&atmega->us_servo, 0);
   // we don't want smooth steering here
   smooth_steer_start = (micros() - 1000000);
   if (track_direction == TRACK_RIGHT) {
-    turn_right(atmega, true);
+    turn_right(atmega);
   } else {
-    turn_left(atmega, true);
+    turn_left(atmega);
   }
   _delay_us(100000);
   wall_phase = 0;
@@ -314,7 +307,7 @@ void obstacle_phase_reset(System* atmega) {
   last_direction_update = micros();
 }
 
-void obstacle_phase_0(System* atmega, bool sees_wall, bool may_log) {
+void obstacle_phase_0(System* atmega, bool sees_wall) {
   // setup phase
   if (last_wall_phase != wall_phase) {
     update_track_direction = false;
@@ -323,7 +316,7 @@ void obstacle_phase_0(System* atmega, bool sees_wall, bool may_log) {
     } else {
       Servo_set_angle(&atmega->us_servo, 90);
     }
-    stop_driving(atmega, may_log);
+    stop_driving(atmega);
     _delay_us(100000);
     last_wall_phase = wall_phase;
     wall_phase = 1;
@@ -335,17 +328,17 @@ void obstacle_phase_0(System* atmega, bool sees_wall, bool may_log) {
   }
 }
 
-void obstacle_phase_1(System* atmega, bool sees_wall, bool may_log) {
-  obstacle_phase_0(atmega, sees_wall, may_log);
+void obstacle_phase_1(System* atmega, bool sees_wall) {
+  obstacle_phase_0(atmega, sees_wall);
 }
 
-void obstacle_phase_2(System* atmega, bool sees_wall, bool may_log) {
+void obstacle_phase_2(System* atmega, bool sees_wall) {
   // turn right phase
   if (last_wall_phase != wall_phase) {
     if (track_direction == TRACK_RIGHT) {
-      turn_right(atmega, may_log);
+      turn_right(atmega);
     } else {
-      turn_left(atmega, may_log);
+      turn_left(atmega);
     }
     last_wall_phase = wall_phase;
   }
@@ -356,24 +349,24 @@ void obstacle_phase_2(System* atmega, bool sees_wall, bool may_log) {
   }
 }
 
-void obstacle_phase_3(System* atmega, bool sees_wall, bool may_log) {
+void obstacle_phase_3(System* atmega, bool sees_wall) {
   // drive forward phase
   if (last_wall_phase != wall_phase &&
       UltraSoundSensor_dist(&atmega->us) == US_CURRENT_SENSOR_DISTANCE) {
-    drive_forward(atmega, may_log);
+    drive_forward(atmega);
     last_wall_phase = wall_phase;
   } else if (UltraSoundSensor_dist(&atmega->us) < US_CURRENT_SENSOR_DISTANCE) {
     if (track_direction == TRACK_RIGHT) {
-      turn_smooth_right(atmega, may_log);
+      turn_smooth_right(atmega);
     } else {
-      turn_smooth_left(atmega, may_log);
+      turn_smooth_left(atmega);
     }
     last_wall_phase = wall_phase;
   } else if (UltraSoundSensor_dist(&atmega->us) > US_CURRENT_SENSOR_DISTANCE) {
     if (track_direction == TRACK_RIGHT) {
-      turn_smooth_left(atmega, may_log);
+      turn_smooth_left(atmega);
     } else {
-      turn_smooth_right(atmega, may_log);
+      turn_smooth_right(atmega);
     }
     last_wall_phase = wall_phase;
   }
@@ -384,14 +377,13 @@ void obstacle_phase_3(System* atmega, bool sees_wall, bool may_log) {
   }
 }
 
-void obstacle_phase_4(System* atmega, bool sees_wall, bool may_log) {
+void obstacle_phase_4(System* atmega, bool sees_wall) {
   // turn left phase
   if (last_wall_phase != wall_phase) {
-    Menu_log(LOG_INFO, "p4\n");
     if (track_direction == TRACK_RIGHT) {
-      turn_smooth_left(atmega, may_log);
+      turn_smooth_left(atmega);
     } else {
-      turn_smooth_right(atmega, may_log);
+      turn_smooth_right(atmega);
     }
     last_wall_phase = wall_phase;
   }
@@ -402,10 +394,9 @@ void obstacle_phase_4(System* atmega, bool sees_wall, bool may_log) {
   }
 }
 
-void turn_left(System* atmega, bool may_log MAYBE_UNUSED) {
+void turn_left(System* atmega) {
   if ((micros() - last_direction_update) >= DIRECTION_UPDATE_DELAY_US &&
       update_track_direction) {
-    Menu_log(LOG_DEBUG, "now!\n");
     last_direction_update = micros();
     track_direction = TRACK_LEFT;
   }
@@ -415,7 +406,7 @@ void turn_left(System* atmega, bool may_log MAYBE_UNUSED) {
       is_smooth_steering = true;
       smooth_steer_start = micros();
     }
-    turn_smooth_left(atmega, may_log);
+    turn_smooth_left(atmega);
   } else {
     is_smooth_steering = false;
     Motor_drive_backward(&atmega->mt_left, SPEED_TURN_B);
@@ -423,10 +414,9 @@ void turn_left(System* atmega, bool may_log MAYBE_UNUSED) {
   }
 }
 
-void turn_right(System* atmega, bool may_log MAYBE_UNUSED) {
+void turn_right(System* atmega) {
   if ((micros() - last_direction_update) >= DIRECTION_UPDATE_DELAY_US &&
       update_track_direction) {
-    Menu_log(LOG_DEBUG, "now!\n");
     last_direction_update = micros();
     track_direction = TRACK_RIGHT;
   }
@@ -437,7 +427,7 @@ void turn_right(System* atmega, bool may_log MAYBE_UNUSED) {
       is_smooth_steering = true;
       smooth_steer_start = micros();
     }
-    turn_smooth_right(atmega, may_log);
+    turn_smooth_right(atmega);
   } else {
     is_smooth_steering = false;
     Motor_drive_forward(&atmega->mt_left, SPEED_TURN_A);
@@ -445,30 +435,26 @@ void turn_right(System* atmega, bool may_log MAYBE_UNUSED) {
   }
 }
 
-void turn_smooth_left(System* atmega, bool may_log) {
-  if (may_log) Menu_log(LOG_DEBUG, TURN_LEFT_MESSAGE);
+void turn_smooth_left(System* atmega) {
   last_direction_update = micros();
   Motor_drive_forward(&atmega->mt_right, SPEED_TURN_SLOW_A);
   Motor_drive_backward(&atmega->mt_left, SPEED_TURN_SLOW_B);
 }
 
-void turn_smooth_right(System* atmega, bool may_log) {
-  if (may_log) Menu_log(LOG_DEBUG, TURN_RIGHT_MESSAGE);
+void turn_smooth_right(System* atmega) {
   last_direction_update = micros();
   Motor_drive_forward(&atmega->mt_left, SPEED_TURN_SLOW_A);
   Motor_drive_backward(&atmega->mt_right, SPEED_TURN_SLOW_B);
 }
 
-void drive_forward(System* atmega, bool may_log) {
+void drive_forward(System* atmega) {
   smooth_steer_start = micros();
-  if (may_log) Menu_log(LOG_DEBUG, DRIVE_FORWARD_MESSAGE);
   last_direction_update = micros();
   Motor_drive_forward(&atmega->mt_left, SPEED_DRIVE);
   Motor_drive_forward(&atmega->mt_right, SPEED_DRIVE);
 }
 
-void stop_driving(System* atmega, bool may_log) {
-  if (may_log) Menu_log(LOG_DEBUG, STOP_MESSAGE);
+void stop_driving(System* atmega) {
   last_direction_update = micros();
   Motor_drive_forward(&atmega->mt_left, 0);
   Motor_drive_forward(&atmega->mt_right, 0);

@@ -15,8 +15,6 @@ int MAIN() {
   timer_init();
   PWM_init();
 
-  USART_send_str(USART_instance(), "Hello World!");
-
   // create system and event senders
   System atmega = System_create();
   USARTEvent usart = USARTEvent_create("input");
