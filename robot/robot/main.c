@@ -14,7 +14,8 @@ int MAIN() {
   stop_watchdog();  // if resetted through watchdog, disable immediately
   timer_init();
   PWM_init();
-  Menu_init("car_start", "car_stop");
+
+  USART_send_str(USART_instance(), "Hello World!");
 
   // create system and event senders
   System atmega = System_create();
