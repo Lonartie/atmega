@@ -535,35 +535,34 @@ void safe_state_loop(System* atmega) {
 }
 
 void pause_driving(System* atmega) {
-  // static uint16_t last_led_update = 0;
-  // static uint16_t last_message_sent = 0;
-  // static bool ll_left = true, ll_mid = false, ll_right = false, to_right =
-  // true;
+  static uint16_t last_led_update = 0;
+  static uint16_t last_message_sent = 0;
+  static bool ll_left = true, ll_mid = false, ll_right = false, to_right = true;
 
-  // System_stop(atmega);
+  System_stop(atmega);
 
-  // if ((millis() - last_led_update) >= 2000) /*.5 Hz*/ {
-  //   last_led_update = millis();
-  //   ShiftRegister_write_n(&atmega->led_strip, 3, ll_left, ll_mid, ll_right);
-  //   if (to_right) {
-  //     ll_right = ll_mid;
-  //     ll_mid = ll_left;
-  //     ll_left = false;
-  //     if (ll_right) {
-  //       to_right = false;
-  //     }
-  //   } else {
-  //     ll_left = ll_mid;
-  //     ll_mid = ll_right;
-  //     ll_right = false;
-  //     if (ll_left) {
-  //       to_right = true;
-  //     }
-  //   }
-  // }
+  if ((millis() - last_led_update) >= 2000) /*.5 Hz*/ {
+    last_led_update = millis();
+    ShiftRegister_write_n(&atmega->led_strip, 3, ll_left, ll_mid, ll_right);
+    if (to_right) {
+      ll_right = ll_mid;
+      ll_mid = ll_left;
+      ll_left = false;
+      if (ll_right) {
+        to_right = false;
+      }
+    } else {
+      ll_left = ll_mid;
+      ll_mid = ll_right;
+      ll_right = false;
+      if (ll_left) {
+        to_right = true;
+      }
+    }
+  }
 
-  // if ((millis() - last_message_sent) >= 1000) {
-  //   last_message_sent = millis();
-  //   USART_send_str(USART_instance(), PAUSE_MESSAGE);
-  // }
+  if ((millis() - last_message_sent) >= 1000) {
+    last_message_sent = millis();
+    USART_send_str(USART_instance(), PAUSE_MESSAGE);
+  }
 }
