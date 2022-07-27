@@ -23,8 +23,8 @@ void turn_smooth_right(System* atmega, bool may_log);
 void drive_forward(System* atmega, bool may_log);
 void stop_driving(System* atmega, bool may_log);
 bool measure_was_recently();
-void idle_state(bool left, bool mid, bool right);
-void on_start_block(bool left, bool mid, bool right);
+void idle_state(System* atmega, bool left, bool mid, bool right);
+void on_start_block(System* atmega, bool left, bool mid, bool right);
 void reset_system(System* atmega);
 void drive(System* atmega, bool left, bool mid, bool right, bool sees_wall);
 void show_commands();
@@ -97,10 +97,10 @@ void Logic_drive_3_rounds(void* system) {
 
   switch (presentation_state) {
     case IDLE:
-      idle_state(left, mid, right);
+      idle_state(atmega, left, mid, right);
       break;
     case ON_START_BLOCK:
-      on_start_block(left, mid, right);
+      on_start_block(atmega, left, mid, right);
       break;
     case DRIVING_FIRST_ROUND:
     case DRIVING_SECOND_ROUND:
@@ -114,8 +114,10 @@ void Logic_drive_3_rounds(void* system) {
   }
 }
 
-void idle_state(bool left, bool mid, bool right) {
+void idle_state(System* atmega, bool left, bool mid, bool right) {
   static uint32_t last_message_sent = 0;
+
+  ShiftRegister_write_n(&atmega->led_strip, 3, left, mid, right);
 
   if (left && mid && right) {
     presentation_state = ON_START_BLOCK;
@@ -128,8 +130,15 @@ void idle_state(bool left, bool mid, bool right) {
   }
 }
 
-void on_start_block(bool left, bool mid, bool right) {
+void on_start_block(System* atmega, bool left, bool mid, bool right) {
   static uint32_t last_message_sent = 0;
+  static uint32_t last_led_blink = 0;
+  static bool led_on = false;
+
+  if ((micros() - last_led_blink) >= 100000) {
+    led_on = !led_on;
+    ShiftRegister_write_n(&atmega->led_strip, 3, led_on, led_on, led_on);
+  }
 
   if (!left || !mid || !right) {
     presentation_state = IDLE;
