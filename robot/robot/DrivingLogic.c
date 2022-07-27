@@ -1,80 +1,40 @@
 #include "DrivingLogic.h"
 
 #include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
 #include <util/delay.h>
 
+#include "Constants.h"
 #include "EventSystem/EventSystem.h"
 #include "EventSystem/HardwareTimer.h"
+#include "EventSystem/USARTEvent.h"
 #include "Models/Menu.h"
 #include "Models/System.h"
 #include "Models/WatchDog.h"
+#include "States.h"
 
-const int8_t SPEED_DRIVE_SLOW = 0;
-const int16_t SPEED_DRIVE = 220;
-const int16_t SPEED_TURN_A = 220;
-const int16_t SPEED_TURN_B = 220;
-const int16_t SPEED_TURN_SLOW_A = 240;
-const int16_t SPEED_TURN_SLOW_B = 20;
-
-const uint32_t TIME_TO_TRY_SMOOTH_STEERING_US = 150000;
-
-const uint8_t US_SENSOR_DISTANCE_SMALL = 16;
-const uint8_t US_SENSOR_DISTANCE_LARGE = 23;
-static uint8_t US_CURRENT_SENSOR_DISTANCE = 16;
-
-const uint32_t DIRECTION_UPDATE_DELAY_US = 300000;
-
-const uint16_t MEASURE_THRESHOLD_LEFT = 330;
-const uint16_t MEASURE_THRESHOLD_MID = 400;
-const uint16_t MEASURE_THRESHOLD_RIGHT = 330;
-
-const char* TURN_LEFT_MESSAGE = "tl\n";
-const char* TURN_RIGHT_MESSAGE = "tr\n";
-const char* DRIVE_FORWARD_MESSAGE = "df\n";
-const char* STOP_MESSAGE = "s\n";
-const char* TIMER_MESSAGE = "%ums\n";
-const char* SENSORS_MESSAGE = "%d%d%d\n";
-const char* SENSORS_DEBUG_MESSAGE = "%d %d %d\n";
-const char* US_SENSOR_MESSAGE = "dist: %d\n";
-
-typedef enum State {
-  STATE_LNF,
-  STATE_DRV_FW,
-  STATE_DRV_FW_ML,
-  STATE_DRV_FW_MR,
-  STATE_TRN_LEFT,
-  STATE_TRN_RIGHT
-} State;
-
-typedef enum TrackDirection {
-  TRACK_UNKNOWN,
-  TRACK_LEFT,
-  TRACK_RIGHT
-} TrackDirection;
-
-static TrackDirection track_direction = TRACK_UNKNOWN;
-static bool wall_detected = false;
-static uint32_t last_direction_update = 0;
-static bool update_track_direction = true;
-static uint8_t wall_phase = 0;
-static uint8_t last_wall_phase = UINT8_MAX;
-static uint32_t last_measure = 0;
-static uint32_t last_last_measure = 0;
-static uint32_t smooth_steer_start = 0;
-static bool is_smooth_steering = false;
-
-void drive_logic(System* atmega);
 void avoid_obstacle_logic(System* atmega, bool sees_wall, bool may_log,
                           bool any_sensor);
-
 void turn_left(System* atmega, bool may_log);
 void turn_right(System* atmega, bool may_log);
 void turn_smooth_left(System* atmega, bool may_log);
 void turn_smooth_right(System* atmega, bool may_log);
 void drive_forward(System* atmega, bool may_log);
 void stop_driving(System* atmega, bool may_log);
-
 bool measure_was_recently();
+void idle_state(bool left, bool mid, bool right);
+void on_start_block(bool left, bool mid, bool right);
+void reset_system(System* atmega);
+void drive(System* atmega, bool left, bool mid, bool right, bool sees_wall);
+void show_commands();
+
+void Logic_command(void* usart) {
+  if (current_command != NULL) {
+    free(current_command);
+  }
+  current_command = strdup(((USARTEvent*)usart)->data);
+}
 
 void detect_wall(void* system) {
   System* atmega = (System*)system;
@@ -111,32 +71,8 @@ void Logic_start(void* system) {
                            Listener_create_r(system, detect_wall, "US_SENSOR"));
 }
 
-void Logic_drive_infinite(void* system) {
+void Logic_drive_3_rounds(void* system) {
   System* atmega = (System*)system;
-  drive_logic(atmega);
-}
-
-void Logic_drive_3_rounds(void* system MAYBE_UNUSED) {}
-
-void drive_logic(System* atmega) {
-  static State state = STATE_LNF;
-  static bool lleft = false, lmid = false, lright = false;
-  // static uint32_t last_time = 0;
-  // static uint32_t _time_ = 0;
-  static bool may_see_start = true;
-  static bool seeing_start = false;
-  static uint32_t time_seeing_start = 0;
-  static uint8_t rounds = 0;
-  // static bool log_1_sec = false;
-
-  // if (micros() - _time_ >= 500000) {
-  // if (false) {
-  //   // Menu_log(LOG_INFO, FMT("wall: %d\n", wall_detected));
-  //   // _time_ = micros();
-  //   log_1_sec = true;
-  // } else {
-  //   log_1_sec = false;
-  // }
 
   if (!atmega->started) {
     Menu_log(LOG_INFO, "not started\n");
@@ -152,19 +88,78 @@ void drive_logic(System* atmega) {
   bool right = right_measure > MEASURE_THRESHOLD_RIGHT;
   bool sees_wall = (wall_detected && measure_was_recently());
 
+  if (current_command != NULL && strcmp(current_command, "?") == 0) {
+    show_commands();
+    free(current_command);
+    current_command = NULL;
+    return;
+  }
+
+  switch (presentation_state) {
+    case IDLE:
+      idle_state(left, mid, right);
+      break;
+    case ON_START_BLOCK:
+      on_start_block(left, mid, right);
+      break;
+    case DRIVING_FIRST_ROUND:
+    case DRIVING_SECOND_ROUND:
+    case DRIVING_THIRD_ROUND:
+      drive(atmega, left, mid, right, sees_wall);
+      break;
+    case END:
+      rounds = 0;
+      reset_system(atmega);  // no-return
+      break;
+  }
+}
+
+void idle_state(bool left, bool mid, bool right) {
+  static uint32_t last_message_sent = 0;
+
+  if (left && mid && right) {
+    presentation_state = ON_START_BLOCK;
+    return;
+  }
+
+  if ((micros() - last_message_sent) >= 1000000) {
+    last_message_sent = micros();
+    USART_send_str(USART_instance(), IDLE_MESSAGE);
+  }
+}
+
+void on_start_block(bool left, bool mid, bool right) {
+  static uint32_t last_message_sent = 0;
+
+  if (!left || !mid || !right) {
+    presentation_state = IDLE;
+    return;
+  }
+
+  if (current_command != NULL && strcmp(current_command, "S") == 0) {
+    presentation_state = DRIVING_FIRST_ROUND;
+    free(current_command);
+    current_command = NULL;
+    return;
+  }
+
+  if ((micros() - last_message_sent) >= 1000000) {
+    last_message_sent = micros();
+    USART_send_str(USART_instance(), START_BLOCK_MESSAGE);
+  }
+}
+
+void drive(System* atmega, bool left, bool mid, bool right, bool sees_wall) {
+  static State state = STATE_LNF;
+  static bool lleft = false, lmid = false, lright = false;
+  static bool may_see_start = true;
+  static bool seeing_start = false;
+  static uint32_t time_seeing_start = 0;
   bool may_log = false;
 
   if (left != lleft || mid != lmid || right != lright) {
-    // update lights and sends log messages
     may_log = true;
     ShiftRegister_write_n(&atmega->led_strip, 3, left, mid, right);
-    // new_time = micros();
-    // uint32_t time_diff = (new_time - last_time) / 1000;
-    // last_time = new_time;
-    // Menu_log(LOG_DEBUG, FMT(TIMER_MESSAGE, time_diff));
-    // Menu_log(LOG_INFO, FMT(SENSORS_MESSAGE, left, mid, right));
-    // Menu_log(LOG_DEBUG, FMT(SENSORS_DEBUG_MESSAGE, (int)left_measure,
-    //                         (int)mid_measure, (int)right_measure));
   }
 
   if (wall_phase != 0 || sees_wall) {
@@ -446,3 +441,14 @@ void stop_driving(System* atmega, bool may_log) {
 }
 
 bool measure_was_recently() { return (micros() - last_measure) <= 50000; }
+
+void reset_system(System* atmega) {
+  System_stop(atmega);
+  Menu_log(LOG_INFO, "Reset in 5 secs...\n");
+  _delay_ms(1000);
+  watchdog_init(SEC_4);
+  _delay_ms(5000);
+  return;
+}
+
+void show_commands() { USART_send_str(USART_instance(), COMMANDS_STR); }

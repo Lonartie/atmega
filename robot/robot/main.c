@@ -26,31 +26,33 @@ int MAIN() {
   // register event listeners
   EventSystem_reg_listener(
       EventSystem_instance(),
-      Listener_create_r(&atmega, Logic_drive_infinite, timer.event));
+      Listener_create_r(&atmega, Logic_drive_3_rounds, timer.event));
 
   EventSystem_reg_listener(
       EventSystem_instance(),
-      Listener_create_r(&usart, Menu_handle_input, usart.event));
+      Listener_create_r(&usart, Logic_command, usart.event));
 
-  EventSystem_reg_listener(
-      EventSystem_instance(),
-      Listener_create_r(&atmega, Logic_reset, Menu_instance().car_start_event));
+  //   EventSystem_reg_listener(
+  //       EventSystem_instance(),
+  //       Listener_create_r(&atmega, Logic_reset,
+  //       Menu_instance().car_start_event));
 
   //   EventSystem_reg_listener(
   //       EventSystem_instance(),
   //       Listener_create_r(&atmega, Logic_reset,
   //       Menu_instance().car_stop_event));
 
-  EventSystem_reg_listener(EventSystem_instance(),
-                           Listener_create_r(&atmega, System_start,
-                                             Menu_instance().car_start_event));
+  //   EventSystem_reg_listener(EventSystem_instance(),
+  //                            Listener_create_r(&atmega, System_start,
+  //                                              Menu_instance().car_start_event));
 
-  EventSystem_reg_listener(
-      EventSystem_instance(),
-      Listener_create_r(&atmega, System_stop, Menu_instance().car_stop_event));
+  //   EventSystem_reg_listener(
+  //       EventSystem_instance(),
+  //       Listener_create_r(&atmega, System_stop,
+  //       Menu_instance().car_stop_event));
 
-  // show usart menu
-  Menu_show(Menu_instance().current);
+  //   // show usart menu
+  //   Menu_show(Menu_instance().current);
 
   // start event senders
   Timer_start(&timer);
