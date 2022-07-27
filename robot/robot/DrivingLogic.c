@@ -26,8 +26,7 @@ void on_start_block(System* atmega, bool left, bool mid, bool right);
 void reset_system(System* atmega);
 void drive(System* atmega, bool left, bool mid, bool right, bool sees_wall);
 void show_commands();
-void safe_state_loop(System* atmega);
-void pause_driving(System* atmega);
+void message_led_line(System* atmega, const char* message, uint8_t led_freq);
 
 void Logic_command(void* usart) {
   if (current_command != NULL) {
@@ -89,7 +88,7 @@ void Logic_drive_3_rounds(void* system) {
   bool sees_wall = (wall_detected && measure_was_recently());
 
   if (safe_state) {
-    safe_state_loop(atmega);
+    message_led_line(atmega, SAFE_SATE_MESSAGE, 125);
     return;
   }
 
@@ -138,7 +137,7 @@ void Logic_drive_3_rounds(void* system) {
         System_start(atmega);
         return;
       }
-      pause_driving(atmega);
+      message_led_line(atmega, PAUSE_MESSAGE, 2000);
       break;
     case DRIVING:
       if (current_command != NULL && strcmp(current_command, "P") == 0) {
@@ -502,13 +501,13 @@ void reset_system(System* atmega) {
 
 void show_commands() { USART_send_str(USART_instance(), COMMANDS_STR); }
 
-void safe_state_loop(System* atmega) {
+void message_led_line(System* atmega, const char* message, uint8_t led_freq) {
   static uint16_t last_led_update = 0;
   static uint16_t last_message_sent = 0;
   static bool ll_left = true, ll_mid = false, ll_right = false, to_right = true;
   System_stop(atmega);
 
-  if ((millis() - last_led_update) >= 125) /*8 Hz*/ {
+  if ((millis() - last_led_update) >= led_freq) /*8 Hz*/ {
     last_led_update = millis();
     ShiftRegister_write_n(&atmega->led_strip, 3, ll_left, ll_mid, ll_right);
     if (to_right) {
@@ -530,39 +529,6 @@ void safe_state_loop(System* atmega) {
 
   if ((millis() - last_message_sent) >= 1000) {
     last_message_sent = millis();
-    USART_send_str(USART_instance(), SAFE_SATE_MESSAGE);
-  }
-}
-
-void pause_driving(System* atmega) {
-  static uint16_t last_led_update = 0;
-  static uint16_t last_message_sent = 0;
-  static bool ll_left = true, ll_mid = false, ll_right = false, to_right = true;
-
-  System_stop(atmega);
-
-  if ((millis() - last_led_update) >= 2000) /*.5 Hz*/ {
-    last_led_update = millis();
-    ShiftRegister_write_n(&atmega->led_strip, 3, ll_left, ll_mid, ll_right);
-    if (to_right) {
-      ll_right = ll_mid;
-      ll_mid = ll_left;
-      ll_left = false;
-      if (ll_right) {
-        to_right = false;
-      }
-    } else {
-      ll_left = ll_mid;
-      ll_mid = ll_right;
-      ll_right = false;
-      if (ll_left) {
-        to_right = true;
-      }
-    }
-  }
-
-  if ((millis() - last_message_sent) >= 1000) {
-    last_message_sent = millis();
-    USART_send_str(USART_instance(), PAUSE_MESSAGE);
+    USART_send_str(USART_instance(), message);
   }
 }
