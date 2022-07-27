@@ -96,17 +96,20 @@ void Logic_drive_3_rounds(void* system) {
     free(current_command);
     current_command = NULL;
     reset_system(atmega);  // no-return
-  } else if (current_command != NULL && strcmp(current_command, "A") == 0) {
-    avoid_obstacles_enabled = true;
-    USART_send_str(USART_instance(), "avoiding obstacles enabled\n");
-    free(current_command);
-    current_command = NULL;
-  } else if (current_command != NULL && strcmp(current_command, "D") == 0) {
-    USART_send_str(USART_instance(), "avoiding obstacles disabled\n");
-    avoid_obstacles_enabled = false;
-    free(current_command);
-    current_command = NULL;
   }
+  // else if (current_command != NULL && strcmp(current_command, "A") == 0)
+  // {
+  //   avoid_obstacles_enabled = true;
+  //   USART_send_str(USART_instance(), "avoiding obstacles enabled\n");
+  //   free(current_command);
+  //   current_command = NULL;
+  // } else if (current_command != NULL && strcmp(current_command, "D") == 0)
+  // {
+  //   USART_send_str(USART_instance(), "avoiding obstacles disabled\n");
+  //   avoid_obstacles_enabled = false;
+  //   free(current_command);
+  //   current_command = NULL;
+  // }
 
   switch (presentation_state) {
     case IDLE:
