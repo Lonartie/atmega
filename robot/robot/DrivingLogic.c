@@ -117,6 +117,8 @@ void Logic_drive_3_rounds(void* system) {
       last_message_sent = millis();
       USART_send_str(USART_instance(), SAFE_SATE_MESSAGE);
     }
+
+    return;
   }
 
   if (current_command != NULL && strcmp(current_command, "?") == 0) {
