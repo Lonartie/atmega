@@ -28,8 +28,11 @@ const char* COMMANDS_STR =
     "?  -> show help\n"
     "S  -> start driving\n"
     "R  -> reset in 5 seconds\n"
-    "A  -> enable obstacle detection\n"
-    "D  -> disable obstacle detection\n";
+    "X  -> safe state\n";
+const char* DRIVING_COMMANDS_STR =
+    "P  -> pause/unpause driving\n"
+    "C  -> return home\n";
+
 const char* IDLE_MESSAGE =
     "Not on the starting field. Place me there please... Send ? for help\n";
 const char* START_BLOCK_MESSAGE =
@@ -51,6 +54,8 @@ const char* MANUAL_RESET_MESSAGE =
     "Thanks!\n";
 const char* PAUSE_MESSAGE =
     "Pause ... zzzZZZzzzZZZzzz ... wake me up with P again\n";
+const char* SAFE_SATE_MESSAGE =
+    "In safe state! Won't react to any instructions! Rescue me!\n";
 
 const char* TURN_LEFT_MESSAGE = "tl\n";
 const char* TURN_RIGHT_MESSAGE = "tr\n";
@@ -72,6 +77,7 @@ static uint32_t last_last_measure = 0;
 static uint32_t smooth_steer_start = 0;
 static bool is_smooth_steering = false;
 static char* current_command = NULL;
+static bool safe_state = false;
 
 static bool avoid_obstacles_enabled = false;
 static uint8_t rounds = 0;

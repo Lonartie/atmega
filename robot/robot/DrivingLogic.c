@@ -86,6 +86,39 @@ void Logic_drive_3_rounds(void* system) {
   bool right = right_measure > MEASURE_THRESHOLD_RIGHT;
   bool sees_wall = (wall_detected && measure_was_recently());
 
+  if (safe_state) {
+    static uint16_t last_led_update = 0;
+    static uint16_t last_message_sent = 0;
+    static bool ll_left = true, ll_mid = false, ll_right = false,
+                to_right = true;
+    System_stop(atmega);
+
+    if ((millis() - last_led_update) >= 125) /*8 Hz*/ {
+      last_led_update = millis();
+      ShiftRegister_write_n(&atmega->led_strip, 3, ll_left, ll_mid, ll_right);
+      if (to_right) {
+        ll_right = ll_mid;
+        ll_mid = ll_left;
+        ll_left = false;
+        if (ll_right) {
+          to_right = false;
+        }
+      } else {
+        ll_left = ll_mid;
+        ll_mid = ll_right;
+        ll_right = false;
+        if (ll_left) {
+          to_right = true;
+        }
+      }
+    }
+
+    if ((millis() - last_message_sent) >= 1000) {
+      last_message_sent = millis();
+      USART_send_str(USART_instance(), SAFE_SATE_MESSAGE);
+    }
+  }
+
   if (current_command != NULL && strcmp(current_command, "?") == 0) {
     show_commands();
     free(current_command);
@@ -96,6 +129,11 @@ void Logic_drive_3_rounds(void* system) {
     free(current_command);
     current_command = NULL;
     reset_system(atmega);  // no-return
+  } else if (current_command != NULL && strcmp(current_command, "X") == 0) {
+    safe_state = true;
+    free(current_command);
+    current_command = NULL;
+    return;
   }
   // else if (current_command != NULL && strcmp(current_command, "A") == 0)
   // {
