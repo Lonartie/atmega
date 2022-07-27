@@ -26,7 +26,7 @@ void on_start_block(System* atmega, bool left, bool mid, bool right);
 void reset_system(System* atmega);
 void drive(System* atmega, bool left, bool mid, bool right, bool sees_wall);
 void show_commands();
-void message_led_line(System* atmega, const char* message, uint8_t led_freq);
+void message_led_line(System* atmega, const char* message, uint16_t led_freq);
 
 void Logic_command(void* usart) {
   if (current_command != NULL) {
@@ -156,8 +156,6 @@ void Logic_drive_3_rounds(void* system) {
 }
 
 void idle_state(System* atmega, bool left, bool mid, bool right) {
-  static uint16_t last_message_sent = 0;
-
   ShiftRegister_write_n(&atmega->led_strip, 3, left, mid, right);
 
   if (left && mid && right) {
@@ -172,8 +170,6 @@ void idle_state(System* atmega, bool left, bool mid, bool right) {
 }
 
 void on_start_block(System* atmega, bool left, bool mid, bool right) {
-  static uint16_t last_message_sent = 0;
-  static uint16_t last_led_blink = 0;
   static bool led_on = false;
 
   if ((millis() - last_led_blink) >= 100) {
@@ -207,7 +203,6 @@ void drive(System* atmega, bool left, bool mid, bool right, bool sees_wall) {
   static bool may_see_start = true;
   static bool seeing_start = false;
   static uint16_t time_seeing_start = 0;
-  static uint16_t last_message_sent = 0;
 
   if (left != lleft || mid != lmid || right != lright) {
     ShiftRegister_write_n(&atmega->led_strip, 3, left, mid, right);
@@ -501,9 +496,7 @@ void reset_system(System* atmega) {
 
 void show_commands() { USART_send_str(USART_instance(), COMMANDS_STR); }
 
-void message_led_line(System* atmega, const char* message, uint8_t led_freq) {
-  static uint16_t last_led_update = 0;
-  static uint16_t last_message_sent = 0;
+void message_led_line(System* atmega, const char* message, uint16_t led_freq) {
   static bool ll_left = true, ll_mid = false, ll_right = false, to_right = true;
   System_stop(atmega);
 

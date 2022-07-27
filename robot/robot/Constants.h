@@ -79,6 +79,10 @@ static bool is_smooth_steering = false;
 static char* current_command = NULL;
 static bool safe_state = false;
 
+static uint16_t last_message_sent = 0;
+static uint16_t last_led_blink = 0;
+static uint16_t last_led_update = 0;
+
 static bool avoid_obstacles_enabled = false;
 static uint8_t rounds = 0;
 static PresentationState presentation_state = IDLE;
