@@ -93,6 +93,11 @@ void Logic_drive_3_rounds(void* system) {
     free(current_command);
     current_command = NULL;
     return;
+  } else if (current_command != NULL && strcmp(current_command, "R") == 0) {
+    USART_send_str(USART_instance(), MANUAL_RESET_MESSAGE);
+    free(current_command);
+    current_command = NULL;
+    reset_system(atmega);  // no-return
   } else if (current_command != NULL && strcmp(current_command, "A") == 0) {
     avoid_obstacles_enabled = true;
     USART_send_str(USART_instance(), "avoiding obstacles enabled\n");
@@ -203,7 +208,8 @@ void drive(System* atmega, bool left, bool mid, bool right, bool sees_wall) {
     may_see_start = true;
   }
 
-  if (seeing_start && (micros() - time_seeing_start) / 1000 >= 50) {
+  if (seeing_start &&
+      (micros() - time_seeing_start) >= TIME_TO_RECOGNIZE_START_BLOCK_US) {
     rounds++;
     switch (rounds) {
       case 2:
@@ -472,7 +478,6 @@ bool measure_was_recently() { return (micros() - last_measure) <= 50000; }
 
 void reset_system(System* atmega) {
   System_stop(atmega);
-  Menu_log(LOG_INFO, "Reset in 5 secs...\n");
   _delay_ms(1000);
   watchdog_init(SEC_4);
   _delay_ms(5000);

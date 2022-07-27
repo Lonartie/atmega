@@ -5,14 +5,14 @@
 
 #include "States.h"
 
-const int8_t SPEED_DRIVE_SLOW = 0;
-const int16_t SPEED_DRIVE = 180;
+const int16_t SPEED_DRIVE = 160;
 const int16_t SPEED_TURN_A = 220;
 const int16_t SPEED_TURN_B = 220;
 const int16_t SPEED_TURN_SLOW_A = 240;
 const int16_t SPEED_TURN_SLOW_B = 20;
 
-const uint32_t TIME_TO_TRY_SMOOTH_STEERING_US = 150000;
+const uint32_t TIME_TO_TRY_SMOOTH_STEERING_US = 120000;
+const uint32_t TIME_TO_RECOGNIZE_START_BLOCK_US = 1000000;
 
 const uint8_t US_SENSOR_DISTANCE_SMALL = 16;
 const uint8_t US_SENSOR_DISTANCE_LARGE = 23;
@@ -27,6 +27,7 @@ const uint16_t MEASURE_THRESHOLD_RIGHT = 330;
 const char* COMMANDS_STR =
     "?  -> show help\n"
     "S  -> start driving\n"
+    "R  -> reset in 5 seconds\n"
     "A  -> enable obstacle detection\n"
     "D  -> disable obstacle detection\n";
 const char* IDLE_MESSAGE =
@@ -44,6 +45,12 @@ const char* END_MESSAGE =
     "general sense of my further life now? Will reset myself in 5 seconds. "
     "Take care of you and me!\n";
 const char* ROUND_MESSAGE = "Round and round I go, currently round %d\n";
+const char* MANUAL_RESET_MESSAGE =
+    "WIll reset myself in 5 seconds. I will forget everything. Make sure to "
+    "handle me well and take care of my messages when I am back functioning. "
+    "Thanks!\n";
+const char* PAUSE_MESSAGE =
+    "Pause ... zzzZZZzzzZZZzzz ... wake me up with P again\n";
 
 const char* TURN_LEFT_MESSAGE = "tl\n";
 const char* TURN_RIGHT_MESSAGE = "tr\n";
