@@ -44,9 +44,9 @@ void detect_wall(void* system) {
     return;
   }
 
-  wall_detected = ((micros() - last_last_measure) < 20000);
+  wall_detected = ((millis() - last_last_measure) < 20);
   last_last_measure = last_measure;
-  last_measure = micros();
+  last_measure = millis();
 }
 
 void Logic_reset(void* system) {
@@ -58,7 +58,7 @@ void Logic_reset(void* system) {
   wall_phase = 0;
   last_wall_phase = UINT8_MAX;
   update_track_direction = true;
-  last_direction_update = micros();
+  last_direction_update = millis();
 }
 
 void Logic_start(void* system) {
@@ -156,7 +156,7 @@ void Logic_drive_3_rounds(void* system) {
 }
 
 void idle_state(System* atmega, bool left, bool mid, bool right) {
-  static uint32_t last_message_sent = 0;
+  static uint16_t last_message_sent = 0;
 
   ShiftRegister_write_n(&atmega->led_strip, 3, left, mid, right);
 
@@ -165,20 +165,20 @@ void idle_state(System* atmega, bool left, bool mid, bool right) {
     return;
   }
 
-  if ((micros() - last_message_sent) >= 1000000) {
-    last_message_sent = micros();
+  if ((millis() - last_message_sent) >= 1000) {
+    last_message_sent = millis();
     USART_send_str(USART_instance(), IDLE_MESSAGE);
   }
 }
 
 void on_start_block(System* atmega, bool left, bool mid, bool right) {
-  static uint32_t last_message_sent = 0;
-  static uint32_t last_led_blink = 0;
+  static uint16_t last_message_sent = 0;
+  static uint16_t last_led_blink = 0;
   static bool led_on = false;
 
-  if ((micros() - last_led_blink) >= 100000) {
+  if ((millis() - last_led_blink) >= 100) {
     led_on = !led_on;
-    last_led_blink = micros();
+    last_led_blink = millis();
     ShiftRegister_write_n(&atmega->led_strip, 3, led_on, led_on, led_on);
   }
 
@@ -195,8 +195,8 @@ void on_start_block(System* atmega, bool left, bool mid, bool right) {
     return;
   }
 
-  if ((micros() - last_message_sent) >= 1000000) {
-    last_message_sent = micros();
+  if ((millis() - last_message_sent) >= 1000) {
+    last_message_sent = millis();
     USART_send_str(USART_instance(), START_BLOCK_MESSAGE);
   }
 }
@@ -206,11 +206,11 @@ void drive(System* atmega, bool left, bool mid, bool right, bool sees_wall) {
   static bool lleft = false, lmid = false, lright = false;
   static bool may_see_start = true;
   static bool seeing_start = false;
-  static uint32_t time_seeing_start = 0;
-  static uint32_t last_message_sent = 0;
+  static uint16_t time_seeing_start = 0;
+  static uint16_t last_message_sent = 0;
 
-  if ((micros() - last_message_sent) >= 1000000) {
-    last_message_sent = micros();
+  if ((millis() - last_message_sent) >= 1000) {
+    last_message_sent = millis();
     USART_send_str(USART_instance(), FMT(ROUND_MESSAGE, rounds));
   }
 
@@ -225,14 +225,14 @@ void drive(System* atmega, bool left, bool mid, bool right, bool sees_wall) {
   if (left && mid && right && !seeing_start && may_see_start) {
     seeing_start = true;
     may_see_start = false;
-    time_seeing_start = micros();
+    time_seeing_start = millis();
   } else if (!left || !mid || !right) {
     seeing_start = false;
     may_see_start = true;
   }
 
   if (seeing_start &&
-      (micros() - time_seeing_start) >= TIME_TO_RECOGNIZE_START_BLOCK_US) {
+      (millis() - time_seeing_start) >= TIME_TO_RECOGNIZE_START_BLOCK_MS) {
     rounds++;
     switch (rounds) {
       case 2:
@@ -321,7 +321,7 @@ void avoid_obstacle_logic(System* atmega, bool sees_wall, bool any_sensor) {
 void obstacle_phase_reset(System* atmega) {
   Servo_set_angle(&atmega->us_servo, 0);
   // we don't want smooth steering here
-  smooth_steer_start = (micros() - 1000000);
+  smooth_steer_start = (millis() - 1000);
   if (track_direction == TRACK_RIGHT) {
     turn_right(atmega);
   } else {
@@ -332,7 +332,7 @@ void obstacle_phase_reset(System* atmega) {
   last_wall_phase = UINT8_MAX;
   US_CURRENT_SENSOR_DISTANCE = US_SENSOR_DISTANCE_SMALL;
   update_track_direction = true;
-  last_direction_update = micros();
+  last_direction_update = millis();
 }
 
 void obstacle_phase_0(System* atmega, bool sees_wall) {
@@ -423,16 +423,16 @@ void obstacle_phase_4(System* atmega, bool sees_wall) {
 }
 
 void turn_left(System* atmega) {
-  if ((micros() - last_direction_update) >= DIRECTION_UPDATE_DELAY_US &&
+  if ((millis() - last_direction_update) >= DIRECTION_UPDATE_DELAY_MS &&
       update_track_direction) {
-    last_direction_update = micros();
+    last_direction_update = millis();
     track_direction = TRACK_LEFT;
   }
   // try smooth steer first
-  if ((micros() - smooth_steer_start) < TIME_TO_TRY_SMOOTH_STEERING_US) {
+  if ((millis() - smooth_steer_start) < TIME_TO_TRY_SMOOTH_STEERING_MS) {
     if (!is_smooth_steering) {
       is_smooth_steering = true;
-      smooth_steer_start = micros();
+      smooth_steer_start = millis();
     }
     turn_smooth_left(atmega);
   } else {
@@ -443,17 +443,17 @@ void turn_left(System* atmega) {
 }
 
 void turn_right(System* atmega) {
-  if ((micros() - last_direction_update) >= DIRECTION_UPDATE_DELAY_US &&
+  if ((millis() - last_direction_update) >= DIRECTION_UPDATE_DELAY_MS &&
       update_track_direction) {
-    last_direction_update = micros();
+    last_direction_update = millis();
     track_direction = TRACK_RIGHT;
   }
 
   // try smooth steer first
-  if ((micros() - smooth_steer_start) < TIME_TO_TRY_SMOOTH_STEERING_US) {
+  if ((millis() - smooth_steer_start) < TIME_TO_TRY_SMOOTH_STEERING_MS) {
     if (!is_smooth_steering) {
       is_smooth_steering = true;
-      smooth_steer_start = micros();
+      smooth_steer_start = millis();
     }
     turn_smooth_right(atmega);
   } else {
@@ -464,31 +464,31 @@ void turn_right(System* atmega) {
 }
 
 void turn_smooth_left(System* atmega) {
-  last_direction_update = micros();
+  last_direction_update = millis();
   Motor_drive_forward(&atmega->mt_right, SPEED_TURN_SLOW_A);
   Motor_drive_backward(&atmega->mt_left, SPEED_TURN_SLOW_B);
 }
 
 void turn_smooth_right(System* atmega) {
-  last_direction_update = micros();
+  last_direction_update = millis();
   Motor_drive_forward(&atmega->mt_left, SPEED_TURN_SLOW_A);
   Motor_drive_backward(&atmega->mt_right, SPEED_TURN_SLOW_B);
 }
 
 void drive_forward(System* atmega) {
-  smooth_steer_start = micros();
-  last_direction_update = micros();
+  smooth_steer_start = millis();
+  last_direction_update = millis();
   Motor_drive_forward(&atmega->mt_left, SPEED_DRIVE);
   Motor_drive_forward(&atmega->mt_right, SPEED_DRIVE);
 }
 
 void stop_driving(System* atmega) {
-  last_direction_update = micros();
+  last_direction_update = millis();
   Motor_drive_forward(&atmega->mt_left, 0);
   Motor_drive_forward(&atmega->mt_right, 0);
 }
 
-bool measure_was_recently() { return (micros() - last_measure) <= 50000; }
+bool measure_was_recently() { return (millis() - last_measure) <= 50; }
 
 void reset_system(System* atmega) {
   System_stop(atmega);

@@ -11,14 +11,14 @@ const int16_t SPEED_TURN_B = 220;
 const int16_t SPEED_TURN_SLOW_A = 240;
 const int16_t SPEED_TURN_SLOW_B = 20;
 
-const uint32_t TIME_TO_TRY_SMOOTH_STEERING_US = 120000;
-const uint32_t TIME_TO_RECOGNIZE_START_BLOCK_US = 100000;
+const uint16_t TIME_TO_TRY_SMOOTH_STEERING_MS = 120;
+const uint16_t TIME_TO_RECOGNIZE_START_BLOCK_MS = 100;
 
 const uint8_t US_SENSOR_DISTANCE_SMALL = 16;
 const uint8_t US_SENSOR_DISTANCE_LARGE = 23;
 static uint8_t US_CURRENT_SENSOR_DISTANCE = 16;
 
-const uint32_t DIRECTION_UPDATE_DELAY_US = 300000;
+const uint16_t DIRECTION_UPDATE_DELAY_MS = 300;
 
 const uint16_t MEASURE_THRESHOLD_LEFT = 330;
 const uint16_t MEASURE_THRESHOLD_MID = 400;
@@ -68,13 +68,13 @@ const char* US_SENSOR_MESSAGE = "dist: %d\n";
 
 static TrackDirection track_direction = TRACK_UNKNOWN;
 static bool wall_detected = false;
-static uint32_t last_direction_update = 0;
+static uint16_t last_direction_update = 0;
 static bool update_track_direction = true;
 static uint8_t wall_phase = 0;
 static uint8_t last_wall_phase = UINT8_MAX;
-static uint32_t last_measure = 0;
-static uint32_t last_last_measure = 0;
-static uint32_t smooth_steer_start = 0;
+static uint16_t last_measure = 0;
+static uint16_t last_last_measure = 0;
+static uint16_t smooth_steer_start = 0;
 static bool is_smooth_steering = false;
 static char* current_command = NULL;
 static bool safe_state = false;
