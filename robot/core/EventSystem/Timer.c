@@ -3,7 +3,7 @@
 #include "EventSystem.h"
 #include "HardwareTimer.h"
 
-Timer Timer_create(uint64_t interval_ms, String event) {
+Timer Timer_create(uint16_t interval_ms, String event) {
   Timer timer;
   timer.interval_ms = interval_ms;
   timer.last_time_ms = millis();
@@ -24,7 +24,7 @@ void Timer_stop(Timer* timer) {
 
 void Timer_update(void* obj) {
   Timer* timer = (Timer*)obj;
-  uint64_t current_time_ms = millis();
+  uint16_t current_time_ms = millis();
   if (timer->last_time_ms + timer->interval_ms <= current_time_ms) {
     timer->last_time_ms = current_time_ms;
     Event event = Event_create(timer->event);

@@ -31,7 +31,7 @@ void EventSystem_reg_updater(EventSystem* _this, Updater updater) {
 }
 
 void EventSystem_unreg_updater(EventSystem* _this, Updater updater) {
-  for (uint64_t i = 0; i < _this->updaters.size; i++)
+  for (uint8_t i = 0; i < _this->updaters.size; i++)
     if (_this->updaters.data[i].update == updater.update &&
         _this->updaters.data[i].object == updater.object) {
       Vector_Updater_4_erase(&_this->updaters, i);

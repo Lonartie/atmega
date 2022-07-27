@@ -9,8 +9,8 @@ typedef void (*TimerCallback)();
 
 /// @brief a timer that sends events in millisecond intervals
 typedef struct Timer {
-  uint64_t interval_ms;
-  uint64_t last_time_ms;
+  uint16_t interval_ms;
+  uint16_t last_time_ms;
   String event;
 } Timer;
 
@@ -18,7 +18,7 @@ typedef struct Timer {
 /// @param interval_ms the interval in milliseconds
 /// @param event the event that will be sent when the timer is done
 /// @returns a new timer which has not started yet
-Timer Timer_create(uint64_t interval_ms, String event);
+Timer Timer_create(uint16_t interval_ms, String event);
 
 /// @brief starts the given timer
 void Timer_start(Timer* timer);
