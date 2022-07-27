@@ -19,11 +19,11 @@ bool String_contains(String a, String b);
 bool String_equals_trimmed(String a, String b);
 
 /// @brief the buffer size for quick formatting of strings
-#define FMT_SIZE 64
+#define FMT_SIZE 45
 
 /// @brief quickly formats a string with a given buffer size of FMT_SIZE
 #define FMT(format, ...) \
-  ((snprintf(__buffer__, 64, format, __VA_ARGS__), __buffer__))
+  ((snprintf(__buffer__, FMT_SIZE, format, __VA_ARGS__), __buffer__))
 
 /// @brief the internal buffer to use for quick formatting of strings
 extern char __buffer__[FMT_SIZE];
