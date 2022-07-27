@@ -89,7 +89,8 @@ void Logic_drive_3_rounds(void* system) {
   bool sees_wall = (wall_detected && measure_was_recently());
 
   if (safe_state) {
-    return safe_state_loop(atmega);
+    safe_state_loop(atmega);
+    return;
   }
 
   if (current_command != NULL) {
@@ -223,7 +224,8 @@ void drive(System* atmega, bool left, bool mid, bool right, bool sees_wall) {
   }
 
   if (avoid_obstacles_enabled && (wall_phase != 0 || sees_wall)) {
-    return avoid_obstacle_logic(atmega, sees_wall, (left || mid || right));
+    avoid_obstacle_logic(atmega, sees_wall, (left || mid || right));
+    return;
   }
 
   if (left && mid && right && !seeing_start && may_see_start) {
