@@ -135,7 +135,7 @@ void on_start_block(System* atmega, bool left, bool mid, bool right) {
   static uint32_t last_led_blink = 0;
   static bool led_on = false;
 
-  if ((micros() - last_led_blink) >= 100000) {
+  if ((micros() - last_led_blink) >= 200000) {
     led_on = !led_on;
     last_led_blink = micros();
     ShiftRegister_write_n(&atmega->led_strip, 3, led_on, led_on, led_on);
