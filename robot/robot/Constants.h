@@ -33,29 +33,16 @@ static const char* DRIVING_COMMANDS_STR =
     "P  -> pause/unpause driving\n"
     "C  -> return home\n";
 
-static const char* IDLE_MESSAGE =
-    "Not on the starting field. Place me there please... Send ? for help\n";
-static const char* START_BLOCK_MESSAGE =
-    "On the starting field. Waiting for your instructions... Send ? for help\n";
-static const char* START_ROUND_ONE_MESSAGE =
-    "Here I go again on my own, going down the only round I've ever known\n";
-static const char* START_ROUND_TWO_MESSAGE =
-    "YEAH, done round 1, going for round 2/3\n";
-static const char* START_ROUND_THREE_MESSAGE =
-    "YEAH YEAH YEAH, done round 2, going for round 3/3\n";
-static const char* END_MESSAGE =
-    "YEAH YEAH YEAH, I really did it my way... And waht's my purpose and the "
-    "general sense of my further life now? Will reset myself in 5 seconds. "
-    "Take care of you and me!\n";
-static const char* ROUND_MESSAGE = "Round and round I go, currently round %d\n";
-static const char* MANUAL_RESET_MESSAGE =
-    "WIll reset myself in 5 seconds. I will forget everything. Make sure to "
-    "handle me well and take care of my messages when I am back functioning. "
-    "Thanks!\n";
-static const char* PAUSE_MESSAGE =
-    "Pause ... zzzZZZzzzZZZzzz ... wake me up with P again\n";
-static const char* SAFE_SATE_MESSAGE =
-    "In safe state! Won't react to any instructions! Rescue me!\n";
+static const char* IDLE_MESSAGE = "\n";
+static const char* START_BLOCK_MESSAGE = "\n";
+static const char* START_ROUND_ONE_MESSAGE = "\n";
+static const char* START_ROUND_TWO_MESSAGE = "\n";
+static const char* START_ROUND_THREE_MESSAGE = "\n";
+static const char* END_MESSAGE = "\n";
+static const char* ROUND_MESSAGE = "\n";
+static const char* MANUAL_RESET_MESSAGE = "\n";
+static const char* PAUSE_MESSAGE = "\n";
+static const char* SAFE_SATE_MESSAGE = "\n";
 
 static TrackDirection track_direction = TRACK_UNKNOWN;
 static bool wall_detected = false;
