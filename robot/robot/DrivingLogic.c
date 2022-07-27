@@ -26,6 +26,8 @@ void on_start_block(System* atmega, bool left, bool mid, bool right);
 void reset_system(System* atmega);
 void drive(System* atmega, bool left, bool mid, bool right, bool sees_wall);
 void show_commands();
+void safe_state_loop(System* atmega);
+void pause(System* atmega);
 
 void Logic_command(void* usart) {
   if (current_command != NULL) {
@@ -87,38 +89,7 @@ void Logic_drive_3_rounds(void* system) {
   bool sees_wall = (wall_detected && measure_was_recently());
 
   if (safe_state) {
-    static uint16_t last_led_update = 0;
-    static uint16_t last_message_sent = 0;
-    static bool ll_left = true, ll_mid = false, ll_right = false,
-                to_right = true;
-    System_stop(atmega);
-
-    if ((millis() - last_led_update) >= 125) /*8 Hz*/ {
-      last_led_update = millis();
-      ShiftRegister_write_n(&atmega->led_strip, 3, ll_left, ll_mid, ll_right);
-      if (to_right) {
-        ll_right = ll_mid;
-        ll_mid = ll_left;
-        ll_left = false;
-        if (ll_right) {
-          to_right = false;
-        }
-      } else {
-        ll_left = ll_mid;
-        ll_mid = ll_right;
-        ll_right = false;
-        if (ll_left) {
-          to_right = true;
-        }
-      }
-    }
-
-    if ((millis() - last_message_sent) >= 1000) {
-      last_message_sent = millis();
-      USART_send_str(USART_instance(), SAFE_SATE_MESSAGE);
-    }
-
-    return;
+    return safe_state_loop(atmega);
   }
 
   if (current_command != NULL && strcmp(current_command, "?") == 0) {
@@ -158,9 +129,23 @@ void Logic_drive_3_rounds(void* system) {
     case ON_START_BLOCK:
       on_start_block(atmega, left, mid, right);
       break;
-    case DRIVING_FIRST_ROUND:
-    case DRIVING_SECOND_ROUND:
-    case DRIVING_THIRD_ROUND:
+    case PAUSE:
+      if (current_command != NULL && strcmp(current_command, "P") == 0) {
+        free(current_command);
+        current_command = NULL;
+        presentation_state = DRIVING;
+        System_start(atmega);
+        return;
+      }
+      pause(atmega);
+      break;
+    case DRIVING:
+      if (current_command != NULL && strcmp(current_command, "P") == 0) {
+        free(current_command);
+        current_command = NULL;
+        presentation_state = PAUSE;
+        return;
+      }
       drive(atmega, left, mid, right, sees_wall);
       break;
     case END:
@@ -203,7 +188,7 @@ void on_start_block(System* atmega, bool left, bool mid, bool right) {
   }
 
   if (current_command != NULL && strcmp(current_command, "S") == 0) {
-    presentation_state = DRIVING_FIRST_ROUND;
+    presentation_state = DRIVING;
     free(current_command);
     current_command = NULL;
     USART_send_str(USART_instance(), START_ROUND_ONE_MESSAGE);
@@ -514,3 +499,72 @@ void reset_system(System* atmega) {
 }
 
 void show_commands() { USART_send_str(USART_instance(), COMMANDS_STR); }
+
+void safe_state_loop(System* atmega) {
+  static uint16_t last_led_update = 0;
+  static uint16_t last_message_sent = 0;
+  static bool ll_left = true, ll_mid = false, ll_right = false, to_right = true;
+  System_stop(atmega);
+
+  if ((millis() - last_led_update) >= 125) /*8 Hz*/ {
+    last_led_update = millis();
+    ShiftRegister_write_n(&atmega->led_strip, 3, ll_left, ll_mid, ll_right);
+    if (to_right) {
+      ll_right = ll_mid;
+      ll_mid = ll_left;
+      ll_left = false;
+      if (ll_right) {
+        to_right = false;
+      }
+    } else {
+      ll_left = ll_mid;
+      ll_mid = ll_right;
+      ll_right = false;
+      if (ll_left) {
+        to_right = true;
+      }
+    }
+  }
+
+  if ((millis() - last_message_sent) >= 1000) {
+    last_message_sent = millis();
+    USART_send_str(USART_instance(), SAFE_SATE_MESSAGE);
+  }
+
+  return;
+}
+
+void pause(System* atmega) {
+  static uint16_t last_led_update = 0;
+  static uint16_t last_message_sent = 0;
+  static bool ll_left = true, ll_mid = false, ll_right = false, to_right = true;
+
+  System_stop(atmega);
+
+  if ((millis() - last_led_update) >= 2000) /*.5 Hz*/ {
+    last_led_update = millis();
+    ShiftRegister_write_n(&atmega->led_strip, 3, ll_left, ll_mid, ll_right);
+    if (to_right) {
+      ll_right = ll_mid;
+      ll_mid = ll_left;
+      ll_left = false;
+      if (ll_right) {
+        to_right = false;
+      }
+    } else {
+      ll_left = ll_mid;
+      ll_mid = ll_right;
+      ll_right = false;
+      if (ll_left) {
+        to_right = true;
+      }
+    }
+  }
+
+  if ((millis() - last_message_sent) >= 1000) {
+    last_message_sent = millis();
+    USART_send_str(USART_instance(), PAUSE_MESSAGE);
+  }
+
+  return;
+}

@@ -19,10 +19,9 @@ typedef enum TrackDirection {
 typedef enum PresentationState {
   IDLE,
   ON_START_BLOCK,
-  DRIVING_FIRST_ROUND,
-  DRIVING_SECOND_ROUND,
-  DRIVING_THIRD_ROUND,
+  PAUSE,
+  DRIVING,
   END
 } PresentationState;
 
-#endif // STATES_H
+#endif  // STATES_H
