@@ -93,6 +93,14 @@ void Logic_drive_3_rounds(void* system) {
     free(current_command);
     current_command = NULL;
     return;
+  } else if (current_command != NULL && strcmp(current_command, "A") == 0) {
+    avoid_obstacles_enabled = true;
+    free(current_command);
+    current_command = NULL;
+  } else if (current_command != NULL && strcmp(current_command, "D") == 0) {
+    avoid_obstacles_enabled = false;
+    free(current_command);
+    current_command = NULL;
   }
 
   switch (presentation_state) {
@@ -135,7 +143,7 @@ void on_start_block(System* atmega, bool left, bool mid, bool right) {
   static uint32_t last_led_blink = 0;
   static bool led_on = false;
 
-  if ((micros() - last_led_blink) >= 200000) {
+  if ((micros() - last_led_blink) >= 100000) {
     led_on = !led_on;
     last_led_blink = micros();
     ShiftRegister_write_n(&atmega->led_strip, 3, led_on, led_on, led_on);
@@ -150,6 +158,7 @@ void on_start_block(System* atmega, bool left, bool mid, bool right) {
     presentation_state = DRIVING_FIRST_ROUND;
     free(current_command);
     current_command = NULL;
+    USART_send_str(USART_instance(), START_ROUND_ONE_MESSAGE);
     return;
   }
 
@@ -165,14 +174,20 @@ void drive(System* atmega, bool left, bool mid, bool right, bool sees_wall) {
   static bool may_see_start = true;
   static bool seeing_start = false;
   static uint32_t time_seeing_start = 0;
+  static uint32_t last_message_sent = 0;
   bool may_log = false;
+
+  if ((micros() - last_message_sent) >= 1000000) {
+    last_message_sent = micros();
+    USART_send_str(USART_instance(), FMT(ROUND_MESSAGE, rounds));
+  }
 
   if (left != lleft || mid != lmid || right != lright) {
     may_log = true;
     ShiftRegister_write_n(&atmega->led_strip, 3, left, mid, right);
   }
 
-  if (wall_phase != 0 || sees_wall) {
+  if (avoid_obstacles_enabled && (wall_phase != 0 || sees_wall)) {
     return avoid_obstacle_logic(atmega, sees_wall, may_log,
                                 (left || mid || right));
   }
@@ -188,18 +203,19 @@ void drive(System* atmega, bool left, bool mid, bool right, bool sees_wall) {
 
   if (seeing_start && (micros() - time_seeing_start) / 1000 >= 50) {
     rounds++;
-
-    if (rounds == 4) {
-      rounds = 0;
-      System_stop(atmega);
-      Menu_log(LOG_INFO, "Reset in 5 secs...\n");
-      _delay_ms(1000);
-      watchdog_init(SEC_4);
-      _delay_ms(5000);
-      return;
+    switch (rounds) {
+      case 2:
+        USART_send_str(USART_instance(), START_ROUND_TWO_MESSAGE);
+        break;
+      case 3:
+        USART_send_str(USART_instance(), START_ROUND_THREE_MESSAGE);
+        break;
+      case 4:
+        USART_send_str(USART_instance(), END_MESSAGE);
+        presentation_state = END;
+        return;
     }
 
-    Menu_log(LOG_INFO, FMT("Round %d/3\n", rounds));
     seeing_start = false;
   }
 

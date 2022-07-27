@@ -6,7 +6,7 @@
 #include "States.h"
 
 const int8_t SPEED_DRIVE_SLOW = 0;
-const int16_t SPEED_DRIVE = 220;
+const int16_t SPEED_DRIVE = 180;
 const int16_t SPEED_TURN_A = 220;
 const int16_t SPEED_TURN_B = 220;
 const int16_t SPEED_TURN_SLOW_A = 240;
@@ -26,11 +26,24 @@ const uint16_t MEASURE_THRESHOLD_RIGHT = 330;
 
 const char* COMMANDS_STR =
     "?  -> show help\n"
-    "S  -> start driving\n";
+    "S  -> start driving\n"
+    "A  -> enable obstacle detection\n"
+    "D  -> disable obstacle detection\n";
 const char* IDLE_MESSAGE =
     "Not on the starting field. Place me there please... Send ? for help\n";
 const char* START_BLOCK_MESSAGE =
     "On the starting field. Waiting for your instructions... Send ? for help\n";
+const char* START_ROUND_ONE_MESSAGE =
+    "Here I go again on my own, going down the only round I've ever known\n";
+const char* START_ROUND_TWO_MESSAGE =
+    "YEAH, done round 1, going for round 2/3\n";
+const char* START_ROUND_THREE_MESSAGE =
+    "YEAH YEAH YEAH, done round 2, going for round 3/3\n";
+const char* END_MESSAGE =
+    "YEAH YEAH YEAH, I really did it my way... And waht's my purpose and the "
+    "general sense of my further life now? Will reset myself in 5 seconds. "
+    "Take care of you and me!\n";
+const char* ROUND_MESSAGE = "Round and round I go, currently round %d\n";
 
 const char* TURN_LEFT_MESSAGE = "tl\n";
 const char* TURN_RIGHT_MESSAGE = "tr\n";
@@ -53,6 +66,7 @@ static uint32_t smooth_steer_start = 0;
 static bool is_smooth_steering = false;
 static char* current_command = NULL;
 
+static bool avoid_obstacles_enabled = false;
 static uint8_t rounds = 0;
 static PresentationState presentation_state = IDLE;
 
