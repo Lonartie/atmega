@@ -75,7 +75,7 @@ void Logic_drive_3_rounds(void* system) {
   System* atmega = (System*)system;
 
   if (!atmega->started) {
-    Menu_log(LOG_INFO, "not started\n");
+    System_start(atmega);
     return;
   }
 
