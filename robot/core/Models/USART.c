@@ -92,7 +92,7 @@ ISR(USART_RX_vect) {
   uint8_t i = 0;
 
   // get the whole message
-  while (1) {
+  while (true) {
     data[i] = USART_recv_byte(USART_instance());
     if (data[i] == '\r') {
       continue;
@@ -106,5 +106,12 @@ ISR(USART_RX_vect) {
 
   // mark as ready
   data[i] = '\0';
+
+  for (int k = 0; k <= i; ++k) {
+    if (data[k] == '\r' || data[k] == '\n') {
+      data[k] = '\0';
+    }
+  }
+
   ready_read = true;
 }
