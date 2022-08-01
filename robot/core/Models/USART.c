@@ -94,7 +94,7 @@ ISR(USART_RX_vect) {
   // get the whole message
   while (1) {
     data[i] = USART_recv_byte(USART_instance());
-    if (data[i] == '\r') {
+    if (data[i] == '\n') {
       break;
     }
     data = (char*)realloc(data, sizeof(char) * (i + 1));
