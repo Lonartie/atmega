@@ -13,7 +13,7 @@ class Robo:
 
         self.con.write(('PY\r').encode('ascii', 'replace'))
 
-        time.sleep(1)
+        time.sleep(5)
 
         self.answer = str(self.con.readline())
 
