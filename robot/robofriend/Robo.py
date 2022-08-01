@@ -11,7 +11,7 @@ class Robo:
         self.con.flushInput()
         self.con.flushOutput()
 
-        self.con.write(b'PY\r')
+        self.con.write('PY\r')
 
         time.sleep(1)
 
