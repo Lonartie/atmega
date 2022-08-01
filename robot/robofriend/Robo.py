@@ -12,10 +12,13 @@ class Robo:
         self.con.flushOutput()
 
         self.con.write(('PY\r').encode('ascii', 'replace'))
+        self.con.flush()
 
         time.sleep(5)
 
         self.answer = str(self.con.readline())
+        self.con.flushInput()
+        self.con.flushOutput()
 
     def close(self):
         self.con.close()
