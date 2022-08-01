@@ -9,6 +9,7 @@
 #include "Driving.h"
 #include "EventSystem/EventSystem.h"
 #include "EventSystem/HardwareTimer.h"
+#include "Globals.h"
 #include "Messages.h"
 #include "Models/System.h"
 #include "ObstacleAvoidance.h"
@@ -31,7 +32,7 @@ void Logic_command(void* usart) {
 void detect_wall(void* system) {
   System* atmega = (System*)system;
 
-  if (UltraSoundSensor_dist(&atmega->us) > US_CURRENT_SENSOR_DISTANCE) {
+  if (UltraSoundSensor_dist(&atmega->us) > us_current_sensor_distance) {
     wall_detected = false;
     return;
   }
@@ -46,7 +47,7 @@ void Logic_reset(void* system) {
   Servo_set_angle(&atmega->us_servo, 0);
   Servo_set_angle(&atmega->us_servo, 0);
   _delay_us(500000);
-  US_CURRENT_SENSOR_DISTANCE = US_SENSOR_DISTANCE_SMALL;
+  us_current_sensor_distance = US_SENSOR_DISTANCE_SMALL;
   wall_phase = 0;
   last_wall_phase = UINT8_MAX;
   update_track_direction = true;
@@ -57,7 +58,7 @@ void Logic_start(void* system) {
   System* atmega = (System*)system;
   Servo_set_angle(&atmega->us_servo, 0);
 
-  UltraSoundSensor_set_event(&atmega->us, US_CURRENT_SENSOR_DISTANCE,
+  UltraSoundSensor_set_event(&atmega->us, us_current_sensor_distance,
                              "US_SENSOR");
   EventSystem_reg_listener(EventSystem_instance(),
                            Listener_create_r(system, detect_wall, "US_SENSOR"));
@@ -141,7 +142,7 @@ void idle_state(System* atmega, bool left, bool mid, bool right) {
     return;
   }
 
-  if ((millis() - last_message_sent) >= one_seconds_ms) {
+  if ((millis() - last_message_sent) >= ONE_SECONDS_MS) {
     last_message_sent = millis();
     USART_send_str(USART_instance(), IDLE_MESSAGE);
   }
@@ -169,7 +170,7 @@ void on_start_block(System* atmega, bool left, bool mid, bool right) {
     return;
   }
 
-  if ((millis() - last_message_sent) >= one_seconds_ms) {
+  if ((millis() - last_message_sent) >= ONE_SECONDS_MS) {
     last_message_sent = millis();
     USART_send_str(USART_instance(), START_BLOCK_MESSAGE);
   }
@@ -199,7 +200,7 @@ void message_led_line(System* atmega, const char* message, uint16_t led_freq) {
     }
   }
 
-  if ((millis() - last_message_sent) >= one_seconds_ms) {
+  if ((millis() - last_message_sent) >= ONE_SECONDS_MS) {
     last_message_sent = millis();
     USART_send_str(USART_instance(), message);
   }

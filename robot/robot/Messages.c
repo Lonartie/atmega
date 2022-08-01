@@ -1,6 +1,7 @@
 #include "Messages.h"
 
 #include "Constants.h"
+#include "Globals.h"
 #include "Models/USART.h"
 
 void show_commands() {

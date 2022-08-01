@@ -18,7 +18,6 @@
 
 #define US_SENSOR_DISTANCE_SMALL 16
 #define US_SENSOR_DISTANCE_LARGE 23
-static uint8_t US_CURRENT_SENSOR_DISTANCE = 16;
 
 #define DIRECTION_UPDATE_DELAY_MS 300
 
@@ -75,30 +74,7 @@ static uint8_t US_CURRENT_SENSOR_DISTANCE = 16;
   "I just arrived at home. Resetting NOW! Take care of my messages when I'm " \
   "back...\n"
 
-static TrackDirection track_direction = TD_UNKNOWN;
-static bool wall_detected = false;
-static uint32_t last_direction_update = 0;
-static bool update_track_direction = true;
-static uint8_t wall_phase = 0;
-static uint8_t last_wall_phase = UINT8_MAX;
-static uint32_t last_measure = 0;
-static uint32_t last_last_measure = 0;
-static uint32_t smooth_steer_start = 0;
-static bool is_smooth_steering = false;
-static char* current_command = NULL;
-static bool safe_state = false;
-static const uint32_t one_seconds_ms = 1000;
-static const uint32_t five_seconds_ms = 5000;
-
-static uint32_t last_message_sent = 0;
-static uint32_t last_led_blink = 0;
-static uint32_t last_led_update = 0;
-
-static uint32_t start_driving_time = 0;
-
-static bool avoid_obstacles_enabled = false;
-static bool return_home = false;
-static uint8_t rounds = 0;
-static PresentationState presentation_state = PS_IDLE;
+#define ONE_SECONDS_MS 1000
+#define FIVE_SECONDS_MS 5000
 
 #endif  // CONSTANTS_H

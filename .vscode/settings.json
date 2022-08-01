@@ -7,6 +7,7 @@
     "eventsystem.h": "c",
     "timer.h": "c",
     "adcpin.h": "c",
-    "messages.h": "c"
+    "messages.h": "c",
+    "globals.h": "c"
   }
 }

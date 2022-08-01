@@ -2,6 +2,7 @@
 
 #include "Constants.h"
 #include "EventSystem/HardwareTimer.h"
+#include "Globals.h"
 #include "ObstacleAvoidance.h"
 #include "Reset.h"
 #include "States.h"
@@ -121,12 +122,12 @@ void drive(System* atmega, bool left, bool mid, bool right, bool sees_wall) {
       seeing_start = false;
     }
 
-    if ((millis() - last_message_sent) >= one_seconds_ms && rounds > 0) {
+    if ((millis() - last_message_sent) >= ONE_SECONDS_MS && rounds > 0) {
       last_message_sent = millis();
       USART_send_str(USART_instance(), FMT(ROUND_MESSAGE, rounds));
     }
   } else {
-    if ((millis() - last_message_sent) >= one_seconds_ms) {
+    if ((millis() - last_message_sent) >= ONE_SECONDS_MS) {
       last_message_sent = millis();
       USART_send_str(USART_instance(), RETURN_HOME_MESSAGE);
     }
