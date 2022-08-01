@@ -11,12 +11,7 @@ class Robo:
         self.con.write(b'PY\r\n')
         time.sleep(3)
         answer = self.con.readall().decode()
-        self.long = answer
-        lines = answer.split('\n')
-        lines = list(filter(None, lines))
-        lines = list(filter(bool, lines))
-        lines = list(filter(len, lines))
-        self.answer = answer[-1]
+        self.answer = answer.strip()
 
     def close(self):
         self.con.close()
