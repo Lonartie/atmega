@@ -12,7 +12,7 @@ void run_py_mode(System* atmega) {
     started = true;
   }
 
-  if (current_command != NULL && String_equals(current_command, "forward")) {
+  if (current_command != NULL && String_contains(current_command, "forward")) {
     drive_forward(atmega);
   }
 }
