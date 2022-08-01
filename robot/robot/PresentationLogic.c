@@ -54,22 +54,22 @@ void presentation_update(void* system) {
     return;
   }
 
-  if (current_command != NULL && strcmp(current_command, "?") == 0) {
+  if (current_command != NULL && String_equals(current_command, "?")) {
     show_commands();
     free(current_command);
     current_command = NULL;
     return;
-  } else if (current_command != NULL && strcmp(current_command, "R") == 0) {
+  } else if (current_command != NULL && String_equals(current_command, "R")) {
     print(MANUAL_RESET_MESSAGE);
     free(current_command);
     current_command = NULL;
     reset_system_5_seconds(atmega);  // no-return
-  } else if (current_command != NULL && strcmp(current_command, "X") == 0) {
+  } else if (current_command != NULL && String_equals(current_command, "X")) {
     safe_state = true;
     free(current_command);
     current_command = NULL;
     return;
-  } else if (current_command != NULL && strcmp(current_command, "A") == 0) {
+  } else if (current_command != NULL && String_equals(current_command, "A")) {
     avoid_obstacles_enabled = !avoid_obstacles_enabled;
     print(FMT("avoiding obstacles %s\n",
               (avoid_obstacles_enabled ? "enabled" : "disabled")));
@@ -131,7 +131,7 @@ void presentation_process_on_start_block(System* atmega, bool left, bool mid,
     return;
   }
 
-  if (current_command != NULL && strcmp(current_command, "S") == 0) {
+  if (current_command != NULL && String_equals(current_command, "S")) {
     presentation_state = PS_DRIVING;
     free(current_command);
     current_command = NULL;
@@ -146,7 +146,7 @@ void presentation_process_on_start_block(System* atmega, bool left, bool mid,
 }
 
 void presentation_check_toggle_drive_pause(System* atmega) {
-  if (current_command != NULL && strcmp(current_command, "P") == 0) {
+  if (current_command != NULL && String_equals(current_command, "P")) {
     free(current_command);
     current_command = NULL;
     presentation_state =
@@ -157,7 +157,7 @@ void presentation_check_toggle_drive_pause(System* atmega) {
 }
 
 void presentation_check_return_home() {
-  if (current_command != NULL && strcmp(current_command, "C") == 0) {
+  if (current_command != NULL && String_equals(current_command, "C")) {
     free(current_command);
     current_command = NULL;
     return_home = true;
