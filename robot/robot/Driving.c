@@ -99,7 +99,8 @@ void drive(System* atmega, bool left, bool mid, bool right, bool sees_wall) {
 
   if (!return_home) {
     if (seeing_start &&
-        (millis() - time_seeing_start) >= TIME_TO_RECOGNIZE_START_BLOCK_MS) {
+        (millis() - time_seeing_start) >= TIME_TO_RECOGNIZE_START_BLOCK_MS &&
+        (millis() - start_driving_time) >= ROUNDS_COUNTER_START_DELAY_MS) {
       rounds++;
       switch (rounds) {
         case 2:

@@ -3,6 +3,8 @@
 
 #include "Models/System.h"
 
+#define ROUNDS_COUNTER_START_DELAY_MS 1500
+
 void turn_left(System* atmega);
 void turn_right(System* atmega);
 void turn_smooth_left(System* atmega);

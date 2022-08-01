@@ -136,6 +136,7 @@ void idle_state(System* atmega, bool left, bool mid, bool right) {
   ShiftRegister_write_n(&atmega->led_strip, 3, left, mid, right);
 
   if (left && mid && right) {
+    start_driving_time = millis();
     presentation_state = PS_ON_START_BLOCK;
     return;
   }
