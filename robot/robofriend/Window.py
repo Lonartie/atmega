@@ -11,7 +11,7 @@ class Window:
         self.root.title("RoboFriend")
         self.robot = Robo()
         tk.Label(self.root, text=self.robot.answer).pack()
-        tk.Button(self.root, text='long', command=self.show_long)
+        tk.Button(self.root, text='long', command=self.show_long).pack()
 
     def show_long(self):
         messagebox.showinfo("LONG", self.robot.long)
