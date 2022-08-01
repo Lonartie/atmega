@@ -24,3 +24,4 @@ bool avoid_obstacles_enabled = false;
 bool return_home = false;
 uint8_t rounds = 0;
 PresentationState presentation_state = PS_IDLE;
+bool py_mode = false;

@@ -28,5 +28,6 @@ extern bool avoid_obstacles_enabled;
 extern bool return_home;
 extern uint8_t rounds;
 extern PresentationState presentation_state;
+extern bool py_mode;
 
 #endif  // GLOBALS_H

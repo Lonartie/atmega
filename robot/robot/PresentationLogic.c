@@ -13,6 +13,7 @@
 #include "Messages.h"
 #include "Models/System.h"
 #include "ObstacleAvoidance.h"
+#include "PyMode.h"
 #include "Reset.h"
 #include "States.h"
 
@@ -35,6 +36,11 @@ void presentation_start(void* system) {
 void presentation_update(void* system) {
   System* atmega = (System*)system;
 
+  if (py_mode) {
+    run_py_mode(atmega);
+    return;
+  }
+
   if (!atmega->started) {
     System_start(atmega);
     return;
@@ -54,7 +60,10 @@ void presentation_update(void* system) {
     return;
   }
 
-  if (current_command != NULL && String_equals(current_command, "?")) {
+  if (current_command != NULL && String_equals(current_command, "PY")) {
+    py_mode = true;
+    return;
+  } else if (current_command != NULL && String_equals(current_command, "?")) {
     show_commands();
     free(current_command);
     current_command = NULL;
