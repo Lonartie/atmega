@@ -5,8 +5,9 @@ class Robo:
 
     def __init__(self):
         self.con = serial.Serial('/dev/rfcomm0')
-        self.con.timeout(0.25)
-        self.con.write(b'?')
+        self.con.isOpen()
+        self.con.timeout = 0.25
+        self.con.write('?\r')
         self.con.flush()
         answer = ""
         done = False
