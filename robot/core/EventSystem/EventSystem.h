@@ -10,7 +10,7 @@
 /// @note this is designed to be used as a singleton with
 /// 'EventSystem_instance()'
 typedef struct EventSystem {
-  Vector_Updater_4 updaters;
+  Vector_Updater_8 updaters;
   Vector_Listener_8 listeners;
   bool exit_flag;
 } EventSystem;

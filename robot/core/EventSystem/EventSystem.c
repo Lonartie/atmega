@@ -16,7 +16,7 @@ EventSystem* EventSystem_instance() {
   static bool initialized = false;
 
   if (!initialized) {
-    instance.updaters = Vector_Updater_4_create();
+    instance.updaters = Vector_Updater_8_create();
     instance.listeners = Vector_Listener_8_create();
     instance.exit_flag = false;
 
@@ -27,14 +27,14 @@ EventSystem* EventSystem_instance() {
 }
 
 void EventSystem_reg_updater(EventSystem* _this, Updater updater) {
-  Vector_Updater_4_push_back(&_this->updaters, updater);
+  Vector_Updater_8_push_back(&_this->updaters, updater);
 }
 
 void EventSystem_unreg_updater(EventSystem* _this, Updater updater) {
   for (uint8_t i = 0; i < _this->updaters.size; i++)
     if (_this->updaters.data[i].update == updater.update &&
         _this->updaters.data[i].object == updater.object) {
-      Vector_Updater_4_erase(&_this->updaters, i);
+      Vector_Updater_8_erase(&_this->updaters, i);
       return;
     }
 }

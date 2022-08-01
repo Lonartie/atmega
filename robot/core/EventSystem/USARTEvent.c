@@ -34,9 +34,16 @@ void USARTEvent_stop(USARTEvent* _this) {
                             Updater_create(_this, USARTEvent_update));
 }
 
+void free_data() {
+  if (data != NULL) {
+    free(data);
+    data = NULL;
+  }
+}
+
 void USARTEvent_update(void* _this) {
   USARTEvent* usart_event = (USARTEvent*)_this;
-  if (ready_read) {
+  if (ready_read && data != NULL) {
     // send event
     ready_read = false;
     usart_event->data = data;
@@ -44,13 +51,13 @@ void USARTEvent_update(void* _this) {
                            Event_create(usart_event->event));
 
     // after event system has handled the event, free the data
-    free(data);
     usart_event->data = NULL;
-    data = NULL;
+    free_data();
   }
 }
 
 ISR(USART_RX_vect) {
+  free_data();
   data = (char*)malloc(sizeof(char) * 1);
   uint8_t i = 0;
 

@@ -10,8 +10,8 @@ static volatile uint64_t microseconds = 0;
 
 void timer_init() {
   TCCR1A = 0;
-  TCCR1B = _BV(WGM12) | (_BV(CS11));
-  TIMSK1 = (1 << (1));
+  TCCR1B = (1 << WGM12) | (1 << CS11);
+  TIMSK1 = (1 << OCIE1A);
   OCR1A = ((F_CPU / PRESCALER) / 10000) - 1;
   sei();
 }
