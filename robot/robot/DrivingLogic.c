@@ -238,7 +238,8 @@ void drive(System* atmega, bool left, bool mid, bool right, bool sees_wall) {
       last_message_sent = millis();
       USART_send_str(USART_instance(), RETURN_HOME_MESSAGE);
     }
-    if (seeing_start) {
+    if (seeing_start &&
+        (millis() - time_seeing_start) >= TIME_TO_RECOGNIZE_START_BLOCK_MS) {
       USART_send_str(USART_instance(), RETURN_HOME_END_MESSAGE);
       reset_system_now(atmega);
     }
