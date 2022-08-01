@@ -17,14 +17,5 @@ class Robo:
         lines = list(filter(len, lines))
         self.answer = answer[-1]
 
-        buffer = ""
-        while True:
-            character = self.con.read(1)
-            if (character != '\r' and character != '\n'):
-                buffer += character
-            else:
-                break
-        self.answer = buffer
-
     def close(self):
         self.con.close()
