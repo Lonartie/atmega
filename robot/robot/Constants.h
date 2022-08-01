@@ -98,7 +98,7 @@ static uint32_t start_driving_time = 0;
 
 static bool avoid_obstacles_enabled = false;
 static bool return_home = false;
-static uint8_t rounds = 1;
+static uint8_t rounds = 0;
 static PresentationState presentation_state = PS_IDLE;
 
 #endif  // CONSTANTS_H
