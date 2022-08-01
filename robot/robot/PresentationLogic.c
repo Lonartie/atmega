@@ -60,7 +60,7 @@ void presentation_update(void* system) {
     return;
   }
 
-  if (current_command != NULL && String_equals(current_command, "PY")) {
+  if (current_command != NULL && String_contains(current_command, "PY")) {
     py_mode = true;
     return;
   } else if (current_command != NULL && String_equals(current_command, "?")) {
