@@ -11,5 +11,6 @@ void drive_forward(System* atmega);
 void stop_driving(System* atmega);
 
 void drive(System* atmega, bool left, bool mid, bool right, bool sees_wall);
+void count_rounds(System* atmega, bool left, bool mid, bool right);
 
 #endif  // DRIVING_H

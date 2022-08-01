@@ -3,6 +3,7 @@
 #include "Constants.h"
 #include "EventSystem/HardwareTimer.h"
 #include "Globals.h"
+#include "Messages.h"
 #include "ObstacleAvoidance.h"
 #include "Reset.h"
 #include "States.h"
@@ -76,9 +77,6 @@ void stop_driving(System* atmega) {
 void drive(System* atmega, bool left, bool mid, bool right, bool sees_wall) {
   static DriveDirectionState state = DDS_LNF;
   static bool lleft = false, lmid = false, lright = false;
-  static bool may_see_start = true;
-  static bool seeing_start = false;
-  static uint32_t time_seeing_start = 0;
 
   if (left != lleft || mid != lmid || right != lright) {
     ShiftRegister_write_n(&atmega->led_strip, 3, left, mid, right);
@@ -89,54 +87,7 @@ void drive(System* atmega, bool left, bool mid, bool right, bool sees_wall) {
     return;
   }
 
-  if (left && mid && right && !seeing_start && may_see_start) {
-    seeing_start = true;
-    may_see_start = false;
-    time_seeing_start = millis();
-  } else if (!left || !mid || !right) {
-    seeing_start = false;
-    may_see_start = true;
-  }
-
-  if (!return_home) {
-    if (seeing_start &&
-        (millis() - time_seeing_start) >= TIME_TO_RECOGNIZE_START_BLOCK_MS) {
-      rounds++;
-      switch (rounds) {
-        case 0:
-        case 1:
-          break;
-        case 2:
-          USART_send_str(USART_instance(), START_ROUND_TWO_MESSAGE);
-          break;
-        case 3:
-          USART_send_str(USART_instance(), START_ROUND_THREE_MESSAGE);
-          break;
-        case 4:
-        default:
-          USART_send_str(USART_instance(), END_MESSAGE);
-          presentation_state = PS_END;
-          return;
-      }
-
-      seeing_start = false;
-    }
-
-    if ((millis() - last_message_sent) >= ONE_SECONDS_MS && rounds > 0) {
-      last_message_sent = millis();
-      USART_send_str(USART_instance(), FMT(ROUND_MESSAGE, rounds));
-    }
-  } else {
-    if ((millis() - last_message_sent) >= ONE_SECONDS_MS) {
-      last_message_sent = millis();
-      USART_send_str(USART_instance(), RETURN_HOME_MESSAGE);
-    }
-    if (seeing_start &&
-        (millis() - time_seeing_start) >= TIME_TO_RECOGNIZE_START_BLOCK_MS) {
-      USART_send_str(USART_instance(), RETURN_HOME_END_MESSAGE);
-      reset_system_now(atmega);
-    }
-  }
+  count_rounds(atmega, left, mid, right);
 
   // there are rare cases where 011 -> 010 -> 000 is detected so
   // we need to memorize the x0x side and turn the car afterwards
@@ -181,4 +132,46 @@ void drive(System* atmega, bool left, bool mid, bool right, bool sees_wall) {
   lleft = left;
   lmid = mid;
   lright = right;
+}
+
+void count_rounds(System* atmega, bool left, bool mid, bool right) {
+  static bool may_see_start = true;
+  static bool seeing_start = false;
+  static uint32_t time_seeing_start = 0;
+
+  if (left && mid && right && !seeing_start && may_see_start) {
+    seeing_start = true;
+    may_see_start = false;
+    time_seeing_start = millis();
+  } else if (!left || !mid || !right) {
+    seeing_start = false;
+    may_see_start = true;
+  }
+
+  if (!return_home) {
+    if (seeing_start &&
+        (millis() - time_seeing_start) >= TIME_TO_RECOGNIZE_START_BLOCK_MS) {
+      rounds++;
+      print_rounds_changed_message();
+      if (rounds >= 4) {
+        presentation_state = PS_END;
+      }
+      seeing_start = false;
+    }
+
+    if ((millis() - last_message_sent) >= ONE_SECONDS_MS && rounds > 0) {
+      last_message_sent = millis();
+      print_rounds_message();
+    }
+  } else {
+    if ((millis() - last_message_sent) >= ONE_SECONDS_MS) {
+      last_message_sent = millis();
+      print_return_home_message();
+    }
+    if (seeing_start &&
+        (millis() - time_seeing_start) >= TIME_TO_RECOGNIZE_START_BLOCK_MS) {
+      print_arrived_home_message();
+      reset_system_now(atmega);
+    }
+  }
 }

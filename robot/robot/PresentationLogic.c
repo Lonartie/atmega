@@ -16,33 +16,14 @@
 #include "Reset.h"
 #include "States.h"
 
-void idle_state(System* atmega, bool left, bool mid, bool right);
-void on_start_block(System* atmega, bool left, bool mid, bool right);
-void message_led_line(System* atmega, const char* message, uint16_t led_freq);
-void check_toggle_drive_pause(System* atmega);
-void check_return_home();
-
-void Logic_command(void* usart) {
+void presentation_handle_command(void* usart) {
   if (current_command != NULL) {
     free(current_command);
   }
   current_command = strdup(((USART*)usart)->data);
 }
 
-void detect_wall(void* system) {
-  System* atmega = (System*)system;
-
-  if (UltraSoundSensor_dist(&atmega->us) > us_current_sensor_distance) {
-    wall_detected = false;
-    return;
-  }
-
-  wall_detected = ((millis() - last_last_measure) < 20);
-  last_last_measure = last_measure;
-  last_measure = millis();
-}
-
-void Logic_reset(void* system) {
+void presentation_reset(void* system) {
   System* atmega = (System*)system;
   Servo_set_angle(&atmega->us_servo, 0);
   Servo_set_angle(&atmega->us_servo, 0);
@@ -54,7 +35,7 @@ void Logic_reset(void* system) {
   last_direction_update = millis();
 }
 
-void Logic_start(void* system) {
+void presentation_start(void* system) {
   System* atmega = (System*)system;
   Servo_set_angle(&atmega->us_servo, 0);
 
@@ -64,7 +45,7 @@ void Logic_start(void* system) {
                            Listener_create_r(system, detect_wall, "US_SENSOR"));
 }
 
-void Logic_drive_3_rounds(void* system) {
+void presentation_update(void* system) {
   System* atmega = (System*)system;
 
   if (!atmega->started) {
@@ -82,7 +63,7 @@ void Logic_drive_3_rounds(void* system) {
   bool sees_wall = (wall_detected && measure_was_recently());
 
   if (safe_state) {
-    message_led_line(atmega, SAFE_SATE_MESSAGE, 125);
+    print_message_with_led_line(atmega, SAFE_SATE_MESSAGE, 125);
     return;
   }
 
@@ -112,18 +93,18 @@ void Logic_drive_3_rounds(void* system) {
 
   switch (presentation_state) {
     case PS_IDLE:
-      idle_state(atmega, left, mid, right);
+      presentation_process_idle_state(atmega, left, mid, right);
       break;
     case PS_ON_START_BLOCK:
-      on_start_block(atmega, left, mid, right);
+      presentation_process_on_start_block(atmega, left, mid, right);
       break;
     case PS_PAUSE:
-      check_toggle_drive_pause(atmega);
-      message_led_line(atmega, PAUSE_MESSAGE, 2000);
+      presentation_check_toggle_drive_pause(atmega);
+      print_message_with_led_line(atmega, PAUSE_MESSAGE, 2000);
       break;
     case PS_DRIVING:
-      check_toggle_drive_pause(atmega);
-      check_return_home();
+      presentation_check_toggle_drive_pause(atmega);
+      presentation_check_return_home();
       drive(atmega, left, mid, right, sees_wall);
       break;
     case PS_END:
@@ -133,7 +114,8 @@ void Logic_drive_3_rounds(void* system) {
   }
 }
 
-void idle_state(System* atmega, bool left, bool mid, bool right) {
+void presentation_process_idle_state(System* atmega, bool left, bool mid,
+                                     bool right) {
   ShiftRegister_write_n(&atmega->led_strip, 3, left, mid, right);
 
   if (left && mid && right) {
@@ -148,7 +130,8 @@ void idle_state(System* atmega, bool left, bool mid, bool right) {
   }
 }
 
-void on_start_block(System* atmega, bool left, bool mid, bool right) {
+void presentation_process_on_start_block(System* atmega, bool left, bool mid,
+                                         bool right) {
   static bool led_on = false;
 
   if ((millis() - last_led_blink) >= 100) {
@@ -176,37 +159,7 @@ void on_start_block(System* atmega, bool left, bool mid, bool right) {
   }
 }
 
-void message_led_line(System* atmega, const char* message, uint16_t led_freq) {
-  static bool ll_left = true, ll_mid = false, ll_right = false, to_right = true;
-  System_stop(atmega);
-
-  if ((millis() - last_led_update) >= led_freq) /*8 Hz*/ {
-    last_led_update = millis();
-    ShiftRegister_write_n(&atmega->led_strip, 3, ll_left, ll_mid, ll_right);
-    if (to_right) {
-      ll_right = ll_mid;
-      ll_mid = ll_left;
-      ll_left = false;
-      if (ll_right) {
-        to_right = false;
-      }
-    } else {
-      ll_left = ll_mid;
-      ll_mid = ll_right;
-      ll_right = false;
-      if (ll_left) {
-        to_right = true;
-      }
-    }
-  }
-
-  if ((millis() - last_message_sent) >= ONE_SECONDS_MS) {
-    last_message_sent = millis();
-    USART_send_str(USART_instance(), message);
-  }
-}
-
-void check_toggle_drive_pause(System* atmega) {
+void presentation_check_toggle_drive_pause(System* atmega) {
   if (current_command != NULL && strcmp(current_command, "P") == 0) {
     free(current_command);
     current_command = NULL;
@@ -217,7 +170,7 @@ void check_toggle_drive_pause(System* atmega) {
   }
 }
 
-void check_return_home() {
+void presentation_check_return_home() {
   if (current_command != NULL && strcmp(current_command, "C") == 0) {
     free(current_command);
     current_command = NULL;

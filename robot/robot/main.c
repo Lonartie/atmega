@@ -19,25 +19,25 @@ int MAIN() {
   USART* usart = USART_instance();
   Timer timer = Timer_create(0, "update");
 
-  Logic_start(&atmega);
+  presentation_start(&atmega);
 
   // register event listeners
   EventSystem_reg_listener(
       EventSystem_instance(),
-      Listener_create_r(&atmega, Logic_drive_3_rounds, timer.event));
+      Listener_create_r(&atmega, presentation_update, timer.event));
 
   EventSystem_reg_listener(
       EventSystem_instance(),
-      Listener_create_r(usart, Logic_command, usart->event));
+      Listener_create_r(usart, presentation_handle_command, usart->event));
 
   //   EventSystem_reg_listener(
   //       EventSystem_instance(),
-  //       Listener_create_r(&atmega, Logic_reset,
+  //       Listener_create_r(&atmega, presentation_reset,
   //       Menu_instance().car_start_event));
 
   //   EventSystem_reg_listener(
   //       EventSystem_instance(),
-  //       Listener_create_r(&atmega, Logic_reset,
+  //       Listener_create_r(&atmega, presentation_reset,
   //       Menu_instance().car_stop_event));
 
   //   EventSystem_reg_listener(EventSystem_instance(),

@@ -7,6 +7,19 @@
 #include "EventSystem/HardwareTimer.h"
 #include "Globals.h"
 
+void detect_wall(void* system) {
+  System* atmega = (System*)system;
+
+  if (UltraSoundSensor_dist(&atmega->us) > us_current_sensor_distance) {
+    wall_detected = false;
+    return;
+  }
+
+  wall_detected = ((millis() - last_last_measure) < 20);
+  last_last_measure = last_measure;
+  last_measure = millis();
+}
+
 void avoid_obstacle_logic(System* atmega, bool sees_wall, bool any_sensor) {
   if (wall_phase >= 3 && any_sensor) {
     obstacle_phase_reset(atmega);
