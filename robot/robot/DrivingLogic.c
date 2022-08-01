@@ -202,7 +202,7 @@ void drive(System* atmega, bool left, bool mid, bool right, bool sees_wall) {
   static bool lleft = false, lmid = false, lright = false;
   static bool may_see_start = true;
   static bool seeing_start = false;
-  static uint16_t time_seeing_start = 0;
+  static uint32_t time_seeing_start = 0;
 
   if (left != lleft || mid != lmid || right != lright) {
     ShiftRegister_write_n(&atmega->led_strip, 3, left, mid, right);

@@ -11,18 +11,18 @@ static const int16_t SPEED_TURN_B = 220;
 static const int16_t SPEED_TURN_SLOW_A = 240;
 static const int16_t SPEED_TURN_SLOW_B = 20;
 
-static const uint16_t TIME_TO_TRY_SMOOTH_STEERING_MS = 120;
-static const uint16_t TIME_TO_RECOGNIZE_START_BLOCK_MS = 100;
+static const uint32_t TIME_TO_TRY_SMOOTH_STEERING_MS = 120;
+static const uint32_t TIME_TO_RECOGNIZE_START_BLOCK_MS = 100;
 
 static const uint8_t US_SENSOR_DISTANCE_SMALL = 16;
 static const uint8_t US_SENSOR_DISTANCE_LARGE = 23;
 static uint8_t US_CURRENT_SENSOR_DISTANCE = 16;
 
-static const uint16_t DIRECTION_UPDATE_DELAY_MS = 300;
+static const uint32_t DIRECTION_UPDATE_DELAY_MS = 300;
 
-static const uint16_t MEASURE_THRESHOLD_LEFT = 330;
-static const uint16_t MEASURE_THRESHOLD_MID = 400;
-static const uint16_t MEASURE_THRESHOLD_RIGHT = 330;
+static const uint32_t MEASURE_THRESHOLD_LEFT = 330;
+static const uint32_t MEASURE_THRESHOLD_MID = 400;
+static const uint32_t MEASURE_THRESHOLD_RIGHT = 330;
 
 static const char* COMMANDS_STR =
     "?  -> show help\n"
@@ -59,22 +59,22 @@ static const char* SAFE_SATE_MESSAGE =
 
 static TrackDirection track_direction = TRACK_UNKNOWN;
 static bool wall_detected = false;
-static uint16_t last_direction_update = 0;
+static uint32_t last_direction_update = 0;
 static bool update_track_direction = true;
 static uint8_t wall_phase = 0;
 static uint8_t last_wall_phase = UINT8_MAX;
-static uint16_t last_measure = 0;
-static uint16_t last_last_measure = 0;
-static uint16_t smooth_steer_start = 0;
+static uint32_t last_measure = 0;
+static uint32_t last_last_measure = 0;
+static uint32_t smooth_steer_start = 0;
 static bool is_smooth_steering = false;
 static char* current_command = NULL;
 static bool safe_state = false;
-static const uint16_t one_seconds_ms = 1000;
-static const uint16_t five_seconds_ms = 5000;
+static const uint32_t one_seconds_ms = 1000;
+static const uint32_t five_seconds_ms = 5000;
 
-static uint16_t last_message_sent = 0;
-static uint16_t last_led_blink = 0;
-static uint16_t last_led_update = 0;
+static uint32_t last_message_sent = 0;
+static uint32_t last_led_blink = 0;
+static uint32_t last_led_update = 0;
 
 static bool avoid_obstacles_enabled = false;
 static uint8_t rounds = 0;
