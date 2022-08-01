@@ -92,10 +92,6 @@ void Logic_drive_3_rounds(void* system) {
     return;
   }
 
-  if (current_command != NULL) {
-    USART_send_str(USART_instance(), current_command);
-  }
-
   if (current_command != NULL && strcmp(current_command, "?") == 0) {
     show_commands();
     free(current_command);
