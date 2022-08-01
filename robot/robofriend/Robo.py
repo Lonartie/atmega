@@ -11,7 +11,7 @@ class Robo:
         self.con.flushInput()
         self.con.flushOutput()
 
-        self.con.write('PY\r')
+        self.con.write('PY\r'.encode("uft-8"))
 
         time.sleep(1)
 
