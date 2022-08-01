@@ -10,7 +10,7 @@ class Robo:
             parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE)
         self.con.write(b'PY\r\n')
         time.sleep(1)
-        answer = str(self.readall())
+        answer = str(self.con.readall())
         lines = answer.split('\n')
         lines = list(filter(None, lines))
         lines = list(filter(bool, lines))
