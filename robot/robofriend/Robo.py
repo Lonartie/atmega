@@ -11,7 +11,7 @@ class Robo:
         self.con.flushInput()
         self.con.flushOutput()
 
-        self.con.write('PY\r'.encode("utf-8"))
+        self.con.write('PY\r'.encode('ascii', 'replace'))
 
         time.sleep(1)
 
