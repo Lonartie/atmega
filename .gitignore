@@ -58,3 +58,5 @@ test
 .vscode/dryrun.log
 .vscode/configurationCache.log
 doxygen/
+
+*__pycache__/
