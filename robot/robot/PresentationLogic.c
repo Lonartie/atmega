@@ -23,22 +23,9 @@ void presentation_handle_command(void* usart) {
   current_command = strdup(((USART*)usart)->data);
 }
 
-void presentation_reset(void* system) {
-  System* atmega = (System*)system;
-  Servo_set_angle(&atmega->us_servo, 0);
-  Servo_set_angle(&atmega->us_servo, 0);
-  _delay_us(500000);
-  us_current_sensor_distance = US_SENSOR_DISTANCE_SMALL;
-  wall_phase = 0;
-  last_wall_phase = UINT8_MAX;
-  update_track_direction = true;
-  last_direction_update = millis();
-}
-
 void presentation_start(void* system) {
   System* atmega = (System*)system;
   Servo_set_angle(&atmega->us_servo, 0);
-
   UltraSoundSensor_set_event(&atmega->us, us_current_sensor_distance,
                              "US_SENSOR");
   EventSystem_reg_listener(EventSystem_instance(),
@@ -73,7 +60,7 @@ void presentation_update(void* system) {
     current_command = NULL;
     return;
   } else if (current_command != NULL && strcmp(current_command, "R") == 0) {
-    USART_send_str(USART_instance(), MANUAL_RESET_MESSAGE);
+    print(MANUAL_RESET_MESSAGE);
     free(current_command);
     current_command = NULL;
     reset_system_5_seconds(atmega);  // no-return
@@ -84,9 +71,8 @@ void presentation_update(void* system) {
     return;
   } else if (current_command != NULL && strcmp(current_command, "A") == 0) {
     avoid_obstacles_enabled = !avoid_obstacles_enabled;
-    USART_send_str(USART_instance(),
-                   FMT("avoiding obstacles %s\n",
-                       (avoid_obstacles_enabled ? "enabled" : "disabled")));
+    print(FMT("avoiding obstacles %s\n",
+              (avoid_obstacles_enabled ? "enabled" : "disabled")));
     free(current_command);
     current_command = NULL;
   }
@@ -126,7 +112,7 @@ void presentation_process_idle_state(System* atmega, bool left, bool mid,
 
   if ((millis() - last_message_sent) >= ONE_SECONDS_MS) {
     last_message_sent = millis();
-    USART_send_str(USART_instance(), IDLE_MESSAGE);
+    print(IDLE_MESSAGE);
   }
 }
 

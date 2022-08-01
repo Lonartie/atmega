@@ -30,33 +30,11 @@ int MAIN() {
       EventSystem_instance(),
       Listener_create_r(usart, presentation_handle_command, usart->event));
 
-  //   EventSystem_reg_listener(
-  //       EventSystem_instance(),
-  //       Listener_create_r(&atmega, presentation_reset,
-  //       Menu_instance().car_start_event));
-
-  //   EventSystem_reg_listener(
-  //       EventSystem_instance(),
-  //       Listener_create_r(&atmega, presentation_reset,
-  //       Menu_instance().car_stop_event));
-
-  //   EventSystem_reg_listener(EventSystem_instance(),
-  //                            Listener_create_r(&atmega, System_start,
-  //                                              Menu_instance().car_start_event));
-
-  //   EventSystem_reg_listener(
-  //       EventSystem_instance(),
-  //       Listener_create_r(&atmega, System_stop,
-  //       Menu_instance().car_stop_event));
-
-  //   // show usart menu
-  //   Menu_show(Menu_instance().current);
-
-  // start event senders
+  // start updaters
   Timer_start(&timer);
   USART_start(usart);
 
-  // start event loop
+  // run event loop
   EventSystem_run(EventSystem_instance());
 
   return 0;

@@ -12,6 +12,8 @@ void show_commands() {
   }
 }
 
+void print(const char* message) { USART_send_str(USART_instance(), message); }
+
 void print_rounds_changed_message() {
   switch (rounds) {
     case 0:
@@ -28,18 +30,6 @@ void print_rounds_changed_message() {
       USART_send_str(USART_instance(), END_MESSAGE);
       return;
   }
-}
-
-void print_rounds_message() {
-  USART_send_str(USART_instance(), FMT(ROUND_MESSAGE, rounds));
-}
-
-void print_return_home_message() {
-  USART_send_str(USART_instance(), RETURN_HOME_MESSAGE);
-}
-
-void print_arrived_home_message() {
-  USART_send_str(USART_instance(), RETURN_HOME_END_MESSAGE);
 }
 
 void print_message_with_led_line(System* atmega, const char* message,

@@ -140,4 +140,6 @@ void obstacle_phase_4(System* atmega, bool sees_wall) {
   }
 }
 
-bool measure_was_recently() { return (millis() - last_measure) <= 50; }
+bool measure_was_recently() {
+  return (millis() - last_measure) <= WALL_MEASUREMENT_RECENTLY_THRESHOLD_MS;
+}

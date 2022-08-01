@@ -161,16 +161,16 @@ void count_rounds(System* atmega, bool left, bool mid, bool right) {
 
     if ((millis() - last_message_sent) >= ONE_SECONDS_MS && rounds > 0) {
       last_message_sent = millis();
-      print_rounds_message();
+      print(FMT(ROUND_MESSAGE, rounds));
     }
   } else {
     if ((millis() - last_message_sent) >= ONE_SECONDS_MS) {
       last_message_sent = millis();
-      print_return_home_message();
+      print(RETURN_HOME_MESSAGE);
     }
     if (seeing_start &&
         (millis() - time_seeing_start) >= TIME_TO_RECOGNIZE_START_BLOCK_MS) {
-      print_arrived_home_message();
+      print(RETURN_HOME_END_MESSAGE);
       reset_system_now(atmega);
     }
   }
