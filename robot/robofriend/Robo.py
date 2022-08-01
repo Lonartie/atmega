@@ -1,10 +1,24 @@
 import serial
 
+
 class Robo:
 
-  def __init__(self):
-    self.con = serial.Serial('/dev/rfcomm0')
-    print("connected to: " + self.con.name)
+    def __init__(self):
+        self.con = serial.Serial('/dev/rfcomm0')
+        self.con.timeout(0.25)
+        self.con.baudrate = 9600
+        self.con.open()
+        self.con.write(b'?')
+        self.con.flush()
+        answer = ""
+        done = False
+        while not done:
+            ch = self.con.read(1)
+            if (ch == None):
+                done = True
+            else:
+                answer += str(ch)
+        self.answer = answer
 
-  def close(self):
-    self.con.close()
+    def close(self):
+        self.con.close()
