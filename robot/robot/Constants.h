@@ -28,7 +28,8 @@ static const char* COMMANDS_STR =
     "?  -> show help\n"
     "S  -> start driving\n"
     "R  -> reset in 5 seconds\n"
-    "X  -> safe state\n";
+    "X  -> safe state\n"
+    "A  -> toggle obstacle avoidance\n";
 static const char* DRIVING_COMMANDS_STR =
     "P  -> pause/unpause driving\n"
     "C  -> return home\n";
@@ -47,7 +48,8 @@ static const char* END_MESSAGE =
     "YEAH YEAH YEAH, I really did it my way... And waht's my purpose and the "
     "general sense of my further life now? Will reset myself in 5 seconds. "
     "Take care of you and me!\n";
-static const char* ROUND_MESSAGE = "Round and round I go, currently round %d\n";
+static const char* ROUND_MESSAGE =
+    "Round and round I go, currently round #%d\n";
 static const char* MANUAL_RESET_MESSAGE =
     "Will reset myself in 5 seconds. I will forget everything. Make sure to "
     "handle me well and take care of my messages when I am back functioning. "
@@ -56,6 +58,11 @@ static const char* PAUSE_MESSAGE =
     "Pause ... zzzZZZzzzZZZzzz ... wake me up with P again\n";
 static const char* SAFE_SATE_MESSAGE =
     "In safe state! Won't react to any instructions! Rescue me!\n";
+static const char* RETURN_HOME_MESSAGE =
+    "Aborting this journey, hurrying home, will reset me there\n";
+static const char* RETURN_HOME_END_MESSAGE =
+    "I just arrived at home. Resetting NOW! Take care of my messages when I'm "
+    "back...\n";
 
 static TrackDirection track_direction = TRACK_UNKNOWN;
 static bool wall_detected = false;
@@ -77,6 +84,7 @@ static uint32_t last_led_blink = 0;
 static uint32_t last_led_update = 0;
 
 static bool avoid_obstacles_enabled = false;
+static bool return_home = false;
 static uint8_t rounds = 0;
 static PresentationState presentation_state = IDLE;
 

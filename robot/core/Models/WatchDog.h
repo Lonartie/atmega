@@ -3,7 +3,14 @@
 
 #include "Misc/Utils.h"
 
-typedef enum WatchDogTime { MS_500, SEC_1, SEC_2, SEC_4, SEC_8 } WatchDogTime;
+typedef enum WatchDogTime {
+  NOW,
+  MS_500,
+  SEC_1,
+  SEC_2,
+  SEC_4,
+  SEC_8
+} WatchDogTime;
 
 void watchdog_init(WatchDogTime time);
 void stop_watchdog();

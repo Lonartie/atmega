@@ -23,10 +23,13 @@ void stop_driving(System* atmega);
 bool measure_was_recently();
 void idle_state(System* atmega, bool left, bool mid, bool right);
 void on_start_block(System* atmega, bool left, bool mid, bool right);
-void reset_system(System* atmega);
+void reset_system_5_seconds(System* atmega);
+void reset_system_now(System* atmega);
 void drive(System* atmega, bool left, bool mid, bool right, bool sees_wall);
 void show_commands();
 void message_led_line(System* atmega, const char* message, uint16_t led_freq);
+void check_toggle_drive_pause(System* atmega);
+void check_return_home();
 
 void Logic_command(void* usart) {
   if (current_command != NULL) {
@@ -101,26 +104,20 @@ void Logic_drive_3_rounds(void* system) {
     USART_send_str(USART_instance(), MANUAL_RESET_MESSAGE);
     free(current_command);
     current_command = NULL;
-    reset_system(atmega);  // no-return
+    reset_system_5_seconds(atmega);  // no-return
   } else if (current_command != NULL && strcmp(current_command, "X") == 0) {
     safe_state = true;
     free(current_command);
     current_command = NULL;
     return;
+  } else if (current_command != NULL && strcmp(current_command, "A") == 0) {
+    avoid_obstacles_enabled = !avoid_obstacles_enabled;
+    USART_send_str(USART_instance(),
+                   FMT("avoiding obstacles %s\n",
+                       (avoid_obstacles_enabled ? "enabled" : "disabled")));
+    free(current_command);
+    current_command = NULL;
   }
-  // else if (current_command != NULL && strcmp(current_command, "A") == 0)
-  // {
-  //   avoid_obstacles_enabled = true;
-  //   USART_send_str(USART_instance(), "avoiding obstacles enabled\n");
-  //   free(current_command);
-  //   current_command = NULL;
-  // } else if (current_command != NULL && strcmp(current_command, "D") == 0)
-  // {
-  //   USART_send_str(USART_instance(), "avoiding obstacles disabled\n");
-  //   avoid_obstacles_enabled = false;
-  //   free(current_command);
-  //   current_command = NULL;
-  // }
 
   switch (presentation_state) {
     case IDLE:
@@ -130,27 +127,17 @@ void Logic_drive_3_rounds(void* system) {
       on_start_block(atmega, left, mid, right);
       break;
     case PAUSE:
-      if (current_command != NULL && strcmp(current_command, "P") == 0) {
-        free(current_command);
-        current_command = NULL;
-        presentation_state = DRIVING;
-        System_start(atmega);
-        return;
-      }
+      check_toggle_drive_pause(atmega);
       message_led_line(atmega, PAUSE_MESSAGE, 2000);
       break;
     case DRIVING:
-      if (current_command != NULL && strcmp(current_command, "P") == 0) {
-        free(current_command);
-        current_command = NULL;
-        presentation_state = PAUSE;
-        return;
-      }
+      check_toggle_drive_pause(atmega);
+      check_return_home();
       drive(atmega, left, mid, right, sees_wall);
       break;
     case END:
       rounds = 0;
-      reset_system(atmega);  // no-return
+      reset_system_5_seconds(atmega);  // no-return
       break;
   }
 }
@@ -222,28 +209,39 @@ void drive(System* atmega, bool left, bool mid, bool right, bool sees_wall) {
     may_see_start = true;
   }
 
-  if (seeing_start &&
-      (millis() - time_seeing_start) >= TIME_TO_RECOGNIZE_START_BLOCK_MS) {
-    rounds++;
-    switch (rounds) {
-      case 2:
-        USART_send_str(USART_instance(), START_ROUND_TWO_MESSAGE);
-        break;
-      case 3:
-        USART_send_str(USART_instance(), START_ROUND_THREE_MESSAGE);
-        break;
-      case 4:
-        USART_send_str(USART_instance(), END_MESSAGE);
-        presentation_state = END;
-        return;
+  if (!return_home) {
+    if (seeing_start &&
+        (millis() - time_seeing_start) >= TIME_TO_RECOGNIZE_START_BLOCK_MS) {
+      rounds++;
+      switch (rounds) {
+        case 2:
+          USART_send_str(USART_instance(), START_ROUND_TWO_MESSAGE);
+          break;
+        case 3:
+          USART_send_str(USART_instance(), START_ROUND_THREE_MESSAGE);
+          break;
+        case 4:
+          USART_send_str(USART_instance(), END_MESSAGE);
+          presentation_state = END;
+          return;
+      }
+
+      seeing_start = false;
     }
 
-    seeing_start = false;
-  }
-
-  if ((millis() - last_message_sent) >= one_seconds_ms) {
-    last_message_sent = millis();
-    USART_send_str(USART_instance(), FMT(ROUND_MESSAGE, rounds));
+    if ((millis() - last_message_sent) >= one_seconds_ms) {
+      last_message_sent = millis();
+      USART_send_str(USART_instance(), FMT(ROUND_MESSAGE, rounds));
+    }
+  } else {
+    if ((millis() - last_message_sent) >= one_seconds_ms) {
+      last_message_sent = millis();
+      USART_send_str(USART_instance(), RETURN_HOME_MESSAGE);
+    }
+    if (seeing_start) {
+      USART_send_str(USART_instance(), RETURN_HOME_END_MESSAGE);
+      reset_system_now(atmega);
+    }
   }
 
   // there are rare cases where 011 -> 010 -> 000 is detected so
@@ -486,7 +484,7 @@ void stop_driving(System* atmega) {
 
 bool measure_was_recently() { return (millis() - last_measure) <= 50; }
 
-void reset_system(System* atmega) {
+void reset_system_5_seconds(System* atmega) {
   System_stop(atmega);
   _delay_ms(one_seconds_ms);
   watchdog_init(SEC_4);
@@ -494,7 +492,19 @@ void reset_system(System* atmega) {
   return;
 }
 
-void show_commands() { USART_send_str(USART_instance(), COMMANDS_STR); }
+void reset_system_now(System* atmega) {
+  System_stop(atmega);
+  watchdog_init(NOW);
+  _delay_ms(one_seconds_ms);
+  return;
+}
+
+void show_commands() {
+  USART_send_str(USART_instance(), COMMANDS_STR);
+  if (presentation_state == DRIVING) {
+    USART_send_str(USART_instance(), DRIVING_COMMANDS_STR);
+  }
+}
 
 void message_led_line(System* atmega, const char* message, uint16_t led_freq) {
   static bool ll_left = true, ll_mid = false, ll_right = false, to_right = true;
@@ -523,5 +533,24 @@ void message_led_line(System* atmega, const char* message, uint16_t led_freq) {
   if ((millis() - last_message_sent) >= one_seconds_ms) {
     last_message_sent = millis();
     USART_send_str(USART_instance(), message);
+  }
+}
+
+void check_toggle_drive_pause(System* atmega) {
+  if (current_command != NULL && strcmp(current_command, "P") == 0) {
+    free(current_command);
+    current_command = NULL;
+    presentation_state = (presentation_state == DRIVING ? PAUSE : DRIVING);
+    System_start(atmega);
+    return;
+  }
+}
+
+void check_return_home() {
+  if (current_command != NULL && strcmp(current_command, "C") == 0) {
+    free(current_command);
+    current_command = NULL;
+    return_home = true;
+    return;
   }
 }

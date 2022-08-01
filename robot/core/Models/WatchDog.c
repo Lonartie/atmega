@@ -11,6 +11,9 @@ void watchdog_init(WatchDogTime time) {
   WDTCSR = (1 << WDCE) | (1 << WDE);  // Watchdog Change Enable
 
   switch (time) {
+    case NOW:
+      WDTCSR = 0;
+      break;
     case MS_500:
       WDTCSR = (1 << WDP0) | (1 << WDP2);
       break;
