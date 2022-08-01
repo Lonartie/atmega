@@ -19,13 +19,17 @@ typedef struct System {
   Motor mt_right;           // the right motor (Motor)
   UltraSoundSensor us;      // the ultrasonic sensor (UltraSoundSensor)
   Servo us_servo;           // the ultrasonic sensor servo (Servo)
-  bool started;
+  bool started;             // whether the system has been started or not (bool)
 } System;
 
 /// @brief creates a system with a shift register for the led strip and a usart
 /// as the logger
 System System_create();
+
+/// @brief starts the system
 void System_start(void* _this);
+
+/// @brief stops the system (stops the motors)
 void System_stop(void* _this);
 
 #endif  // SYSTEM_H

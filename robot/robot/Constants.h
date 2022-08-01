@@ -64,7 +64,7 @@ static const char* RETURN_HOME_END_MESSAGE =
     "I just arrived at home. Resetting NOW! Take care of my messages when I'm "
     "back...\n";
 
-static TrackDirection track_direction = TRACK_UNKNOWN;
+static TrackDirection track_direction = TD_UNKNOWN;
 static bool wall_detected = false;
 static uint32_t last_direction_update = 0;
 static bool update_track_direction = true;
@@ -86,6 +86,6 @@ static uint32_t last_led_update = 0;
 static bool avoid_obstacles_enabled = false;
 static bool return_home = false;
 static uint8_t rounds = 0;
-static PresentationState presentation_state = IDLE;
+static PresentationState presentation_state = PS_IDLE;
 
 #endif  // CONSTANTS_H

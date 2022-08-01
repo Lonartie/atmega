@@ -6,38 +6,29 @@
 #include "Misc/Utils.h"
 
 void PWM_init() {
-  // Set PD5 and PD6 as output (EN[A|B]!)
-  DDRD = (1 << DD5) | (1 << DD6);
+  DDRD = (1 << DD5) | (1 << DD6);  // set pins to output
 
-  // Disable all interrupts
-  cli();
-  // Set prescaler to 64, cf. datasheet for TCCR0B
-  // (TCCR0B: Timer/Counter Control Register 0 B)
-  TCCR0B = 0;
-  TCCR0B |= (1 << CS00) | (1 << CS01);
-  // Set waveform generation mode to Fast PWM, frequency = F_CPU / (PRESCALER *
-  // 2^8)
-  TCCR0A = 0;
-  TCCR0A |= (1 << WGM00) | (1 << WGM01);
-  // Re-enable all interrupts
-  sei();
+  cli();                                  // disable interrupts
+  TCCR0B = 0;                             // disable timer0
+  TCCR0B |= (1 << CS00) | (1 << CS01);    // sets prescaler
+  TCCR0A = 0;                             // set timer0 to normal mode
+  TCCR0A |= (1 << WGM00) | (1 << WGM01);  // set fast PWM mode
+  sei();                                  // enable interrupts
 }
 
 void PWM_set_duty_cycle(uint8_t pin, uint8_t value) {
   if (pin == PD6) {
     if (value == 0) {
-      TCCR0A &= ~(1 << COM0A1) & ~(1 << COM0A0);  // Normal port operation mode
-      PORTD &= ~(1 << PD6);                       // PD6 LOW, equals 0% duty,
-    }                                             // timer disconnected
-    else if (value == 255) {
-      TCCR0A &= ~(1 << COM0A1) & ~(1 << COM0A0);  // Normal port operation mode
-      PORTD |= (1 << PD6);                        // PD6 HIGH, equals 100% duty,
-    }                                             // timer disconnected
-    else {
-      TCCR0A |= (1 << COM0A1);   // OC0A to LOW on Compare Match,
-      TCCR0A &= ~(1 << COM0A0);  // to HIGH at BOTTOM (non-inverting mode)
-      OCR0A = value;             // generates sequences of 1-0-1-0...
-    }                            // for certain periods of time
+      TCCR0A &= ~(1 << COM0A1) & ~(1 << COM0A0);
+      PORTD &= ~(1 << PD6);
+    } else if (value == 255) {
+      TCCR0A &= ~(1 << COM0A1) & ~(1 << COM0A0);
+      PORTD |= (1 << PD6);
+    } else {
+      TCCR0A |= (1 << COM0A1);
+      TCCR0A &= ~(1 << COM0A0);
+      OCR0A = value;
+    }
   }
 
   if (pin == PD5) {

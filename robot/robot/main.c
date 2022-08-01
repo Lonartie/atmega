@@ -2,11 +2,10 @@
 #include "EventSystem/EventSystem.h"
 #include "EventSystem/HardwareTimer.h"
 #include "EventSystem/Timer.h"
-#include "EventSystem/USARTEvent.h"
 #include "Misc/Utils.h"
-#include "Models/Menu.h"
 #include "Models/PWM.h"
 #include "Models/System.h"
+#include "Models/USART.h"
 #include "Models/WatchDog.h"
 
 int MAIN() {
@@ -17,7 +16,7 @@ int MAIN() {
 
   // create system and event senders
   System atmega = System_create();
-  USARTEvent usart = USARTEvent_create("input");
+  USART* usart = USART_instance();
   Timer timer = Timer_create(0, "update");
 
   Logic_start(&atmega);
@@ -29,7 +28,7 @@ int MAIN() {
 
   EventSystem_reg_listener(
       EventSystem_instance(),
-      Listener_create_r(&usart, Logic_command, usart.event));
+      Listener_create_r(&usart, Logic_command, usart->event));
 
   //   EventSystem_reg_listener(
   //       EventSystem_instance(),
@@ -55,7 +54,7 @@ int MAIN() {
 
   // start event senders
   Timer_start(&timer);
-  USARTEvent_start(&usart);
+  USART_start(usart);
 
   // start event loop
   EventSystem_run(EventSystem_instance());

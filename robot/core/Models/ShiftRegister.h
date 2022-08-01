@@ -5,10 +5,10 @@
 #include "Pin.h"
 
 typedef struct ShiftRegister {
-  Pin clk;           ///< clock component
-  Pin data;          ///< data component
-  uint16_t size;     ///< size of the register
-  uint16_t tpd_mcs;  ///< time per data bit in microseconds
+  Pin clk;           // clock component
+  Pin data;          // data component
+  uint16_t size;     // size of the register
+  uint16_t tpd_mcs;  // time per data bit in microseconds
 } ShiftRegister;
 
 /// @returns a new shift register (stack)

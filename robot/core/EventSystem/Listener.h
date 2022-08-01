@@ -2,8 +2,7 @@
 #define LISTENER_H
 
 #include "../Misc/String.h"
-#include "Event.h"
-#include "Misc/Utils.h"
+#include "../Misc/Vector.h"
 
 typedef void (*ListenerReceiverCallback)(void*);
 typedef void (*ListenerCallback)();

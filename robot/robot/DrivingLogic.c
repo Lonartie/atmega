@@ -8,8 +8,8 @@
 #include "Constants.h"
 #include "EventSystem/EventSystem.h"
 #include "EventSystem/HardwareTimer.h"
-#include "EventSystem/USARTEvent.h"
 #include "Models/System.h"
+#include "Models/USART.h"
 #include "Models/WatchDog.h"
 #include "States.h"
 
@@ -35,7 +35,7 @@ void Logic_command(void* usart) {
   if (current_command != NULL) {
     free(current_command);
   }
-  current_command = strdup(((USARTEvent*)usart)->data);
+  current_command = strdup(((USART*)usart)->data);
 }
 
 void detect_wall(void* system) {
@@ -120,13 +120,13 @@ void Logic_drive_3_rounds(void* system) {
   }
 
   switch (presentation_state) {
-    case IDLE:
+    case PS_IDLE:
       idle_state(atmega, left, mid, right);
       break;
-    case ON_START_BLOCK:
+    case PS_ON_START_BLOCK:
       on_start_block(atmega, left, mid, right);
       break;
-    case PAUSE:
+    case PS_PAUSE:
       check_toggle_drive_pause(atmega);
       message_led_line(atmega, PAUSE_MESSAGE, 2000);
       break;
@@ -135,7 +135,7 @@ void Logic_drive_3_rounds(void* system) {
       check_return_home();
       drive(atmega, left, mid, right, sees_wall);
       break;
-    case END:
+    case PS_END:
       rounds = 0;
       reset_system_5_seconds(atmega);  // no-return
       break;
@@ -146,7 +146,7 @@ void idle_state(System* atmega, bool left, bool mid, bool right) {
   ShiftRegister_write_n(&atmega->led_strip, 3, left, mid, right);
 
   if (left && mid && right) {
-    presentation_state = ON_START_BLOCK;
+    presentation_state = PS_ON_START_BLOCK;
     return;
   }
 
@@ -166,7 +166,7 @@ void on_start_block(System* atmega, bool left, bool mid, bool right) {
   }
 
   if (!left || !mid || !right) {
-    presentation_state = IDLE;
+    presentation_state = PS_IDLE;
     return;
   }
 
@@ -185,7 +185,7 @@ void on_start_block(System* atmega, bool left, bool mid, bool right) {
 }
 
 void drive(System* atmega, bool left, bool mid, bool right, bool sees_wall) {
-  static State state = STATE_LNF;
+  static DriveDirectionState state = DDS_LNF;
   static bool lleft = false, lmid = false, lright = false;
   static bool may_see_start = true;
   static bool seeing_start = false;
@@ -222,7 +222,7 @@ void drive(System* atmega, bool left, bool mid, bool right, bool sees_wall) {
           break;
         case 4:
           USART_send_str(USART_instance(), END_MESSAGE);
-          presentation_state = END;
+          presentation_state = PS_END;
           return;
       }
 
@@ -248,39 +248,39 @@ void drive(System* atmega, bool left, bool mid, bool right, bool sees_wall) {
   // there are rare cases where 011 -> 010 -> 000 is detected so
   // we need to memorize the x0x side and turn the car afterwards
   // so it doesn't drive away from the black line
-  State memorized_state = state == STATE_DRV_FW_ML   ? STATE_DRV_FW_ML
-                          : state == STATE_DRV_FW_MR ? STATE_DRV_FW_MR
-                                                     : STATE_DRV_FW;
+  DriveDirectionState memorized_state = state == DDS_DRV_FW_ML   ? DDS_DRV_FW_ML
+                                        : state == DDS_DRV_FW_MR ? DDS_DRV_FW_MR
+                                                                 : DDS_DRV_FW;
 
   // update state
   if (mid && left) {
-    state = STATE_DRV_FW_ML;
+    state = DDS_DRV_FW_ML;
   } else if (mid && right) {
-    state = STATE_DRV_FW_MR;
+    state = DDS_DRV_FW_MR;
   } else if (mid) {
     state = memorized_state;
   } else if (left) {
-    state = STATE_TRN_LEFT;
+    state = DDS_TRN_LEFT;
   } else if (right) {
-    state = STATE_TRN_RIGHT;
-  } else if (state == STATE_DRV_FW_ML) {
-    state = STATE_TRN_LEFT;
-  } else if (state == STATE_DRV_FW_MR) {
-    state = STATE_TRN_RIGHT;
+    state = DDS_TRN_RIGHT;
+  } else if (state == DDS_DRV_FW_ML) {
+    state = DDS_TRN_LEFT;
+  } else if (state == DDS_DRV_FW_MR) {
+    state = DDS_TRN_RIGHT;
   }
 
   // execute state
   switch (state) {
-    case STATE_LNF:        // fall through
-    case STATE_DRV_FW:     // fall through
-    case STATE_DRV_FW_ML:  // fall through
-    case STATE_DRV_FW_MR:
+    case DDS_LNF:        // fall through
+    case DDS_DRV_FW:     // fall through
+    case DDS_DRV_FW_ML:  // fall through
+    case DDS_DRV_FW_MR:
       drive_forward(atmega);
       break;
-    case STATE_TRN_LEFT:
+    case DDS_TRN_LEFT:
       turn_left(atmega);
       break;
-    case STATE_TRN_RIGHT:
+    case DDS_TRN_RIGHT:
       turn_right(atmega);
       break;
   }
@@ -317,7 +317,7 @@ void obstacle_phase_reset(System* atmega) {
   Servo_set_angle(&atmega->us_servo, 0);
   // we don't want smooth steering here
   smooth_steer_start = (millis() - one_seconds_ms);
-  if (track_direction == TRACK_RIGHT) {
+  if (track_direction == TD_RIGHT) {
     turn_right(atmega);
   } else {
     turn_left(atmega);
@@ -334,7 +334,7 @@ void obstacle_phase_0(System* atmega, bool sees_wall) {
   // setup phase
   if (last_wall_phase != wall_phase) {
     update_track_direction = false;
-    if (track_direction == TRACK_RIGHT) {
+    if (track_direction == TD_RIGHT) {
       Servo_set_angle(&atmega->us_servo, -90);
     } else {
       Servo_set_angle(&atmega->us_servo, 90);
@@ -358,7 +358,7 @@ void obstacle_phase_1(System* atmega, bool sees_wall) {
 void obstacle_phase_2(System* atmega, bool sees_wall) {
   // turn right phase
   if (last_wall_phase != wall_phase) {
-    if (track_direction == TRACK_RIGHT) {
+    if (track_direction == TD_RIGHT) {
       turn_right(atmega);
     } else {
       turn_left(atmega);
@@ -379,14 +379,14 @@ void obstacle_phase_3(System* atmega, bool sees_wall) {
     drive_forward(atmega);
     last_wall_phase = wall_phase;
   } else if (UltraSoundSensor_dist(&atmega->us) < US_CURRENT_SENSOR_DISTANCE) {
-    if (track_direction == TRACK_RIGHT) {
+    if (track_direction == TD_RIGHT) {
       turn_smooth_right(atmega);
     } else {
       turn_smooth_left(atmega);
     }
     last_wall_phase = wall_phase;
   } else if (UltraSoundSensor_dist(&atmega->us) > US_CURRENT_SENSOR_DISTANCE) {
-    if (track_direction == TRACK_RIGHT) {
+    if (track_direction == TD_RIGHT) {
       turn_smooth_left(atmega);
     } else {
       turn_smooth_right(atmega);
@@ -403,7 +403,7 @@ void obstacle_phase_3(System* atmega, bool sees_wall) {
 void obstacle_phase_4(System* atmega, bool sees_wall) {
   // turn left phase
   if (last_wall_phase != wall_phase) {
-    if (track_direction == TRACK_RIGHT) {
+    if (track_direction == TD_RIGHT) {
       turn_smooth_left(atmega);
     } else {
       turn_smooth_right(atmega);
@@ -421,7 +421,7 @@ void turn_left(System* atmega) {
   if ((millis() - last_direction_update) >= DIRECTION_UPDATE_DELAY_MS &&
       update_track_direction) {
     last_direction_update = millis();
-    track_direction = TRACK_LEFT;
+    track_direction = TD_LEFT;
   }
   // try smooth steer first
   if ((millis() - smooth_steer_start) < TIME_TO_TRY_SMOOTH_STEERING_MS) {
@@ -441,7 +441,7 @@ void turn_right(System* atmega) {
   if ((millis() - last_direction_update) >= DIRECTION_UPDATE_DELAY_MS &&
       update_track_direction) {
     last_direction_update = millis();
-    track_direction = TRACK_RIGHT;
+    track_direction = TD_RIGHT;
   }
 
   // try smooth steer first
@@ -541,7 +541,7 @@ void check_toggle_drive_pause(System* atmega) {
   if (current_command != NULL && strcmp(current_command, "P") == 0) {
     free(current_command);
     current_command = NULL;
-    presentation_state = (presentation_state == DRIVING ? PAUSE : DRIVING);
+    presentation_state = (presentation_state == DRIVING ? PS_PAUSE : DRIVING);
     System_start(atmega);
     return;
   }

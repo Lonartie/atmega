@@ -6,7 +6,6 @@
 
 #include "EventSystem/EventSystem.h"
 #include "EventSystem/HardwareTimer.h"
-#include "Menu.h"
 #include "Misc/Utils.h"
 
 static Pin echo_pin_inst;
@@ -104,13 +103,13 @@ uint8_t UltraSoundSensor_get_distance(UltraSoundSensor* _this) {
   return duration_to_distance(echo_duration);
 }
 
-void UltraSoundSensor_update(void* obj) {
+void UltraSoundSensor_update(void* _this) {
   if (echo_ready_read) {
     last_echo_duration = echo_duration;
     EventSystem_send_event(EventSystem_instance(),
-                           Event_create(((UltraSoundSensor*)obj)->event));
+                           Event_create(((UltraSoundSensor*)_this)->event));
 
-    UltraSoundSensor_trigger((UltraSoundSensor*)obj);
+    UltraSoundSensor_trigger((UltraSoundSensor*)_this);
   }
 }
 

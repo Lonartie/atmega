@@ -2,7 +2,6 @@
 #define SENSOR_WATCHER_H
 
 #include "Misc/String.h"
-#include "Misc/Utils.h"
 #include "Models/Pin.h"
 
 /// @brief watches a sensor (pin) and triggers an event when the sensor has

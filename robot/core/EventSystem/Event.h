@@ -2,7 +2,6 @@
 #define EVENT_H
 
 #include "../Misc/String.h"
-#include "../Misc/Vector.h"
 
 /// @brief the event type that can be send to the event system
 /// @note in the future this may contain additional event data

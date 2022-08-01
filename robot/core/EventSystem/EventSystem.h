@@ -1,7 +1,6 @@
 #ifndef EVENT_QUEUE_H
 #define EVENT_QUEUE_H
 
-#include "../Misc/String.h"
 #include "Event.h"
 #include "Listener.h"
 #include "Updater.h"

@@ -18,10 +18,11 @@ void Pin_set_read(Pin* pin) { (*pin->ddr) &= ~(1 << pin->ddr_pin); }
 void Pin_set_write(Pin* pin) { (*pin->ddr) |= (1 << pin->ddr_pin); }
 
 void Pin_write(Pin* pin, bool value) {
-  if (value)
+  if (value) {
     (*pin->port) |= (1 << pin->port_pin);
-  else
+  } else {
     (*pin->port) &= ~(1 << pin->port_pin);
+  }
 }
 
 bool Pin_read(Pin* pin) { return (*pin->port) & (1 << pin->port_pin); }

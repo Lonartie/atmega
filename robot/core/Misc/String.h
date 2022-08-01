@@ -23,9 +23,9 @@ bool String_equals_trimmed(String a, String b);
 
 /// @brief quickly formats a string with a given buffer size of FMT_SIZE
 #define FMT(format, ...) \
-  ((snprintf(__buffer__, FMT_SIZE, format, __VA_ARGS__), __buffer__))
+  ((snprintf(FMT_buffer, FMT_SIZE, format, __VA_ARGS__), FMT_buffer))
 
 /// @brief the internal buffer to use for quick formatting of strings
-extern char __buffer__[FMT_SIZE];
+extern char FMT_buffer[FMT_SIZE];
 
 #endif  // VECTOR_STRING_H

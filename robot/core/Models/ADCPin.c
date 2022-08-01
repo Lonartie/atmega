@@ -16,8 +16,8 @@ void ADC_init(void) {
   ADCSRA = (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0);  // ADC clock prescaler
   ADCSRA |= (1 << ADEN);                                // ADC enable
   ADCSRA |= (1 << ADSC);                                // start conversion
-  while (ADCSRA & (1 << ADSC))
-    ;    // ADC warm-up
+  while (ADCSRA & (1 << ADSC)) {                        // ADC warm-up
+  }
   ADCW;  // dummy read
 }
 
@@ -33,8 +33,8 @@ uint16_t ADCPin_read(ADCPin* adc) {
   ADMUX &= ~(ADC_CHANNEL_ALL);
   ADMUX |= adc->channel;
   ADCSRA |= (1 << ADSC);
-  while (ADCSRA & (1 << ADSC))
-    ;  // Wait until done
+  while (ADCSRA & (1 << ADSC)) {
+  }
   return ADCW;
 }
 
