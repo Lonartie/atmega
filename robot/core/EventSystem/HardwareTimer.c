@@ -16,14 +16,20 @@ void timer_init() {
   sei();
 }
 
-uint64_t millis() { return (micros() / 1000); }
+uint64_t millis() {
+  uint64_t us;
+
+  ATOMIC_BLOCK(ATOMIC_RESTORESTATE) { us = microseconds; }
+
+  return us * (MICROS_RESOLUTION / 1000);
+}
 
 uint64_t micros() {
   uint64_t us;
 
   ATOMIC_BLOCK(ATOMIC_RESTORESTATE) { us = microseconds; }
 
-  return us;
+  return us * MICROS_RESOLUTION;
 }
 
-ISR(TIMER1_COMPA_vect) { microseconds += MICROS_RESOLUTION; }
+ISR(TIMER1_COMPA_vect) { microseconds += 1; }
