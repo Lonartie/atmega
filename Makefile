@@ -19,7 +19,7 @@ TEST_INC_WRAP	= robot/tests/IncludeWrappers
 
 ROBO_FLAGS 		= -ffunction-sections -fdata-sections
 ROBO_FLAGS 	 	+= -Wl,--gc-sections -Os -flto
-ROBO_FLAGS 	 	+= -Wall -Wextra -Wfatal-errors
+ROBO_FLAGS 	 	+= -Wall -Wextra -Wfatal-errors -Wno-unused-variable
 ROBO_FLAGS 	 	+= -D F_CPU=16000000 -mmcu=atmega328p
 ROBO_FLAGS 	 	+= -D MAIN=main -I $(CORE_DIR)
 

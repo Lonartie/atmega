@@ -6,6 +6,7 @@
     "utils.h": "c",
     "eventsystem.h": "c",
     "timer.h": "c",
-    "adcpin.h": "c"
+    "adcpin.h": "c",
+    "messages.h": "c"
   }
 }

@@ -4,6 +4,8 @@
 #include "Misc/Utils.h"
 #include "Pin.h"
 
+/// @brief represents a shift register with a data pin, clock pin
+/// @note this struct expects to know the size of the shift register
 typedef struct ShiftRegister {
   Pin clk;           // clock component
   Pin data;          // data component
