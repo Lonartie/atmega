@@ -21,7 +21,7 @@ uint64_t millis() {
 
   ATOMIC_BLOCK(ATOMIC_RESTORESTATE) { us = microseconds; }
 
-  return us * (MICROS_RESOLUTION / 1000);
+  return us / (1000 / MICROS_RESOLUTION);
 }
 
 uint64_t micros() {
