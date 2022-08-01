@@ -2,12 +2,11 @@
 
 #include "libs/micros.h"
 
-void timer_init() {  // Timer settings
-  SET_TCCRA();
-  SET_TCCRB();
-  REG_TIMSK = _BV(BIT_OCIE);
-  REG_OCR = ((F_CPU / PRESCALER) / 10000) -
-            1;  // 10000 is the frequency (1 / 10000) * 1000000 = (100 uS)
+void timer_init() {
+  REG_TCCRA = 0;
+  REG_TCCRB = _BV(BIT_WGM) | CLOCKSEL;
+  REG_TIMSK = (1 << (1));
+  OCR1A = ((F_CPU / 8) / 10000) - 1;
   sei();
 }
 
