@@ -10,7 +10,7 @@
 #include "Misc/Utils.h"
 
 static Pin echo_pin_inst;
-static uint16_t echo_start_us = 0;
+static uint64_t echo_start_us = 0;
 static uint16_t echo_duration = 0;
 static uint16_t last_echo_duration = 0;
 static bool echo_ready_read = true;
@@ -97,7 +97,7 @@ uint8_t UltraSoundSensor_get_distance(UltraSoundSensor* _this) {
 
   manual_mode = true;
   UltraSoundSensor_trigger(_this);
-  uint32_t start = micros();
+  uint64_t start = micros();
   while (!echo_ready_read && micros() - start < 200000) {
   }
   manual_mode = false;

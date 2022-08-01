@@ -3,7 +3,7 @@
 
 #include "Misc/Utils.h"
 
-#define VECTOR_SIZE_T uint16_t
+#define VECTOR_SIZE_T uint8_t
 
 #define DECLARE_VECTOR(TYPE, SIZE)                                            \
   typedef struct Vector_##TYPE##_##SIZE {                                     \
