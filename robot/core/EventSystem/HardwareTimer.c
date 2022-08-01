@@ -3,9 +3,9 @@
 #include "libs/micros.h"
 
 void timer_init() {
-  REG_TCCRA = 0;
-  REG_TCCRB = _BV(BIT_WGM) | CLOCKSEL;
-  REG_TIMSK = (1 << (1));
+  TCCR1A = 0;
+  TCCR1B = _BV(WGM12) | (_BV(CS11));
+  TIMSK1 = (1 << (1));
   OCR1A = ((F_CPU / 8) / 10000) - 1;
   sei();
 }
