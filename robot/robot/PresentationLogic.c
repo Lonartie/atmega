@@ -84,6 +84,8 @@ void presentation_update(void* system) {
               (avoid_obstacles_enabled ? "enabled" : "disabled")));
     free(current_command);
     current_command = NULL;
+  } else if (current_command != NULL) {
+    print(FMT("command '%s' not supported", current_command));
   }
 
   switch (presentation_state) {
