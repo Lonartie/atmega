@@ -16,6 +16,7 @@ void timer_init() {
   TCCR1B = _BV(WGM12) | _BV(CS11);
   TIMSK1 = _BV(OCIE1A);
   OCR1A = ((F_CPU / PRESCALER) / 10000) - 1;
+  sei();
 }
 
 uint64_t millis() { return (micros() / 1000); }
