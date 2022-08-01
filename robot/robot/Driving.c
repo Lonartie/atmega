@@ -102,6 +102,9 @@ void drive(System* atmega, bool left, bool mid, bool right, bool sees_wall) {
         (millis() - time_seeing_start) >= TIME_TO_RECOGNIZE_START_BLOCK_MS) {
       rounds++;
       switch (rounds) {
+        case 0:
+        case 1:
+          break;
         case 2:
           USART_send_str(USART_instance(), START_ROUND_TWO_MESSAGE);
           break;
@@ -109,6 +112,7 @@ void drive(System* atmega, bool left, bool mid, bool right, bool sees_wall) {
           USART_send_str(USART_instance(), START_ROUND_THREE_MESSAGE);
           break;
         case 4:
+        default:
           USART_send_str(USART_instance(), END_MESSAGE);
           presentation_state = PS_END;
           return;

@@ -120,7 +120,7 @@ void Logic_drive_3_rounds(void* system) {
       check_toggle_drive_pause(atmega);
       message_led_line(atmega, PAUSE_MESSAGE, 2000);
       break;
-    case DRIVING:
+    case PS_DRIVING:
       check_toggle_drive_pause(atmega);
       check_return_home();
       drive(atmega, left, mid, right, sees_wall);
@@ -162,7 +162,7 @@ void on_start_block(System* atmega, bool left, bool mid, bool right) {
   }
 
   if (current_command != NULL && strcmp(current_command, "S") == 0) {
-    presentation_state = DRIVING;
+    presentation_state = PS_DRIVING;
     free(current_command);
     current_command = NULL;
     USART_send_str(USART_instance(), START_ROUND_ONE_MESSAGE);
@@ -209,7 +209,8 @@ void check_toggle_drive_pause(System* atmega) {
   if (current_command != NULL && strcmp(current_command, "P") == 0) {
     free(current_command);
     current_command = NULL;
-    presentation_state = (presentation_state == DRIVING ? PS_PAUSE : DRIVING);
+    presentation_state =
+        (presentation_state == PS_DRIVING ? PS_PAUSE : PS_DRIVING);
     System_start(atmega);
     return;
   }

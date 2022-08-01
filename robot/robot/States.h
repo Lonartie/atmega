@@ -24,7 +24,7 @@ typedef enum PresentationState {
   PS_IDLE,            // robot hasn't started yet and doesn't see start block
   PS_ON_START_BLOCK,  // robot is on the start block
   PS_PAUSE,           // robot pauses until unpaused
-  DRIVING,            // robot is driving normally
+  PS_DRIVING,         // robot is driving normally
   PS_END              // robot is on the start block and has driven all rounds
 } PresentationState;
 
