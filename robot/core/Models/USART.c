@@ -74,6 +74,7 @@ void free_data() {
 
 void USART_update(void* _this) {
   USART* usart = (USART*)_this;
+  USART_send_str(usart, "read");
   if (ready_read && data != NULL) {
     // send event
     ready_read = false;
