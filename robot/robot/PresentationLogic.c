@@ -100,7 +100,7 @@ void presentation_update(void* system) {
       break;
     case PS_PAUSE:
       presentation_check_toggle_drive_pause(atmega);
-      print_message_with_led_line(atmega, PAUSE_MESSAGE, 2000);
+      print_message_with_led_line(atmega, PAUSE_MESSAGE, 500);
       break;
     case PS_DRIVING:
       presentation_check_toggle_drive_pause(atmega);
