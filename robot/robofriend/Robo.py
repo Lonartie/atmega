@@ -8,14 +8,7 @@ class Robo:
         self.con = serial.Serial(
             port='/dev/rfcomm0', baudrate=9600, timeout=0.25)
         self.con.write(('PY\r').encode('ascii', 'replace'))
-        buffer = ""
-        while True:
-            oneByte = self.con.read(1)
-            if oneByte == b"\n":
-                break
-            else:
-                buffer += oneByte.decode()
-        self.answer = buffer
+        self.answer = self.con.readline().decode('ascii')
 
     def close(self):
         self.con.close()
