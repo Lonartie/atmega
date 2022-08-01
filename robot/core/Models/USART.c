@@ -94,6 +94,9 @@ ISR(USART_RX_vect) {
   // get the whole message
   while (1) {
     data[i] = USART_recv_byte(USART_instance());
+    if (data[i] == '\r') {
+      continue;
+    }
     if (data[i] == '\n') {
       break;
     }
