@@ -4,10 +4,8 @@ import serial
 class Robo:
 
     def __init__(self):
-        self.con = serial.Serial('/dev/rfcomm0')
-        self.con.timeout = 0.25
-        if not self.con.isOpen():
-          self.con.open()
+        self.con = serial.Serial(
+            port='/dev/rfcomm0', baudrate=9600, timeout=0.25)
         self.con.write(b'?\r')
         self.con.flush()
         answer = ""
