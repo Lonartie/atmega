@@ -1,3 +1,4 @@
+import time
 import serial
 
 
@@ -6,8 +7,14 @@ class Robo:
     def __init__(self):
         self.con = serial.Serial(
             port='/dev/rfcomm0', baudrate=9600, timeout=0.25)
+
+        self.con.flushInput()
+        self.con.flushOutput()
+
         self.con.write(b'PY\r')
-        self.con.flush()
+
+        time.sleep(1)
+
         self.answer = str(self.con.readline())
 
     def close(self):
