@@ -36,10 +36,10 @@ TEST_OBJECTS 	:= $(addprefix $(TEST_OBJ_DIR)/, $(subst .c,.o,$(TEST_SOURCES)))
 TEST_DEPENDS 	:= $(addprefix $(TEST_OBJ_DIR)/, $(subst .c,.d,$(TEST_SOURCES)))
 
 # execute even if exists
-.PHONY: all clean $(ROBO_BINARY)_flash
+.PHONY: all clean $(ROBO_BINARY)_flash Doxygen
 
 # default target, build all
-all: $(ROBO_HEX) # $(TEST_BINARY)
+all: Doxygen $(ROBO_HEX) $(ROBO_BINARY)_flash
 
 # clean build files
 clean:
@@ -64,6 +64,12 @@ $(ROBO_HEX): $(ROBO_BINARY)
 $(ROBO_BINARY)_flash: $(ROBO_HEX)
 	@echo "Flashing $(ROBO_BINARY)"
 	@$(ROBO_DUDE) -p atmega328p -c arduino -P /dev/ttyACM0 -b 115200 -U flash:w:$(ROBO_HEX):i
+
+# Doxygen
+Doxygen:
+	@echo "Generating Doxygen"
+	@doxygen
+	@echo "Doxygen generated"
 
 # recompile sources if dependent header files changed
 -include $(ROBO_DEPENDS)

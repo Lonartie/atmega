@@ -57,3 +57,4 @@ test
 .vscode/targets.log
 .vscode/dryrun.log
 .vscode/configurationCache.log
+doxygen/
