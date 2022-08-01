@@ -88,8 +88,7 @@ void drive(System* atmega, bool left, bool mid, bool right, bool sees_wall) {
     return;
   }
 
-  if (left && mid && right && !seeing_start && may_see_start &&
-      (millis() - start_driving_time) >= ROUNDS_COUNTER_START_DELAY_MS) {
+  if (left && mid && right && !seeing_start && may_see_start) {
     seeing_start = true;
     may_see_start = false;
     time_seeing_start = millis();
@@ -118,7 +117,7 @@ void drive(System* atmega, bool left, bool mid, bool right, bool sees_wall) {
       seeing_start = false;
     }
 
-    if ((millis() - last_message_sent) >= one_seconds_ms) {
+    if ((millis() - last_message_sent) >= one_seconds_ms && rounds > 0) {
       last_message_sent = millis();
       USART_send_str(USART_instance(), FMT(ROUND_MESSAGE, rounds));
     }
