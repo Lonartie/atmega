@@ -1,5 +1,6 @@
+from email import message
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, messagebox
 from Robo import Robo
 
 
@@ -10,6 +11,10 @@ class Window:
         self.root.title("RoboFriend")
         self.robot = Robo()
         tk.Label(self.root, text=self.robot.answer).pack()
+        tk.Button(self.root, text='long', command=self.show_long)
+
+    def show_long(self):
+        messagebox.showinfo("LONG", self.robot.long)
 
     def run(self):
         self.root.mainloop()

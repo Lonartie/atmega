@@ -9,8 +9,9 @@ class Robo:
             port='/dev/rfcomm0', baudrate=9600, timeout=0.25,
             parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE)
         self.con.write(b'PY\r\n')
-        time.sleep(1)
+        time.sleep(3)
         answer = str(self.con.readall())
+        self.long = answer
         lines = answer.split('\n')
         lines = list(filter(None, lines))
         lines = list(filter(bool, lines))
