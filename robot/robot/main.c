@@ -28,7 +28,7 @@ int MAIN() {
 
   EventSystem_reg_listener(
       EventSystem_instance(),
-      Listener_create_r(&usart, Logic_command, usart->event));
+      Listener_create_r(usart, Logic_command, usart->event));
 
   //   EventSystem_reg_listener(
   //       EventSystem_instance(),
