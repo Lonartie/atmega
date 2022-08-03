@@ -18,8 +18,8 @@ class Robo:
                 port='/dev/rfcomm0', baudrate=9600, timeout=0.25,
                 parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE)
             self.send_command('PY')
-            time.sleep(3)
-            self.valid = (self.receive_line() == "OK")
+            time.sleep(1.5)
+            self.valid = ("OK" in self.receive_all())
         except:
             self.valid = False
 
@@ -72,11 +72,7 @@ class Robo:
         self.con.write(bytes(command + "\r\n", encoding="ascii"))
         # time.sleep(0.75)
 
-    def receive_line(self) -> str:
-        return self.con.readline().decode(encoding="ascii").strip()
-
     def receive_all(self) -> str:
-        time.sleep(0.5)
         data = []
         while self.con.inWaiting() > 0:
             msg = self.con.readline().strip()
@@ -85,7 +81,7 @@ class Robo:
             msg = msg.replace(b"\n", b"")
             if msg != b"":
                 data.append(str(msg, encoding='ascii'))
-        return '\n'.join(data);
+        return '\n'.join(data)
 
     def close(self):
         """
