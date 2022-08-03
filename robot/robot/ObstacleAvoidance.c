@@ -99,7 +99,7 @@ void obstacle_phase_3(System* atmega, bool sees_wall) {
   // drive forward phase
   if (last_wall_phase != wall_phase &&
       UltraSoundSensor_dist(&atmega->us) == us_current_sensor_distance) {
-    drive_forward(atmega);
+    drive_forward(atmega, false, false, false);
     last_wall_phase = wall_phase;
   } else if (UltraSoundSensor_dist(&atmega->us) < us_current_sensor_distance) {
     if (track_direction == TD_RIGHT) {
