@@ -19,8 +19,8 @@ void print_rounds_changed_message();
 /// given requency
 /// @param atmega the system with the leds
 /// @param message the message to show every second
-/// @param led_freq the frequency of the leds changing one by one in us
+/// @param led_freq the frequency of the leds changing one by one
 void print_message_with_led_line(System* atmega, const char* message,
-                                 uint32_t led_freq);
+                                 uint16_t led_freq);
 
 #endif  // MESSAGES_H

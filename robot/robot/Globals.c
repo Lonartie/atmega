@@ -14,7 +14,6 @@ bool is_smooth_steering = false;
 char* current_command = NULL;
 bool safe_state = false;
 
-uint64_t last_message_sent_us = 0;
 uint32_t last_message_sent = 0;
 uint32_t last_led_blink = 0;
 uint32_t last_led_update = 0;
