@@ -42,10 +42,12 @@ class Window:
         self.root.mainloop()
 
     def reset(self):
-        messagebox.showinfo(
-            "Shutdown", "The robot will reset and the application will close.")
-        self.robot.reset()
-        self.root.destroy()
+        if self.robot.reset():
+            messagebox.showinfo(
+                "Shutdown", "The robot will reset and the application will close.")
+            self.root.destroy()
+        else:
+            messagebox.showinfo("Failed", "Something went wrong :(")
 
     def check_connection(self):
         if (not self.valid):
