@@ -23,6 +23,14 @@ class Window:
         """
         tk.Button(self.root, text="drive forward",
                   command=self.robot.drive_forward).pack()
+        tk.Button(self.root, text="drive backward",
+                  command=self.robot.drive_backward).pack()
+        tk.Button(self.root, text="drive left",
+                  command=self.robot.drive_left).pack()
+        tk.Button(self.root, text="drive right",
+                  command=self.robot.drive_right).pack()
+        tk.Button(self.root, text="stop",
+                  command=self.robot.drive_stop).pack()
         pass
 
     def run(self):
