@@ -8,7 +8,7 @@
 #include "States.h"
 
 #define SPEED_DRIVE 160
-#define SPEED_DRIVE_SLOW 100
+#define SPEED_DRIVE_SLOW 120
 #define SPEED_TURN_A 220
 #define SPEED_TURN_B 220
 #define SPEED_TURN_SLOW_A 240
