@@ -57,6 +57,11 @@ class Robo:
         self.send_command('reset')
         return (self.receive_line() == "OK")
 
+    def servo(self, angle: int) -> bool:
+        self.clear_buffers()
+        self.send_command('sv:' + angle)
+        return (self.receive_line() == "OK")
+
     def send_command(self, command: str):
         self.con.write(str.encode(command + "\r\n"))
 

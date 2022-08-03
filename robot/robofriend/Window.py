@@ -31,15 +31,29 @@ class Window:
                   command=self.robot.drive_right).pack()
         tk.Button(self.root, text="stop",
                   command=self.robot.drive_stop).pack()
+        tk.Button(self.root, text="servo 90°",
+                  command=lambda: self.robot.servo(90)).pack()
+        tk.Button(self.root, text="servo 45°",
+                  command=lambda: self.robot.servo(45)).pack()
+        tk.Button(self.root, text="servo 0°",
+                  command=lambda: self.robot.servo(0)).pack()
+        tk.Button(self.root, text="servo -45°",
+                  command=lambda: self.robot.servo(-45)).pack()
+        tk.Button(self.root, text="servo -90°",
+                  command=lambda: self.robot.servo(-90)).pack()
+        tk.Button(self.root, text="enable/disable live distance",
+                  command=self.distance_toggle).pack()
         tk.Button(self.root, text="reset",
                   command=self.reset).pack()
-        pass
 
     def run(self):
         """
         Runs the windows main-loop
         """
         self.root.mainloop()
+
+    def distance_toggle():
+        pass
 
     def reset(self):
         if self.robot.reset():

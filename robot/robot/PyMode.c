@@ -45,6 +45,13 @@ void run_py_mode(System* atmega) {
     reset_system_now(atmega);
   }
 
+  if (current_command != NULL && String_contains(current_command, "sv:")) {
+    const char* angle_str = current_command + 3;
+    int8_t angle = atoi(angle_str);
+    Servo_set_angle(&atmega->us_servo, angle);
+    print("OK\n");
+  }
+
   free(current_command);
   current_command = NULL;
 }
