@@ -15,6 +15,7 @@ void show_commands() {
     print(RETURN_COMMAND_STR);
   } else if (presentation_state == PS_ON_START_BLOCK) {
     print(START_COMMAND_STR);
+    print(PY_COMMAND_STR);
   } else if (presentation_state == PS_IDLE) {
     print(PY_COMMAND_STR);
   }
@@ -28,14 +29,14 @@ void print_rounds_changed_message() {
     case 1:
       break;
     case 2:
-      USART_send_str(USART_instance(), START_ROUND_TWO_MESSAGE);
+      print(START_ROUND_TWO_MESSAGE);
       break;
     case 3:
-      USART_send_str(USART_instance(), START_ROUND_THREE_MESSAGE);
+      print(START_ROUND_THREE_MESSAGE);
       break;
     case 4:
     default:
-      USART_send_str(USART_instance(), END_MESSAGE);
+      print(END_MESSAGE);
       return;
   }
 }
@@ -67,6 +68,6 @@ void print_message_with_led_line(System* atmega, const char* message,
 
   if ((millis() - last_message_sent) >= ONE_SECONDS_MS) {
     last_message_sent = millis();
-    USART_send_str(USART_instance(), message);
+    print(message);
   }
 }
