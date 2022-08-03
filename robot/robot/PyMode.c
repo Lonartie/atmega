@@ -1,5 +1,7 @@
 #include "PyMode.h"
 
+#include <stdlib.h>
+
 #include "Driving.h"
 #include "Globals.h"
 #include "Messages.h"
@@ -21,4 +23,7 @@ void run_py_mode(System* atmega) {
     System_stop(atmega);
     print("OK\n");
   }
+
+  free(current_command);
+  current_command = NULL;
 }
