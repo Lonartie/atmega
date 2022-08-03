@@ -94,12 +94,12 @@ void drive(System* atmega, bool left, bool mid, bool right, bool sees_wall) {
     ShiftRegister_write_n(&atmega->led_strip, 3, left, mid, right);
   }
 
+  count_rounds(atmega, left, mid, right);
+
   if (avoid_obstacles_enabled && (wall_phase != 0 || sees_wall)) {
     avoid_obstacle_logic(atmega, sees_wall, (left || mid || right));
     return;
   }
-
-  count_rounds(atmega, left, mid, right);
 
   // there are rare cases where 011 -> 010 -> 000 is detected so
   // we need to memorize the x0x side and turn the car afterwards
