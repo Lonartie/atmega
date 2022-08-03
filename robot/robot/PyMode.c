@@ -48,7 +48,7 @@ void run_py_mode(System* atmega) {
     while ((*angle_str) != ':') {
       angle_str++;
     }
-
+    angle_str++;
     char angle = atoi(angle_str);
     print(FMT("angle: %d", angle));
     Servo_set_angle(&atmega->us_servo, angle);
