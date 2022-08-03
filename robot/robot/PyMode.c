@@ -5,6 +5,7 @@
 #include "Driving.h"
 #include "Globals.h"
 #include "Messages.h"
+#include "Reset.h"
 
 void run_py_mode(System* atmega) {
   static bool started = false;
@@ -37,6 +38,11 @@ void run_py_mode(System* atmega) {
   if (current_command != NULL && String_contains(current_command, "stop")) {
     System_stop(atmega);
     print("OK\n");
+  }
+
+  if (current_command != NULL && String_contains(current_command, "reset")) {
+    print("OK\n");
+    reset_system_now(atmega);
   }
 
   free(current_command);

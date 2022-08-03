@@ -22,7 +22,7 @@ class Window:
         Builds the ui by placing buttons labels etc.
         """
         tk.Button(self.root, text="drive forward",
-                  command=self.robot.drive_forward).pack()
+                  command=self.robot.drive_forward, ).pack()
         tk.Button(self.root, text="drive backward",
                   command=self.robot.drive_backward).pack()
         tk.Button(self.root, text="drive left",
@@ -31,6 +31,8 @@ class Window:
                   command=self.robot.drive_right).pack()
         tk.Button(self.root, text="stop",
                   command=self.robot.drive_stop).pack()
+        tk.Button(self.root, text="reset",
+                  command=self.robot.reset).pack()
         pass
 
     def run(self):
