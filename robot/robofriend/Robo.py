@@ -64,13 +64,10 @@ class Robo:
         # return ("OK" in self.receive_all())
 
     def send_command(self, command: str):
-        command = command.strip()
-        while self.con.inWaiting() > 0:
-            self.con.read()
-            time.sleep(0.1)
         print("sending command: '", command, "'", sep='')
         self.con.write(bytes(command + "\r\n", encoding="ascii"))
         self.con.flush()
+        self.con.flushOutput()
         time.sleep(1)
 
     def receive_all(self) -> str:
