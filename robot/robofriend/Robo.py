@@ -71,10 +71,11 @@ class Robo:
             time.sleep(0.1)
         print("sending command: '", command, "'", sep='')
         self.con.write(bytes(command + "\r\n", encoding="ascii"))
-        # time.sleep(0.75)
+        self.con.flush()
+        time.sleep(self.con.baudrate / 1000000 * len(command))
 
     def receive_all(self) -> str:
-        time.sleep(2)
+        
         data = []
         while self.con.inWaiting() > 0:
             msg = self.con.readline().strip()
