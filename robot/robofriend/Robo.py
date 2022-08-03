@@ -74,7 +74,7 @@ class Robo:
         # time.sleep(0.75)
 
     def receive_all(self) -> str:
-        time.sleep(0.5)
+        time.sleep(2)
         data = []
         while self.con.inWaiting() > 0:
             msg = self.con.readline().strip()
