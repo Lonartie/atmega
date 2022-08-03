@@ -1,8 +1,15 @@
 from Window import Window
 
+
 def main():
-  window = Window()
-  window.run()
+    """
+    Runs the application
+    """
+    window = Window()
+    # if window.valid:
+    window.run()
+    window.close()
+
 
 if (__name__ == '__main__'):
-  main()
+    main()

@@ -7,14 +7,38 @@ from Robo import Robo
 class Window:
 
     def __init__(self):
+        """
+        Creates the window with all the buttons
+        """
         self.root = tk.Tk()
         self.root.title("RoboFriend")
         self.robot = Robo()
-        tk.Label(self.root, text=self.robot.answer).pack()
-        tk.Button(self.root, text='long', command=self.show_long).pack()
+        self.valid = self.robot.valid
+        self.setup_ui()
+        self.check_connection()
 
-    def show_long(self):
-        messagebox.showinfo("LONG", self.robot.long)
+    def setup_ui(self):
+        """
+        Builds the ui by placing buttons labels etc.
+        """
+        tk.Button(self.root, text="drive forward",
+                  command=self.robot.drive_forward).pack()
+        pass
 
     def run(self):
+        """
+        Runs the windows main-loop
+        """
         self.root.mainloop()
+
+    def check_connection(self):
+        if (not self.valid):
+            messagebox.showerror(
+                "Connection failure",
+                "Not able to connect to the robot. Please connect the robot to '/dev/rfcomm0'!")
+
+    def close(self):
+        """
+        Closes any connections to the robot
+        """
+        self.robot.close()
