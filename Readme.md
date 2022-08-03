@@ -1,9 +1,3 @@
-<style>
-  g {
-    color: green
-  }
-</style>
-
 # Table of Contents
 - [Table of Contents](#table-of-contents)
 - [About this project](#about-this-project)
@@ -71,4 +65,4 @@ The code is designed to use a event based control flow.
 ![Image1](res/Robot.jpg)
 ![Image2](res/RoboFriend.png)
 ![Image3](res/Obstacle.png)
-![Video1](res/Driving.mp4)
+<video src="res/Driving.mp4"/>
