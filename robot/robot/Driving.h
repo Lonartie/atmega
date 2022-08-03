@@ -23,6 +23,10 @@ void turn_smooth_right(System* atmega);
 /// @param atmega the system to drive
 void drive_forward(System* atmega);
 
+/// @brief drives backward
+/// @param atmega the system to drive
+void drive_backward(System* atmega);
+
 /// @brief stops the motors
 /// @param atmega the system to drive
 void stop_driving(System* atmega);

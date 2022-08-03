@@ -68,6 +68,13 @@ void drive_forward(System* atmega) {
   Motor_drive_forward(&atmega->mt_right, SPEED_DRIVE);
 }
 
+void drive_backward(System* atmega) {
+  smooth_steer_start = millis();
+  last_direction_update = millis();
+  Motor_drive_backward(&atmega->mt_left, SPEED_DRIVE);
+  Motor_drive_backward(&atmega->mt_right, SPEED_DRIVE);
+}
+
 void stop_driving(System* atmega) {
   last_direction_update = millis();
   Motor_drive_forward(&atmega->mt_left, 0);

@@ -19,6 +19,21 @@ void run_py_mode(System* atmega) {
     print("OK\n");
   }
 
+  if (current_command != NULL && String_contains(current_command, "bw")) {
+    drive_backward(atmega);
+    print("OK\n");
+  }
+
+  if (current_command != NULL && String_contains(current_command, "lt")) {
+    turn_left(atmega);
+    print("OK\n");
+  }
+
+  if (current_command != NULL && String_contains(current_command, "rt")) {
+    turn_right(atmega);
+    print("OK\n");
+  }
+
   if (current_command != NULL && String_contains(current_command, "stop")) {
     System_stop(atmega);
     print("OK\n");
