@@ -2,6 +2,7 @@
 #define DRIVING_H
 
 #include "Models/System.h"
+#include "States.h"
 
 /// @brief turns smooth left for DIRECTION_UPDATE_DELAY_MS and then fully left
 /// @param atmega the system to drive
