@@ -6,8 +6,8 @@ def main():
     Runs the application
     """
     window = Window()
-    # if window.valid:
-    window.run()
+    if window.valid:
+        window.run()
     window.close()
 
 
