@@ -42,7 +42,7 @@ void print_rounds_changed_message() {
 }
 
 void print_message_with_led_line(System* atmega, const char* message,
-                                 uint16_t led_freq) {
+                                 uint32_t led_freq) {
   static bool ll_left = true, ll_mid = false, ll_right = false, to_right = true;
   System_stop(atmega);
 
@@ -66,8 +66,8 @@ void print_message_with_led_line(System* atmega, const char* message,
     }
   }
 
-  if ((millis() - last_message_sent) >= ONE_SECONDS_MS) {
-    last_message_sent = millis();
+  if ((micros() - last_message_sent_us) >= ONE_SECONDS_MS) {
+    last_message_sent_us = micros();
     print(message);
   }
 }

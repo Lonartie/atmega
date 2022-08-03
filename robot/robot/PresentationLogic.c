@@ -56,7 +56,7 @@ void presentation_update(void* system) {
   bool sees_wall = (wall_detected && measure_was_recently());
 
   if (safe_state) {
-    print_message_with_led_line(atmega, SAFE_SATE_MESSAGE, 32);
+    print_message_with_led_line(atmega, SAFE_SATE_MESSAGE, 31250);
     return;
   }
 
@@ -95,7 +95,7 @@ void presentation_update(void* system) {
       break;
     case PS_PAUSE:
       presentation_check_toggle_drive_pause(atmega);
-      print_message_with_led_line(atmega, PAUSE_MESSAGE, 500);
+      print_message_with_led_line(atmega, PAUSE_MESSAGE, 500000);
       break;
     case PS_DRIVING:
       presentation_check_toggle_drive_pause(atmega);
