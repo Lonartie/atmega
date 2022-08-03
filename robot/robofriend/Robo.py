@@ -32,37 +32,37 @@ class Robo:
     def drive_forward(self) -> bool:
         self.clear_buffers()
         self.send_command('fw')
-        return (self.receive_line() == "OK")
+        return ("OK" in self.receive_all())
 
     def drive_backward(self) -> bool:
         self.clear_buffers()
         self.send_command('bw')
-        return (self.receive_line() == "OK")
+        return ("OK" in self.receive_all())
 
     def drive_left(self) -> bool:
         self.clear_buffers()
         self.send_command('lt')
-        return (self.receive_line() == "OK")
+        return ("OK" in self.receive_all())
 
     def drive_right(self) -> bool:
         self.clear_buffers()
         self.send_command('rt')
-        return (self.receive_line() == "OK")
+        return ("OK" in self.receive_all())
 
     def drive_stop(self) -> bool:
         self.clear_buffers()
         self.send_command('stop')
-        return (self.receive_line() == "OK")
+        return ("OK" in self.receive_all())
 
     def reset(self) -> bool:
         self.clear_buffers()
         self.send_command('reset')
-        return (self.receive_line() == "OK")
+        return ("OK" in self.receive_all())
 
     def servo(self, angle: int) -> bool:
         self.clear_buffers()
         self.send_command('sv:' + str(angle))
-        return (self.receive_line() == "OK")
+        return ("OK" in self.receive_all())
 
     def send_command(self, command: str):
         self.con.write(str.encode(command + "\r\n"))
@@ -70,6 +70,9 @@ class Robo:
 
     def receive_line(self) -> str:
         return self.con.readline().decode().strip()
+
+    def receive_all(self) -> str:
+        return self.con.read_all().decode().strip()
 
     def close(self):
         """

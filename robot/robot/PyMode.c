@@ -15,6 +15,10 @@ void run_py_mode(System* atmega) {
     started = true;
   }
 
+  if (current_command != NULL) {
+    print(FMT("command: '%s'", current_command));
+  }
+
   if (current_command != NULL && String_contains(current_command, "fw")) {
     drive_forward(atmega);
     print("OK\n");
