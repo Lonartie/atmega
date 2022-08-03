@@ -65,4 +65,4 @@ The code is designed to use a event based control flow.
 ![Image1](res/Robot.jpg)
 ![Image2](res/RoboFriend.png)
 ![Image3](res/Obstacle.png)
-<video src="res/Driving.mp4"></video>
+![Image4](res/Driving.gif)
