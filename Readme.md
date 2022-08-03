@@ -23,7 +23,7 @@ The ATMega328P is a microprocessor with 32kB flash storage and 2kB memory. Becau
 At the core the car is built around the ATMega328P microprocessor and features 2 independant motors, 3 infrared sensors, 3 leds attached to a shift register, a bluetooth module attached to the USART and an ultra sonic sound sensor mounted on top of a servo motor.
 
 # The current state
-In the following i will describe what is already working and what will come next or is nearly finished and should be worked on in the future.
+In the following I will describe what is already working and what will come next or is nearly finished and should be worked on in the future.
 
 ## What's working (basics)
 If you power on the car it will detect whether or not it sits on the start block. If not it will ask you to put it there, otherwise it will ask you to start the motors with the 'S' command or show a list of all available commands with '?'.
@@ -46,7 +46,7 @@ After you put the car on the start block and give it the 'S' signal it will imme
 ** internal commands
 
 ## Additional Features
-In addition to the basic functionality required by the client the car is also able to avoid obstacles ([Obstacale avoidance](#obstacle-avoidance)) and a remote hardware test executor ([Remote GUI](#remote-gui)).
+In addition to the basic functionality required by the client, the car is also able to avoid obstacles ([Obstacale avoidance](#obstacle-avoidance)) and a remote hardware test executor ([Remote GUI](#remote-gui)).
 ### Obstacle avoidance
 This feature can be enabled or disable as you desire using the command described under [Commands](#commands). It aims to detect obstacles while driving down the track and avoid them by driving around them. It has intelligent detection in which direction it should try to drive around the obstacle.
 
