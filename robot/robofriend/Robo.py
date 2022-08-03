@@ -23,27 +23,37 @@ class Robo:
         except:
             self.valid = False
 
+    def clear_buffers(self):
+        self.con.flushInput()
+        self.con.flushOutput()
+
     def drive_forward(self) -> bool:
+        self.clear_buffers()
         self.send_command('fw')
         return (self.receive_line() == "OK")
 
     def drive_backward(self) -> bool:
+        self.clear_buffers()
         self.send_command('bw')
         return (self.receive_line() == "OK")
 
     def drive_left(self) -> bool:
+        self.clear_buffers()
         self.send_command('lt')
         return (self.receive_line() == "OK")
 
     def drive_right(self) -> bool:
+        self.clear_buffers()
         self.send_command('rt')
         return (self.receive_line() == "OK")
 
     def drive_stop(self) -> bool:
+        self.clear_buffers()
         self.send_command('stop')
         return (self.receive_line() == "OK")
 
     def reset(self) -> bool:
+        self.clear_buffers()
         self.send_command('reset')
         return (self.receive_line() == "OK")
 
