@@ -24,45 +24,44 @@ class Robo:
             self.valid = False
 
     def clear_buffers(self):
-        pass
-        # self.con.flushInput()
-        # self.con.flushOutput()
-        # self.con.read_all()
+        self.con.flushInput()
+        self.con.flushOutput()
+        self.con.read_all()
 
-    def drive_forward(self) -> bool:
+    def drive_forward(self):
         self.clear_buffers()
         self.send_command('fw')
-        return ("OK" in self.receive_all())
+        # return ("OK" in self.receive_all())
 
-    def drive_backward(self) -> bool:
+    def drive_backward(self):
         self.clear_buffers()
         self.send_command('bw')
-        return ("OK" in self.receive_all())
+        # return ("OK" in self.receive_all())
 
-    def drive_left(self) -> bool:
+    def drive_left(self):
         self.clear_buffers()
         self.send_command('lt')
-        return ("OK" in self.receive_all())
+        # return ("OK" in self.receive_all())
 
-    def drive_right(self) -> bool:
+    def drive_right(self):
         self.clear_buffers()
         self.send_command('rt')
-        return ("OK" in self.receive_all())
+        # return ("OK" in self.receive_all())
 
-    def drive_stop(self) -> bool:
+    def drive_stop(self):
         self.clear_buffers()
         self.send_command('stop')
-        return ("OK" in self.receive_all())
+        # return ("OK" in self.receive_all())
 
     def reset(self) -> bool:
         self.clear_buffers()
         self.send_command('reset')
         return ("OK" in self.receive_all())
 
-    def servo(self, angle: int) -> bool:
+    def servo(self, angle: int):
         self.clear_buffers()
         self.send_command('sv:' + str(angle))
-        return ("OK" in self.receive_all())
+        # return ("OK" in self.receive_all())
 
     def send_command(self, command: str):
         command = command.strip()
