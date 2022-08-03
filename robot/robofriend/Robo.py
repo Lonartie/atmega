@@ -43,7 +43,7 @@ class Robo:
         self.send_command('stop')
         return (self.receive_line() == "OK")
 
-    def drive_reset(self) -> bool:
+    def reset(self) -> bool:
         self.send_command('reset')
         return (self.receive_line() == "OK")
 

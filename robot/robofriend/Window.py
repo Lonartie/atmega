@@ -32,7 +32,7 @@ class Window:
         tk.Button(self.root, text="stop",
                   command=self.robot.drive_stop).pack()
         tk.Button(self.root, text="reset",
-                  command=self.robot.reset).pack()
+                  command=self.reset).pack()
         pass
 
     def run(self):
@@ -40,6 +40,12 @@ class Window:
         Runs the windows main-loop
         """
         self.root.mainloop()
+
+    def reset(self):
+        messagebox.showinfo(
+            "Shutdown", "The robot will reset and the application will close.")
+        self.robot.reset()
+        self.root.destroy()
 
     def check_connection(self):
         if (not self.valid):
