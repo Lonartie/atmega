@@ -16,7 +16,7 @@ void run_py_mode(System* atmega) {
   }
 
   if (current_command != NULL) {
-    print(FMT("command: '%s'", current_command));
+    print(FMT("command: '%s'\n", current_command));
   }
 
   if (current_command != NULL && String_contains(current_command, "fw")) {
@@ -49,7 +49,8 @@ void run_py_mode(System* atmega) {
       angle_str++;
     }
 
-    int8_t angle = atoi(angle_str);
+    char angle = atoi(angle_str);
+    print(FMT("angle: %d", angle));
     Servo_set_angle(&atmega->us_servo, angle);
     print("OK\n");
   }

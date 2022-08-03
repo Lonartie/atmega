@@ -66,7 +66,7 @@ class Robo:
 
     def send_command(self, command: str):
         self.con.write(str.encode(command + "\r\n"))
-        time.sleep(0.75)
+        # time.sleep(0.75)
 
     def receive_line(self) -> str:
         return self.con.readline().decode().strip()
