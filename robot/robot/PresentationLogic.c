@@ -56,7 +56,7 @@ void presentation_update(void* system) {
   bool sees_wall = (wall_detected && measure_was_recently());
 
   if (safe_state) {
-    print_message_with_led_line(atmega, SAFE_SATE_MESSAGE, 125);
+    print_message_with_led_line(atmega, SAFE_SATE_MESSAGE, 32);
     return;
   }
 
