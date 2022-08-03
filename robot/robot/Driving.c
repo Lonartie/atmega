@@ -131,7 +131,7 @@ void drive(System* atmega, bool left, bool mid, bool right, bool sees_wall) {
     case DDS_DRV_FW:     // fall through
     case DDS_DRV_FW_ML:  // fall through
     case DDS_DRV_FW_MR:
-      drive_forward(atmega);
+      drive_forward(atmega, left, mid, right);
       break;
     case DDS_TRN_LEFT:
       turn_left(atmega);
