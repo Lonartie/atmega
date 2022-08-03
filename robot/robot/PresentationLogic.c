@@ -144,13 +144,13 @@ void presentation_process_on_start_block(System* atmega, bool left, bool mid,
     presentation_state = PS_DRIVING;
     free(current_command);
     current_command = NULL;
-    USART_send_str(USART_instance(), START_ROUND_ONE_MESSAGE);
+    print(START_ROUND_ONE_MESSAGE);
     return;
   }
 
   if ((millis() - last_message_sent) >= ONE_SECONDS_MS) {
     last_message_sent = millis();
-    USART_send_str(USART_instance(), START_BLOCK_MESSAGE);
+    print(START_BLOCK_MESSAGE);
   }
 }
 

@@ -51,4 +51,8 @@ void drive(System* atmega, bool left, bool mid, bool right, bool sees_wall);
 /// @param right whether or not the right line sensor sees something
 void count_rounds(System* atmega, bool left, bool mid, bool right);
 
+/// @brief checks wether or not the track direction should be updated
+/// @param direction the new direction in case of an update
+void check_update_track_direction(TrackDirection direction);
+
 #endif  // DRIVING_H

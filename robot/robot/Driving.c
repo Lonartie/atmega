@@ -9,11 +9,8 @@
 #include "States.h"
 
 void turn_left(System* atmega) {
-  if ((millis() - last_direction_update) >= DIRECTION_UPDATE_DELAY_MS &&
-      update_track_direction) {
-    last_direction_update = millis();
-    track_direction = TD_LEFT;
-  }
+  check_update_track_direction(TD_LEFT);
+
   // try smooth steer first
   if ((millis() - smooth_steer_start) < TIME_TO_TRY_SMOOTH_STEERING_MS) {
     if (!is_smooth_steering) {
@@ -29,11 +26,7 @@ void turn_left(System* atmega) {
 }
 
 void turn_right(System* atmega) {
-  if ((millis() - last_direction_update) >= DIRECTION_UPDATE_DELAY_MS &&
-      update_track_direction) {
-    last_direction_update = millis();
-    track_direction = TD_RIGHT;
-  }
+  check_update_track_direction(TD_RIGHT);
 
   // try smooth steer first
   if ((millis() - smooth_steer_start) < TIME_TO_TRY_SMOOTH_STEERING_MS) {
@@ -185,5 +178,13 @@ void count_rounds(System* atmega, bool left, bool mid, bool right) {
       print(RETURN_HOME_END_MESSAGE);
       reset_system_now(atmega);
     }
+  }
+}
+
+void check_update_track_direction(TrackDirection direction) {
+  if ((millis() - last_direction_update) >= DIRECTION_UPDATE_DELAY_MS &&
+      update_track_direction) {
+    last_direction_update = millis();
+    track_direction = direction;
   }
 }
