@@ -17,6 +17,7 @@
     - [Remote GUI](#remote-gui) 
   - [What's next](#whats-next)
 - [Code design](#code-design)
+- [Images](#images)
 
 # About this project
 This project aims to create a self driving robot car. The code is written for the ATMega328P microprocessor (C-language) but can easily be adapted to work with other avr microprocessors. The car should be able to use its [components](#the-car) to drive along a pre built track. As for the track, it has a black line the car should follow. The goal is that the car can drive 3 rounds along the line (without any problems like changing directions or ignoring corners) while printing messages through the USART and receive commands while doing so.
@@ -65,3 +66,9 @@ The work for the desktop based unit tests have already started. The makefile is 
 
 # Code design
 The code is designed to use a event based control flow.
+
+# Images
+![Image1](res/Robot.jpg)
+![Image2](res/RoboFriend.png)
+![Image3](res/Obstacle.png)
+![Video1](res/Driving.mp4)

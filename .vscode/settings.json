@@ -9,6 +9,7 @@
     "adcpin.h": "c",
     "messages.h": "c",
     "globals.h": "c",
-    "driving.h": "c"
+    "driving.h": "c",
+    "reset.h": "c"
   }
 }
