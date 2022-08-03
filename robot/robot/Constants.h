@@ -26,16 +26,14 @@
 #define MEASURE_THRESHOLD_MID 400
 #define MEASURE_THRESHOLD_RIGHT 330
 
-#define COMMANDS_STR           \
-  "?  -> show help\n"          \
-  "S  -> start driving\n"      \
-  "R  -> reset in 5 seconds\n" \
-  "X  -> safe state\n"         \
-  "A  -> toggle obstacle avoidance\n"
-
-#define DRIVING_COMMANDS_STR      \
-  "P  -> pause/unpause driving\n" \
-  "C  -> return home\n"
+#define HELP_COMMAND_STR "?  -> show help\n"
+#define START_COMMAND_STR "S  -> start driving\n"
+#define RESET_COMMAND_STR "R  -> reset in 5 seconds\n"
+#define SAFE_STATE_COMMAND_STR "X  -> safe state\n"
+#define OBSTACLE_COMMAND_STR "A  -> toggle obstacle avoidance\n"
+#define PAUSE_COMMAND_STR "P  -> pause/unpause driving\n"
+#define RETURN_COMMAND_STR "C  -> return home\n"
+#define PY_COMMAND_STR "PY -> start py command mode\n"
 
 #define IDLE_MESSAGE \
   "Not on the starting field. Place me there please... Send ? for help\n"

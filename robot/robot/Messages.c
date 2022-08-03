@@ -6,9 +6,17 @@
 #include "Models/USART.h"
 
 void show_commands() {
-  USART_send_str(USART_instance(), COMMANDS_STR);
+  print(HELP_COMMAND_STR);
+  print(RESET_COMMAND_STR);
+  print(SAFE_STATE_COMMAND_STR);
+  print(OBSTACLE_COMMAND_STR);
   if (presentation_state == PS_DRIVING) {
-    USART_send_str(USART_instance(), DRIVING_COMMANDS_STR);
+    print(PAUSE_COMMAND_STR);
+    print(RETURN_COMMAND_STR);
+  } else if (presentation_state == PS_ON_START_BLOCK) {
+    print(START_COMMAND_STR);
+  } else if (presentation_state == PS_IDLE) {
+    print(PY_COMMAND_STR);
   }
 }
 
