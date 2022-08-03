@@ -1,3 +1,9 @@
+<style>
+  g {
+    color: green
+  }
+</style>
+
 # Table of Contents
 - [Table of Contents](#table-of-contents)
 - [About this project](#about-this-project)
@@ -37,10 +43,10 @@ After you put the car on the start block and give it the 'S' signal it will imme
 | 'P'        | Pauses or unpauses driving on the line                    |
 | 'X'        | Safe state. Don't react to anything until reset manually  |
 | 'C'        | Drive back to the start block and reset there immediately |
-| <pre style="color:green">'A'</pre> | <pre style="color:green">Enable/disable obstacle avoidance mode (Feature)</pre>   |
+| <g>'A'</g> | <g>Enable/disable obstacle avoidance mode (Feature)</g>   |
 | '?'        | Show the list of available commands                       |
 
-<pre style="color:green"> *feature commands </pre>
+<g> *feature commands </g>
 
 ## Additional Features
 In addition to the basic functionality required by the client the car is also able to avoid obstacles ([Obstacale avoidance](#obstacle-avoidance)) and a remote hardware test executor ([Remote GUI](#remote-gui)).
