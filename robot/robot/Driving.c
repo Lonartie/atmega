@@ -61,9 +61,14 @@ void turn_smooth_right(System* atmega) {
   Motor_drive_backward(&atmega->mt_right, SPEED_TURN_SLOW_B);
 }
 
-void drive_forward(System* atmega) {
+void drive_forward(System* atmega, bool left, bool mid, bool right) {
   smooth_steer_start = millis();
   last_direction_update = millis();
+  uint8_t speed = SPEED_DRIVE;
+  if (left && mid && right) {
+    // drive slower on start block to not overshoot
+    speed = SPEED_DRIVE_SLOW;
+  }
   Motor_drive_forward(&atmega->mt_left, SPEED_DRIVE);
   Motor_drive_forward(&atmega->mt_right, SPEED_DRIVE);
 }

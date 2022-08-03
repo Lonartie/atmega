@@ -21,7 +21,10 @@ void turn_smooth_right(System* atmega);
 
 /// @brief drives forward
 /// @param atmega the system to drive
-void drive_forward(System* atmega);
+/// @param left whether or not the left line sensor sees something
+/// @param mid whether or not the mid line sensor sees something
+/// @param right whether or not the right line sensor sees something
+void drive_forward(System* atmega, bool left, bool mid, bool right);
 
 /// @brief drives backward
 /// @param atmega the system to drive
