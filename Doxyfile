@@ -282,7 +282,7 @@ TAB_SIZE               = 4
 # with the commands \{ and \} for these it is advised to use the version @{ and
 # @} or use a double escape (\\{ and \\})
 
-ALIASES                =
+ALIASES                = verb{1}="\<\1\>"
 
 # Set the OPTIMIZE_OUTPUT_FOR_C tag to YES if your project consists of C sources
 # only. Doxygen will then generate output that is more tailored for C. For
@@ -351,7 +351,7 @@ EXTENSION_MAPPING      =
 # case of backward compatibilities issues.
 # The default value is: YES.
 
-MARKDOWN_SUPPORT       = YES
+MARKDOWN_SUPPORT       = NO
 
 # When the TOC_INCLUDE_HEADINGS tag is set to a non-zero value, all headings up
 # to that level are automatically included in the table of contents, even if
@@ -907,7 +907,7 @@ WARN_LOGFILE           =
 # Note: If this tag is empty the current directory is searched.
 
 INPUT                  = ./robot \
-                         ./Readme.md
+                         ./Readme-Doxy.md 
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses
@@ -1105,7 +1105,7 @@ FILTER_SOURCE_PATTERNS =
 # (index.html). This can be useful if you have a project on for instance GitHub
 # and want to reuse the introduction page also for the doxygen output.
 
-USE_MDFILE_AS_MAINPAGE = Readme.md
+USE_MDFILE_AS_MAINPAGE = Readme-Doxy.md
 
 #---------------------------------------------------------------------------
 # Configuration options related to source browsing
@@ -1329,7 +1329,7 @@ HTML_STYLESHEET        =
 # list). For an example see the documentation.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_EXTRA_STYLESHEET  = DoxyStyle.css
+HTML_EXTRA_STYLESHEET  =
 
 # The HTML_EXTRA_FILES tag can be used to specify one or more extra images or
 # other source files which should be copied to the HTML output directory. Note
@@ -1339,7 +1339,7 @@ HTML_EXTRA_STYLESHEET  = DoxyStyle.css
 # files will be copied as-is; there are no commands or markers available.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_EXTRA_FILES       =
+HTML_EXTRA_FILES       = 
 
 # The HTML_COLORSTYLE_HUE tag controls the color of the HTML output. Doxygen
 # will adjust the colors in the style sheet and background images according to
