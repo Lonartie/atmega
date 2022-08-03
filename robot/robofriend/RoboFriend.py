@@ -1,6 +1,5 @@
 from Window import Window
 
-
 def main():
     """
     Runs the application
@@ -9,7 +8,6 @@ def main():
     if window.valid:
         window.run()
     window.close()
-
 
 if (__name__ == '__main__'):
     main()

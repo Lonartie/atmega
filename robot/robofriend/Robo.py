@@ -24,46 +24,68 @@ class Robo:
             self.valid = False
 
     def clear_buffers(self):
+        """
+        Clears the serial input and output buffers
+        """
         self.con.flushInput()
         self.con.flushOutput()
         self.con.read_all()
 
     def drive_forward(self):
+        """
+        Sends the drive forward command to the robot
+        """
         self.clear_buffers()
         self.send_command('fw')
-        # return ("OK" in self.receive_all())
 
     def drive_backward(self):
+        """
+        Sends the drive backward command to the robot
+        """
         self.clear_buffers()
         self.send_command('bw')
-        # return ("OK" in self.receive_all())
 
     def drive_left(self):
+        """
+        Sends the drive left command to the robot
+        """
         self.clear_buffers()
         self.send_command('lt')
-        # return ("OK" in self.receive_all())
 
     def drive_right(self):
+        """
+        Sends the drive right command to the robot
+        """
         self.clear_buffers()
         self.send_command('rt')
-        # return ("OK" in self.receive_all())
 
-    def drive_stop(self):
+    def stop(self):
+        """
+        Sends the stop command to the robot
+        """
         self.clear_buffers()
         self.send_command('stop')
-        # return ("OK" in self.receive_all())
 
     def reset(self) -> bool:
+        """
+        Sends the reset command to the robot
+        Returns true if the robot received the command and will reset itself
+        """
         self.clear_buffers()
         self.send_command('reset')
         return ("OK" in self.receive_all())
 
     def servo(self, angle: int):
+        """
+        Sends a command to the robot to point the servo into the given direction
+        """
         self.clear_buffers()
         self.send_command('sv:' + str(angle))
-        # return ("OK" in self.receive_all())
 
     def send_command(self, command: str):
+        """
+        Sends the given command to the robot
+        """
         print("sending command: '", command, "'", sep='')
         self.con.write(bytes(command + "\r\n", encoding="ascii"))
         self.con.flush()
@@ -71,6 +93,9 @@ class Robo:
         time.sleep(1)
 
     def receive_all(self) -> str:
+        """
+        Receives everything the robot has sent us
+        """
         data = []
         while self.con.inWaiting() > 0:
             msg = self.con.readline().strip()

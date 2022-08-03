@@ -30,7 +30,7 @@ class Window:
         tk.Button(self.root, text="drive right",
                   command=self.robot.drive_right).pack()
         tk.Button(self.root, text="stop",
-                  command=self.robot.drive_stop).pack()
+                  command=self.robot.stop).pack()
         tk.Button(self.root, text="servo 90°",
                   command=lambda: self.robot.servo(90)).pack()
         tk.Button(self.root, text="servo 45°",
@@ -41,8 +41,6 @@ class Window:
                   command=lambda: self.robot.servo(-45)).pack()
         tk.Button(self.root, text="servo -90°",
                   command=lambda: self.robot.servo(-90)).pack()
-        tk.Button(self.root, text="enable/disable live distance",
-                  command=self.distance_toggle).pack()
         tk.Button(self.root, text="reset",
                   command=self.reset).pack()
 
@@ -52,10 +50,10 @@ class Window:
         """
         self.root.mainloop()
 
-    def distance_toggle():
-        pass
-
     def reset(self):
+        """
+        Resets the robot and if successful terminates this program
+        """
         if self.robot.reset():
             messagebox.showinfo(
                 "Shutdown", "The robot will reset and the application will close.")
@@ -64,6 +62,10 @@ class Window:
             messagebox.showinfo("Failed", "Something went wrong :(")
 
     def check_connection(self):
+        """
+        Checks whether or not a connection to the robot could be established.
+        Will show an error if no connection could be established
+        """
         if (not self.valid):
             messagebox.showerror(
                 "Connection failure",
