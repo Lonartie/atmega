@@ -26,6 +26,7 @@ class Robo:
     def clear_buffers(self):
         self.con.flushInput()
         self.con.flushOutput()
+        self.con.read_all()
 
     def drive_forward(self) -> bool:
         self.clear_buffers()
@@ -59,11 +60,12 @@ class Robo:
 
     def servo(self, angle: int) -> bool:
         self.clear_buffers()
-        self.send_command('sv:' + angle)
+        self.send_command('sv:' + str(angle))
         return (self.receive_line() == "OK")
 
     def send_command(self, command: str):
         self.con.write(str.encode(command + "\r\n"))
+        time.sleep(0.25)
 
     def receive_line(self) -> str:
         return self.con.readline().decode().strip()
