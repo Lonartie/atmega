@@ -69,8 +69,8 @@ void drive_forward(System* atmega, bool left, bool mid, bool right) {
     // drive slower on start block to not overshoot
     speed = SPEED_DRIVE_SLOW;
   }
-  Motor_drive_forward(&atmega->mt_left, SPEED_DRIVE);
-  Motor_drive_forward(&atmega->mt_right, SPEED_DRIVE);
+  Motor_drive_forward(&atmega->mt_left, speed);
+  Motor_drive_forward(&atmega->mt_right, speed);
 }
 
 void drive_backward(System* atmega) {

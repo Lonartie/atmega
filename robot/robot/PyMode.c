@@ -20,7 +20,7 @@ void run_py_mode(System* atmega) {
   }
 
   if (current_command != NULL && String_contains(current_command, "fw")) {
-    drive_forward(atmega);
+    drive_forward(atmega, false, false, false);
     print("OK\n");
   } else if (current_command != NULL &&
              String_contains(current_command, "bw")) {
