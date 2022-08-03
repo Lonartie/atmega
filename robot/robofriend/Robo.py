@@ -65,15 +65,27 @@ class Robo:
         return ("OK" in self.receive_all())
 
     def send_command(self, command: str):
+        while self.con.inWaiting() > 0:
+            self.con.read()
+            time.sleep(0.1)
         print("sending command: '", command, "'", command)
-        self.con.write(str.encode(command + "\r\n"))
+        self.con.write(bytes(command + "\r\n", encoding="ascii"))
         # time.sleep(0.75)
 
     def receive_line(self) -> str:
-        return self.con.readline().decode().strip()
+        return self.con.readline().decode(encoding="ascii").strip()
 
     def receive_all(self) -> str:
-        return self.con.read_all().decode().strip()
+        time.sleep(0.5)
+        data = []
+        while self.con.inWaiting() > 0:
+            msg = self.con.readline().strip()
+            time.sleep(0.1)  # Wait for buffer
+            msg = msg.replace(b"\r", b"")
+            msg = msg.replace(b"\n", b"")
+            if msg != b"":
+                data.append(str(msg, encoding='ascii'))
+        return '\n'.join(data);
 
     def close(self):
         """
