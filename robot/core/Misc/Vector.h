@@ -3,8 +3,11 @@
 
 #include "Misc/Utils.h"
 
+/// @brief size type for the vector class to use
 #define VECTOR_SIZE_T uint8_t
 
+/// @brief declares a vector of type TYPE with maximum size SIZE.
+/// The resulting type is called Vector_$TYPE_$SIZE
 #define DECLARE_VECTOR(TYPE, SIZE)                                            \
   typedef struct Vector_##TYPE##_##SIZE {                                     \
     VECTOR_SIZE_T size;                                                       \
@@ -33,6 +36,7 @@
   void Vector_##TYPE##_##SIZE##_push_back(Vector_##TYPE##_##SIZE* vector,     \
                                           TYPE value);
 
+/// @brief defines a vector of type TYPE with maximum size SIZE.
 #define DEFINE_VECTOR(TYPE, SIZE)                                              \
   Vector_##TYPE##_##SIZE Vector_##TYPE##_##SIZE##_create() {                   \
     Vector_##TYPE##_##SIZE vector;                                             \
@@ -97,6 +101,7 @@
     vector->size++;                                                            \
   }
 
+/// @brief declares a bunch of vectors for TYPE with sizes 4, 8, 16, 32 and 64.
 #define DECLARE_VECTORS(TYPE) \
   DECLARE_VECTOR(TYPE, 4)     \
   DECLARE_VECTOR(TYPE, 8)     \
@@ -104,6 +109,7 @@
   DECLARE_VECTOR(TYPE, 32)    \
   DECLARE_VECTOR(TYPE, 64)
 
+/// @brief defines a bunch of vectors for TYPE with sizes 4, 8, 16, 32 and 64.
 #define DEFINE_VECTORS(TYPE) \
   DEFINE_VECTOR(TYPE, 4)     \
   DEFINE_VECTOR(TYPE, 8)     \

@@ -20,6 +20,10 @@ typedef struct UltraSoundSensor {
 /// @brief creates a new ultrasonic sensor with the given pins
 /// @param trigger the pin to trigger the sensor
 /// @param echo the pin to read the echo from the sensor
+/// @param pci_reg the register for the pin change interrupt
+/// @param pci_group the group for the pin change interrupt
+/// @param pci_mask the mask for the pin change interrupt
+/// @param pci_pin the pin for the pin change interrupt
 /// @returns a new ultrasonic sensor
 UltraSoundSensor UltraSoundSensor_create(Pin trigger, Pin echo,
                                          volatile uint8_t* pci_reg,

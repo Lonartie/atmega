@@ -22,12 +22,13 @@ void Timer_stop(Timer* timer) {
                             Updater_create(timer, Timer_update));
 }
 
-void Timer_update(void* obj) {
-  Timer* timer = (Timer*)obj;
+void Timer_update(void* timer) {
+  Timer* actual_timer = (Timer*)timer;
   uint32_t current_time_ms = millis();
-  if (timer->last_time_ms + timer->interval_ms <= current_time_ms) {
-    timer->last_time_ms = current_time_ms;
-    Event event = Event_create(timer->event);
+  if (actual_timer->last_time_ms + actual_timer->interval_ms <=
+      current_time_ms) {
+    actual_timer->last_time_ms = current_time_ms;
+    Event event = Event_create(actual_timer->event);
     EventSystem_send_event(EventSystem_instance(), event);
   }
 }

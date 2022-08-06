@@ -8,8 +8,8 @@
 #include "Models/USART.h"
 #include "Models/UltraSoundSensor.h"
 
-/// @brief the abstraction of the microcontroller and all its components
-///        currently configured for the ATmega328P-car-robot
+/// @brief the abstraction of the microcontroller and all its components.
+/// currently configured for the ATmega328P-car-robot
 typedef struct System {
   ShiftRegister led_strip;  // the LED strip (ShiftRegister)
   ADCPin lf_left;           // the "Linienfolger" left (ADCPin)
@@ -24,12 +24,15 @@ typedef struct System {
 
 /// @brief creates a system with a shift register for the led strip and a usart
 /// as the logger
+/// @returns a new system
 System System_create();
 
 /// @brief starts the system
+/// @param _this the system to start
 void System_start(void* _this);
 
 /// @brief stops the system (stops the motors)
+/// @param _this the system to stop
 void System_stop(void* _this);
 
 #endif  // SYSTEM_H

@@ -15,6 +15,7 @@ typedef enum WatchDogTime {
 
 /// @brief starts the watchdog with the given time interval
 /// @note after system reset make sure to call stop_watchdog() !
+/// @param time the time interval to use
 void watchdog_init(WatchDogTime time);
 
 /// @brief stops the watchdog timer

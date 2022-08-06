@@ -57,8 +57,8 @@ void EventSystem_send_event(EventSystem* _this, Event event) {
   for (uint8_t j = 0; j < _this->listeners.size; ++j) {
     if (String_equals(event.event, _this->listeners.data[j].event)) {
       Listener* listener = &_this->listeners.data[j];
-      if (listener->callback_r != NULL)
-        listener->callback_r(listener->receiver);
+      if (listener->callback_d != NULL)
+        listener->callback_d(listener->data);
       else if (listener->callback != NULL)
         listener->callback();
     }

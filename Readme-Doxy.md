@@ -1,4 +1,4 @@
-# Table of Contents
+# Table of Contents {#table-of-contents}
 - [Table of Contents](#table-of-contents)
 - [About this project](#about-this-project)
   - [What is the ATMega328P?](#what-is-the-atmega328p)

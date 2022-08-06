@@ -3,8 +3,7 @@
 
 #include <stdint.h>
 
-/// @brief initializes the hardware timer using the interrupts TIMER0_COMPA_vect
-/// and TIMER1_COMPA_vect
+/// @brief initializes the hardware timer using the interrupt TIMER1_COMPA_vect
 void timer_init();
 
 /// @returns the current time since init in milliseconds

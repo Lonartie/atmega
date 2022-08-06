@@ -5,6 +5,7 @@
 
 #include "../Misc/String.h"
 
+/// @brief the callback type which is called by the timer
 typedef void (*TimerCallback)();
 
 /// @brief a timer that sends events in millisecond intervals
@@ -21,12 +22,15 @@ typedef struct Timer {
 Timer Timer_create(uint32_t interval_ms, String event);
 
 /// @brief starts the given timer
+/// @param timer the timer to start
 void Timer_start(Timer* timer);
 
 /// @brief stops the given timer
+/// @param timer the timer to stop
 void Timer_stop(Timer* timer);
 
 /// @brief updates the given timer
-void Timer_update(void* obj);
+/// @param timer the timer to update
+void Timer_update(void* timer);
 
 #endif  // TIMER_H

@@ -15,7 +15,7 @@ ROBO_DUDE 		= avrdude
 
 ROBO_FLAGS 		= -ffunction-sections -fdata-sections
 ROBO_FLAGS 	 	+= -Wl,--gc-sections -Os -flto
-ROBO_FLAGS 	 	+= -Wall -Wextra -Wfatal-errors -Wno-unused-variable
+ROBO_FLAGS 	 	+= -Wall -Wextra -Wfatal-errors
 ROBO_FLAGS 	 	+= -D F_CPU=16000000 -mmcu=atmega328p
 ROBO_FLAGS 	 	+= -D MAIN=main -I $(CORE_DIR)
 
@@ -58,6 +58,13 @@ Doxygen:
 	@echo "Generating Doxygen"
 	@doxygen
 	@echo "Doxygen generated"
+
+# convenience targets
+build: $(ROBO_BINARY)
+rebuild: clean $(ROBO_BINARY)
+doxygen: Doxygen
+doxy: Doxygen
+rc: build clean
 
 # recompile sources if dependent header files changed
 -include $(ROBO_DEPENDS)

@@ -7,9 +7,6 @@
 /// @param usart the usart (sender)
 void presentation_handle_command(void* usart);
 
-// /// @brief resets the
-// void presentation_reset(void* system);
-
 /// @brief starts the presentation mode by connecting events and initializing
 /// servo to default state
 /// @param system the system to drive

@@ -5,6 +5,7 @@
 #include "Pin.h"
 
 /// @brief represents a motor with a forward and a backward driving pin
+/// and a pwm pin
 typedef struct Motor {
   Pin forward;
   Pin backward;
